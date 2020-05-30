@@ -121,8 +121,10 @@ PlayerSettings:
     Others: 1
   bundleVersion: 0.1
   preloadedAssets:
-  - {fileID: -5913996563882263270, guid: 45b860a065163ea409b3f4234a9743b0, type: 2}
-  - {fileID: 11400000, guid: 3ebf6e66f4a00714f9ff5535c6b41426, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: -9153586245274118717, guid: bb34b3c42ceee5c46af18f91cc0c3dbe, type: 2}
+  - {fileID: 11400000, guid: 5f51bcc02dcf7c14db71e5060d51e6e9, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -435,8 +437,9 @@ PlayerSettings:
     m_Enabled: 0
     m_Devices: []
   - m_BuildTarget: Android
-    m_Enabled: 0
-    m_Devices: []
+    m_Enabled: 1
+    m_Devices:
+    - Oculus
   - m_BuildTarget: WebGL
     m_Enabled: 0
     m_Devices: []

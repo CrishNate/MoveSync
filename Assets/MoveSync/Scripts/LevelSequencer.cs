@@ -24,6 +24,9 @@ public class LevelSequencer : MonoBehaviour
     private float _time = 0;
     private AudioSource _audioSource;
     public GameObject tetrahedron;
+    public GameObject hexagon;
+
+    private int _marker = 0;
 
     // debug
     private float _timeMarker = 0;
@@ -45,27 +48,28 @@ public class LevelSequencer : MonoBehaviour
     void Update()
     {
         _time = _audioSource.time;
-        
+
+        _marker = ++_marker % 2;
         if (timeBPM >= _timeMarker)
         {
-            _timeMarker = timeBPM + 1 - (timeBPM - _timeMarker);
-            
-            BeatObject beatObject = Instantiate(tetrahedron, transform.position, Quaternion.identity).GetComponent<BeatObject>();
+            GameObject spawn = (_marker == 0) ? tetrahedron : hexagon;
+            BeatObject beatObject = Instantiate(spawn, transform.position, Quaternion.identity).GetComponent<BeatObject>();
             
             TransformData finishTransform = new TransformData();
             finishTransform.position = transform.position;
             finishTransform.position += Random.insideUnitSphere * 10.0f;
             finishTransform.position += Vector3.up * 10.0f;
-            finishTransform.rotation = Quaternion.LookRotation(Camera.main.transform.position - finishTransform.position);
             
-            beatObject.Initialize(_timeMarker + 4, finishTransform);
+            beatObject.Initialize(_timeMarker + 8, finishTransform);
+
+            _timeMarker += 2;
         }
     }
 
     public AudioSource audioSource => _audioSource;
-    public float timeBPM => _time * toBPM - _songInfo.offset;
+    public float timeBPM => time * toBPM;
     public float bpm => _songInfo.bpm;
     public float toBPM => _songInfo.bpm / 60.0f;
     public float toTime => 60.0f / _songInfo.bpm;
-    public float time => _time;
+    public float time => _time - _songInfo.offset;
 }

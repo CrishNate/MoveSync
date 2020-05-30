@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/MoveSync/Scenes/GameScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
-    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 3ebf6e66f4a00714f9ff5535c6b41426,
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 5f51bcc02dcf7c14db71e5060d51e6e9,
       type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 45b860a065163ea409b3f4234a9743b0,
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 782c080eac1f79e46a3df2d7e96a3570,
       type: 2}

@@ -21,7 +21,7 @@ enum TargetStates
 }
 
 [Serializable]
-struct ShootData
+public struct ShootData
 {
     public int _shoots;
     public float _duration;
@@ -60,7 +60,7 @@ public class BeatShoot : BeatObject
     private int _shootIndexMarker = 0;
 
     private BeatShooterStates _state;
-    
+
     protected override void Start()
     {
         base.Start();
@@ -76,21 +76,59 @@ public class BeatShoot : BeatObject
         _state = BeatShooterStates.Moving;
     }
 
+    float GetShootTimeMarker()
+    {
+        return time - _shootAppearTime;
+    }
+
     void UpdateShoot()
     {
         if (_shootIndexMarker == _shootData._shoots) return;
         
         if (LevelSequencer.instance.timeBPM > _shootTimeMarker)
         {
-            _shootTimeMarker = time - _shootAppearTime;
-            _shootTimeMarker += _shootData.GetShootTime() * _shootIndexMarker;
-            _shootIndexMarker++;
-            
             Instantiate(_projectileObject, _shootTransform.position, _shootTransform.rotation)
                 .GetComponent<BaseProjectile>()
-                    .Init(gameObject, _shootTimeMarker, _shootData._duration, _shootAppearTime, _projectileScale);
+                .Init(gameObject, _shootTimeMarker, _shootData._duration, _shootAppearTime, _projectileScale);
 
+            _shootTimeMarker = GetShootTimeMarker();
+            _shootIndexMarker++;
+            _shootTimeMarker += _shootData.GetShootTime() * _shootIndexMarker;
         }
+    }
+
+    Quaternion GetRotationByTargetState()
+    {
+        switch (_targetStates)
+        {
+            case TargetStates.Direction:
+                return transformData.rotation;
+            case TargetStates.Camera:
+                return Quaternion.LookRotation(Camera.main.transform.position - transformData.position);
+        }
+        
+        return Quaternion.identity;
+    }
+    
+    void UpdateMovement()
+    {
+        float dTimeAppear = (LevelSequencer.instance.timeBPM - timeStamp) / (GetShootTimeMarker() - _preShootDelay - timeStamp);
+            
+        dTimeAppear = Mathf.Min(1.0f, dTimeAppear);
+        dTimeAppear = (1 - Mathf.Pow(1 - dTimeAppear, 2.0f));
+            
+        if (Math.Abs(dTimeAppear - 1.0f) < Mathf.Epsilon)
+        {
+            _onPrepare.Invoke();
+            _state = BeatShooterStates.Prepare;
+        }
+        
+        transform.position = _transformOrigin.position +
+                             (transformData.position - _transformOrigin.position) * dTimeAppear;
+
+        float maxAngle = Quaternion.Angle(_transformOrigin.rotation, transformData.rotation);
+        transform.rotation =
+            Quaternion.RotateTowards(_transformOrigin.rotation, GetRotationByTargetState(), maxAngle * dTimeAppear);
     }
     
     protected override void Update()
@@ -100,27 +138,11 @@ public class BeatShoot : BeatObject
         // movement logic
         if (_state == BeatShooterStates.Moving)
         {
-            float dTimeAppear = (LevelSequencer.instance.timeBPM - timeStamp) / (time - _preShootDelay - _shootAppearTime - timeStamp);
-            
-            dTimeAppear = Mathf.Min(1.0f, dTimeAppear);
-            dTimeAppear = (1 - Mathf.Pow(1 - dTimeAppear, 2.0f));
-            
-            if (Math.Abs(dTimeAppear - 1.0f) < Mathf.Epsilon)
-            {
-                _onPrepare.Invoke();
-                _state = BeatShooterStates.Prepare;
-            }
-            
-            transform.position = _transformOrigin.position +
-                                 (transformData.position - _transformOrigin.position) * dTimeAppear;
-
-            float maxAngle = Quaternion.Angle(_transformOrigin.rotation, transformData.rotation);
-            transform.rotation =
-                Quaternion.RotateTowards(_transformOrigin.rotation, transformData.rotation, maxAngle * dTimeAppear);
+            UpdateMovement();
         }
 
         // shoot event logic
-        if (LevelSequencer.instance.timeBPM >= time - _shootAppearTime)
+        if (LevelSequencer.instance.timeBPM >= GetShootTimeMarker())
         {
             if (LevelSequencer.instance.timeBPM <= time + _totalDuration)
             {
@@ -132,7 +154,7 @@ public class BeatShoot : BeatObject
         else
         {
             _shootIndexMarker = 0;
-            _shootTimeMarker = 0;
+            _shootTimeMarker = GetShootTimeMarker();
         }
 
         // end state logic
@@ -145,4 +167,7 @@ public class BeatShoot : BeatObject
             }
         }
     }
+
+    public ShootData shootData => _shootData;
+    public float projectileScale => _projectileScale;
 }

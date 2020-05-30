@@ -5,15 +5,18 @@ using UnityEngine;
 public class Trace : MonoBehaviour
 {
     public float radius;
+    private static float _distanceFromHit = 1.0f;
     
     [SerializeField] private bool _useOnX = true;
     [SerializeField] private bool _useOnY = true;
     [SerializeField] private bool _useOnZ = true;
     [SerializeField] private Vector3 _direction;
-    [SerializeField] private float _distanceFromHit;
+    
+    [SerializeField] private GameObject _previewMesh;
 
     private float _distance;
     private Vector3 _scale;
+    private SpriteRenderer _sprite;
 
     void Start()
     {
@@ -26,13 +29,19 @@ public class Trace : MonoBehaviour
         
         transform.localScale = tempScale;
         _distance = _direction.magnitude;
+
+        radius = GetComponentInParent<BeatShoot>().projectileScale;
+        _sprite = GetComponentInChildren<SpriteRenderer>();
+
+        _sprite.gameObject.transform.localScale = Vector3.one * radius;
+        _previewMesh.transform.localScale = new Vector3(radius, radius, _previewMesh.transform.localScale.z);
     }
 
     void Update()
     {
         RaycastHit hitResult;
-        bool hit = Physics.SphereCast(transform.position, radius, transform.rotation * _direction, out hitResult);
-        float distance = (hit ? hitResult.distance : _distance) - _distanceFromHit;    
+        bool hit = Physics.SphereCast(transform.position, radius, transform.rotation * _direction, out hitResult, _distance, 1 << LayerMask.NameToLayer("Player"));
+        float distance = (hit ? hitResult.distance : _distance) - _distanceFromHit;
         
         Vector3 tempScale = _scale;
         if (_useOnX) tempScale.x = distance;
