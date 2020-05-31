@@ -1463,7 +1463,7 @@ MonoBehaviour:
   _projectileObject: {fileID: 2341723290652221099, guid: 96cb4ff6ae247544c91c4399b884dfb8,
     type: 3}
   _shootTransform: {fileID: 1765459100110835883}
-  _preShootDelay: 0.1
+  _preShootDelay: 0.5
   _shootAppearTime: 6
   _projectileScale: 0.3
   _shootData:
@@ -2741,6 +2741,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: caad8da2139412f47ad7f23b0f8aad85,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: caad8da2139412f47ad7f23b0f8aad85,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: caad8da2139412f47ad7f23b0f8aad85,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: -1504981713932161579, guid: caad8da2139412f47ad7f23b0f8aad85,
         type: 3}

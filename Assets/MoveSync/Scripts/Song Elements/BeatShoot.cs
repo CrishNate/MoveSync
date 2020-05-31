@@ -113,10 +113,10 @@ public class BeatShoot : BeatObject
     void UpdateMovement()
     {
         float dTimeAppear = (LevelSequencer.instance.timeBPM - timeStamp) / (GetShootTimeMarker() - _preShootDelay - timeStamp);
-            
+        
         dTimeAppear = Mathf.Min(1.0f, dTimeAppear);
         dTimeAppear = (1 - Mathf.Pow(1 - dTimeAppear, 2.0f));
-            
+        
         if (Math.Abs(dTimeAppear - 1.0f) < Mathf.Epsilon)
         {
             _onPrepare.Invoke();
@@ -126,7 +126,7 @@ public class BeatShoot : BeatObject
         transform.position = _transformOrigin.position +
                              (transformData.position - _transformOrigin.position) * dTimeAppear;
 
-        float maxAngle = Quaternion.Angle(_transformOrigin.rotation, transformData.rotation);
+        float maxAngle = Quaternion.Angle(_transformOrigin.rotation, GetRotationByTargetState());
         transform.rotation =
             Quaternion.RotateTowards(_transformOrigin.rotation, GetRotationByTargetState(), maxAngle * dTimeAppear);
     }

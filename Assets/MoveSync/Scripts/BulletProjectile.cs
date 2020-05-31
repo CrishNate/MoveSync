@@ -12,17 +12,16 @@ public class BulletProjectile : BaseProjectile
     {
         base.Init(instigator, invokeTimeStamp, duration, appearTime, scale);
 
-        _distance = (Camera.main.transform.position - instigator.transform.position).magnitude;
+        _distance = (Camera.main.transform.position - transform.position).magnitude;
 
         transform.localScale = Vector3.one * scale;
-        _speed = _distance / (_appearTime * LevelSequencer.instance.toTime);
+        _speed = _distance / (appearTime * LevelSequencer.instance.toTime);
     }
 
     void Update()
     {
         transform.position += transform.forward * _speed * Time.deltaTime;
 
-        // just remove it
         if (LevelSequencer.instance.timeBPM > _timeStamp + 10)
         {
             Destroy(gameObject);
