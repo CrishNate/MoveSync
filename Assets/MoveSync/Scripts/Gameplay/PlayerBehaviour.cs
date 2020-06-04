@@ -5,28 +5,49 @@ using UnityEngine.Events;
 
 public class PlayerBehaviour : MonoBehaviour
 {
+    public int maxHealth;
+    [HideInInspector] public int health;
+
     [SerializeField] private UnityEvent _onDeath;
-    [SerializeField] private int _health;
+    [SerializeField] private UnityEvent _onHit;
     [SerializeField] private float _invincibilityTime;
 
     private float _invincibilityTimeStamp;
 
+    void Start()
+    {
+        health = maxHealth;
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.layer == LayerMask.NameToLayer("DamageObjects"))
+        {
+            OnHit(collider.gameObject);
+        }
+    }
+
     public void OnHit(GameObject instigator)
     {
+        if (health == 0) return;
         if (_invincibilityTimeStamp > Time.time) return;
         
-        _health--;
+        health--;
         
         _invincibilityTimeStamp = Time.time + _invincibilityTime;
 
-        if (_health == 0)
+        if (health == 0)
         {
             Death();
         }
+        
+        _onHit.Invoke();
     }
 
     void Death()
     {
         _onDeath.Invoke();
     }
+
+    public bool isMaxHealth => health == maxHealth;
 }

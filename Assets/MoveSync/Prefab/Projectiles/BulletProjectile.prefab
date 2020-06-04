@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4572037298176067891}
   - component: {fileID: 1299282737713354442}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LineFog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2343353623154581034}
   - component: {fileID: 7338560261041456193}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: New Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,7 +251,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4978967972134587898}
   - component: {fileID: 832716710370975365}
-  m_Layer: 0
+  - component: {fileID: 4028362915739522958}
+  m_Layer: 9
   m_Name: BulletProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -287,6 +288,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c8b924a2194ed54d826fc3b71e96b6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!135 &4028362915739522958
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2341723290652221099}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4394369587886932017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,7 +330,7 @@ GameObject:
   - component: {fileID: 4292018204857864941}
   - component: {fileID: 6913751576873081406}
   - component: {fileID: 2324024896628235334}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MuzzleEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5250,7 +5264,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8451073536666550844}
   - component: {fileID: 4963566952007356235}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: New Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5418,6 +5432,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: cfa0aa78b270720428afbf4d669287b4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfa0aa78b270720428afbf4d669287b4, type: 3}
 --- !u!4 &372864676207042594 stripped
@@ -5513,6 +5532,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trail
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 07ba24e8d3cd0b2488ec9365bbac29eb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07ba24e8d3cd0b2488ec9365bbac29eb, type: 3}
 --- !u!1 &3423241796087060853 stripped
@@ -5607,6 +5631,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Trail2 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 07ba24e8d3cd0b2488ec9365bbac29eb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07ba24e8d3cd0b2488ec9365bbac29eb, type: 3}
@@ -5708,6 +5737,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Trail2
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 07ba24e8d3cd0b2488ec9365bbac29eb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07ba24e8d3cd0b2488ec9365bbac29eb, type: 3}
