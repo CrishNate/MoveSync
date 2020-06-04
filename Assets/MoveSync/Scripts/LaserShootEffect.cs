@@ -45,14 +45,18 @@ public class LaserShootEffect : BaseProjectile
 
         float endTimeStamp = _timeStamp + _appearTime + _duration;
         float deltaScale = 0;
+        float deltaScaleForward = 0;
+        
         if (LevelSequencer.instance.timeBPM < endTimeStamp)
         {
             deltaScale = (LevelSequencer.instance.timeBPM - _timeStamp) / _appearTime;
+            deltaScaleForward = deltaScale;
         }
         else
         {
             deltaScale = 1 - (LevelSequencer.instance.timeBPM - endTimeStamp) / (_appearTime * _disapearMultiplier);
-
+            deltaScaleForward = 1.0f;
+            
             if (deltaScale < 0)
             {
                 Destroy(gameObject);
@@ -69,6 +73,8 @@ public class LaserShootEffect : BaseProjectile
         if (_useOnX) tempScale.x = _scale * deltaScale;
         if (_useOnY) tempScale.y = _scale * deltaScale;
         if (_useOnZ) tempScale.z = _scale * deltaScale;
+
+        tempScale.z = deltaScaleForward;
 
         transform.localScale = tempScale;
     }

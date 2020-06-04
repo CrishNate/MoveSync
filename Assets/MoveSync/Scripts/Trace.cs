@@ -30,11 +30,11 @@ public class Trace : MonoBehaviour
         transform.localScale = tempScale;
         _distance = _direction.magnitude;
 
-        radius = GetComponentInParent<BeatShoot>().projectileScale;
+        radius = GetComponentInParent<BeatShoot>().projectileScale / 2.0f;
         _sprite = GetComponentInChildren<SpriteRenderer>();
 
-        _sprite.gameObject.transform.localScale = Vector3.one * radius;
-        _previewMesh.transform.localScale = new Vector3(radius, radius, _previewMesh.transform.localScale.z);
+        _sprite.gameObject.transform.localScale = Vector3.one * radius * 2;
+        _previewMesh.transform.localScale = new Vector3(radius * 2, radius * 2, _previewMesh.transform.localScale.z);
     }
 
     void Update()
