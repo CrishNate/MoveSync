@@ -50,7 +50,7 @@ public class LaserShootEffect : BaseProjectile
         if (LevelSequencer.instance.timeBPM < endTimeStamp)
         {
             deltaScale = (LevelSequencer.instance.timeBPM - _timeStamp) / _appearTime;
-            deltaScaleForward = deltaScale;
+            deltaScaleForward = Mathf.Min(1, deltaScale);
         }
         else
         {
@@ -65,7 +65,7 @@ public class LaserShootEffect : BaseProjectile
 
         deltaScale = Mathf.Clamp(deltaScale, 0.0f, 1.0f);
 
-        float powDeltaScale = Mathf.Pow(deltaScale, 8);
+        float powDeltaScale = Mathf.Pow(deltaScale, 3);
         _meshRenderer.material.color = _savedColor + (Color.white - _savedColor) * powDeltaScale;
         _lineRenderer.startWidth = _lineRenderer.endWidth = _savedWidth * deltaScale;
         
@@ -73,7 +73,7 @@ public class LaserShootEffect : BaseProjectile
         if (_useOnX) tempScale.x = _scale * deltaScale;
         if (_useOnY) tempScale.y = _scale * deltaScale;
         if (_useOnZ) tempScale.z = _scale * deltaScale;
-
+        
         tempScale.z = deltaScaleForward;
 
         transform.localScale = tempScale;

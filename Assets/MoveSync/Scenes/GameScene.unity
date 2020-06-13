@@ -2039,7 +2039,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &355588193
 GameObject:
@@ -4910,7 +4910,7 @@ Transform:
   - {fileID: 1044352227}
   - {fileID: 135112805}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &818586856
 GameObject:
@@ -6784,9 +6784,10 @@ MonoBehaviour:
   _songInfo:
     bpm: 126
     offset: 0.5
-  tetrahedron: {fileID: 5145423521493952812, guid: 190eeb4533de9e449ba55e6b67775f92,
-    type: 3}
-  hexagon: {fileID: 5145423521493952812, guid: ba043efa40b8d254fa3a5474541bc62e, type: 3}
+  beatObjects:
+  - {fileID: 5145423521493952812, guid: ba043efa40b8d254fa3a5474541bc62e, type: 3}
+  - {fileID: 5145423521493952812, guid: ecfcb7d899aa6b3468fc0c964257a4df, type: 3}
+  - {fileID: 5145423521493952812, guid: 190eeb4533de9e449ba55e6b67775f92, type: 3}
   _restartTime: 1
   _onRestartFinished:
     m_PersistentCalls:
@@ -9267,7 +9268,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000012294140286, guid: 0ef9a4657e0594f9c98b343ef29e6132, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4000012294140286, guid: 0ef9a4657e0594f9c98b343ef29e6132, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -10969,7 +10970,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 547f5088751292e4ebd9c81c8d4a934e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 547f5088751292e4ebd9c81c8d4a934e,
         type: 3}

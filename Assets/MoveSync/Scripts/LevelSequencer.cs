@@ -22,8 +22,7 @@ public class LevelSequencer : MonoBehaviour
 
     private float _time = 0;
     private AudioSource _audioSource;
-    public GameObject tetrahedron;
-    public GameObject hexagon;
+    public GameObject[] beatObjects;
 
     [Header("Gameplay settings")] 
     [SerializeField] private float _restartTime = 1.0f;
@@ -58,8 +57,7 @@ public class LevelSequencer : MonoBehaviour
         _marker = ++_marker % 2;
         if (timeBPM >= _timeMarker)
         {
-            GameObject spawn = (_marker == 0) ? tetrahedron : hexagon;
-            BeatObject beatObject = Instantiate(spawn, transform.position, Quaternion.identity).GetComponent<BeatObject>();
+            BeatObject beatObject = Instantiate(beatObjects[Random.Range(0, beatObjects.Length)], transform.position, Quaternion.identity).GetComponent<BeatObject>();
             
             TransformData finishTransform = new TransformData();
             finishTransform.position = transform.position;
