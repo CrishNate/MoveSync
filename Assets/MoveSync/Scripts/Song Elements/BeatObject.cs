@@ -36,6 +36,12 @@ public abstract class BeatObject : MonoBehaviour
     protected virtual void Update()
     {
         _dtime = (LevelSequencer.instance.timeBPM - _timeStamp) / (_time - _timeStamp);
+        
+        if (_dtime < 0)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
         if (_dtime >= 1.0f)
         {

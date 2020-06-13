@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 [Serializable]
@@ -14,22 +15,27 @@ struct SongInfo
 [RequireComponent(typeof(AudioSource))]
 public class LevelSequencer : MonoBehaviour
 {
-    [HideInInspector]
-    public static LevelSequencer instance = null;
+    [HideInInspector] public static LevelSequencer instance = null;
 
-    // song settngs
-    [SerializeField]
-    private SongInfo _songInfo;
+    [Header("Song Settings")]
+    [SerializeField] private SongInfo _songInfo;
 
     private float _time = 0;
     private AudioSource _audioSource;
     public GameObject tetrahedron;
     public GameObject hexagon;
 
-    private int _marker = 0;
+    [Header("Gameplay settings")] 
+    [SerializeField] private float _restartTime = 1.0f;
+
+    [Header("Events")] 
+    [SerializeField] private UnityEvent _onRestartFinished;
+    [SerializeField] private UnityEvent _onRestart;
 
     // debug
     private float _timeMarker = 0;
+    private int _marker = 0;
+
     
     void Awake()
     {
@@ -64,6 +70,49 @@ public class LevelSequencer : MonoBehaviour
 
             _timeMarker += 2;
         }
+    }
+    
+    IEnumerator RestartCoroutine()
+    {
+        while (audioSource.pitch > 0)
+        {
+            audioSource.pitch -= Time.deltaTime / _restartTime;
+            yield return null;
+        }
+
+        audioSource.pitch = 0;
+
+        yield return new WaitForSeconds(1.0f);
+
+        RestartFinish();
+    }
+
+    public void Restart()
+    {
+        StartCoroutine(RestartCoroutine());
+        
+        _onRestart.Invoke();
+    }
+
+    void RestartFinish()
+    {
+        foreach (var beatObject in FindObjectsOfType<BeatObject>())
+        {
+            Destroy(beatObject.gameObject);
+        }
+        
+        foreach (var projectile in FindObjectsOfType<BaseProjectile>())
+        {
+            Destroy(projectile.gameObject);
+        }
+        
+        audioSource.pitch = 1.0f;
+        audioSource.Play();
+        
+        _timeMarker = 0;
+        
+        PlayerBehaviour.instance.Restart();
+        _onRestartFinished.Invoke();
     }
 
     public AudioSource audioSource => _audioSource;

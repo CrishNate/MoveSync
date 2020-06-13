@@ -5,18 +5,46 @@ using UnityEngine.Events;
 
 public class PlayerBehaviour : MonoBehaviour
 {
+    [HideInInspector] public static PlayerBehaviour instance = null;
+    
+    [Header("Events")]
+    [SerializeField] private UnityEvent _onDeath;
+    [SerializeField] private UnityEvent _onHit;
+    [SerializeField] private UnityEvent _onInvincibilityEnd;
+    
+    [Header("Health")]
     public int maxHealth;
     [HideInInspector] public int health;
 
-    [SerializeField] private UnityEvent _onDeath;
-    [SerializeField] private UnityEvent _onHit;
     [SerializeField] private float _invincibilityTime;
 
     private float _invincibilityTimeStamp;
 
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        } 
+        else if (instance == this)
+        {
+            Destroy(gameObject);
+        }
+    }
+    
     void Start()
     {
         health = maxHealth;
+    }
+
+    void Update()
+    {
+        if (_invincibilityTimeStamp > 0 
+            && _invincibilityTimeStamp < Time.time)
+        {
+            _invincibilityTimeStamp = 0.0f;
+            _onInvincibilityEnd.Invoke();
+        }
     }
 
     void OnTriggerEnter(Collider collider)
@@ -31,7 +59,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (health == 0) return;
         if (_invincibilityTimeStamp > Time.time) return;
-        
+
         health--;
         
         _invincibilityTimeStamp = Time.time + _invincibilityTime;
@@ -46,7 +74,14 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Death()
     {
+        LevelSequencer.instance.Restart();
+        
         _onDeath.Invoke();
+    }
+
+    public void Restart()
+    {
+        health = maxHealth;
     }
 
     public bool isMaxHealth => health == maxHealth;
