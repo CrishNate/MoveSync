@@ -20,9 +20,7 @@ public class LevelSequencer : MonoBehaviour
     [Header("Song Settings")]
     [SerializeField] private SongInfo _songInfo;
 
-    private float _time = 0;
     private AudioSource _audioSource;
-    public GameObject[] beatObjects;
 
     [Header("Gameplay settings")] 
     [SerializeField] private float _restartTime = 1.0f;
@@ -30,11 +28,6 @@ public class LevelSequencer : MonoBehaviour
     [Header("Events")] 
     [SerializeField] private UnityEvent _onRestartFinished;
     [SerializeField] private UnityEvent _onRestart;
-
-    // debug
-    private float _timeMarker = 0;
-    private int _marker = 0;
-
     
     void Awake()
     {
@@ -47,26 +40,6 @@ public class LevelSequencer : MonoBehaviour
         else if (instance == this)
         {
             Destroy(gameObject);
-        }
-    }
-
-    void Update()
-    {
-        _time = _audioSource.time;
-
-        _marker = ++_marker % 2;
-        if (timeBPM >= _timeMarker)
-        {
-            BeatObject beatObject = Instantiate(beatObjects[Random.Range(0, beatObjects.Length)], transform.position, Quaternion.identity).GetComponent<BeatObject>();
-            
-            TransformData finishTransform = new TransformData();
-            finishTransform.position = transform.position;
-            finishTransform.position += Random.insideUnitSphere * 10.0f;
-            finishTransform.position += Vector3.up * 10.0f;
-            
-            beatObject.Initialize(_timeMarker + 8, finishTransform);
-
-            _timeMarker += 2;
         }
     }
     
@@ -106,11 +79,18 @@ public class LevelSequencer : MonoBehaviour
         
         audioSource.pitch = 1.0f;
         audioSource.Play();
-        
-        _timeMarker = 0;
-        
+
         PlayerBehaviour.instance.Restart();
         _onRestartFinished.Invoke();
+    }
+
+    public void SetSongTime(float songTime)
+    {
+        const float epsilon = 0.1f;
+        
+        // epsiion prevent this error
+        // ERROR: Error executing result (An invalid seek position was passed to this function. )
+        _audioSource.time = Mathf.Min(songTime + songOffset, _audioSource.clip.length - epsilon);
     }
 
     public AudioSource audioSource => _audioSource;
@@ -118,5 +98,6 @@ public class LevelSequencer : MonoBehaviour
     public float bpm => _songInfo.bpm;
     public float toBPM => _songInfo.bpm / 60.0f;
     public float toTime => 60.0f / _songInfo.bpm;
-    public float time => _time - _songInfo.offset;
+    public float time => _audioSource.time - songOffset;
+    public float songOffset => _songInfo.offset;
 }

@@ -31,7 +31,7 @@ ModelImporter:
       name: glow_edge
     second: {fileID: 2100000, guid: f125edc0a5ab63b42968cf8cebe3e1d9, type: 2}
   materials:
-    materialImportMode: 1
+    materialImportMode: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1

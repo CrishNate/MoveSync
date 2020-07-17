@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225200949655251797}
   m_LocalRotation: {x: 0.3535534, y: -0.61237246, z: 0.3535534, w: 0.61237246}
-  m_LocalPosition: {x: 0, y: 0.753, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 1.3125}
+  m_LocalPosition: {x: 0.00037512, y: 0.9958401, z: 0}
+  m_LocalScale: {x: 1.7551644, y: 1.3164061, z: 1.727783}
   m_Children:
   - {fileID: 8638389898905719772}
   m_Father: {fileID: 4978967972134587898}
@@ -303,6 +303,7 @@ Transform:
   - {fileID: 7372715875409286055}
   - {fileID: 1364680327098243768}
   - {fileID: 2275170618946859111}
+  - {fileID: 738216178657441130}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -318,6 +319,78 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c8b924a2194ed54d826fc3b71e96b6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &3113406975427767035
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 738216178657441130}
+  - component: {fileID: 5219185485121184534}
+  - component: {fileID: 8009481452036797982}
+  - component: {fileID: 4366488078789059860}
+  m_Layer: 10
+  m_Name: NearObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &738216178657441130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3113406975427767035}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4978967972134587898}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5219185485121184534
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3113406975427767035}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.9420324, y: 0.374264, z: 0.1}
+  m_Center: {x: -0.0045599043, y: -0.18292701, z: 0}
+--- !u!65 &8009481452036797982
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3113406975427767035}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6148827, y: 0.28597748, z: 0.1}
+  m_Center: {x: -0.009249166, y: 0.14536458, z: 0}
+--- !u!65 &4366488078789059860
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3113406975427767035}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.34429568, y: 0.27432764, z: 0.1}
+  m_Center: {x: -0.010306634, y: 0.4207434, z: 0}
 --- !u!1 &3291070057849952144
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,8 +545,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4037477933489671889}
   m_LocalRotation: {x: -0.3535534, y: -0.61237246, z: -0.3535534, w: 0.61237246}
-  m_LocalPosition: {x: 0.65325, y: -0.381, z: 0}
-  m_LocalScale: {x: 0.75000006, y: 0.74999994, z: 1.3124999}
+  m_LocalPosition: {x: 0.86034, y: -0.497, z: 0}
+  m_LocalScale: {x: 1.7551644, y: 1.3164061, z: 1.7277828}
   m_Children:
   - {fileID: 1606499163179558015}
   m_Father: {fileID: 4978967972134587898}
@@ -5680,8 +5753,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8190222574817090045}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.65325, y: -0.381, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 1.3125}
+  m_LocalPosition: {x: 0.86034, y: -0.497, z: 0}
+  m_LocalScale: {x: 1.7551644, y: 1.3164061, z: 1.727783}
   m_Children:
   - {fileID: 1947985179713953309}
   m_Father: {fileID: 4978967972134587898}

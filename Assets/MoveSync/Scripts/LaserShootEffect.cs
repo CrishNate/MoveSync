@@ -7,7 +7,9 @@ public class LaserShootEffect : BaseProjectile
     [SerializeField] private bool _useOnX = true;
     [SerializeField] private bool _useOnY = true;
     [SerializeField] private bool _useOnZ = true;
+    [SerializeField] private bool _scaleWithTime = true;
     [SerializeField] private float _disapearMultiplier = 2.0f;
+    [SerializeField] private float _scaleMultiplier = 1.0f;
     [SerializeField] private MeshRenderer _meshRenderer;
     [SerializeField] private LineRenderer _lineRenderer;
 
@@ -33,10 +35,9 @@ public class LaserShootEffect : BaseProjectile
         
         transform.localScale = tempScale;
         
-        transform.parent = instigator.transform;
-        _particleSystem.gameObject.transform.parent = null;
-        _particleSystem.gameObject.transform.localScale = Vector3.one;
-        _savedWidth = _lineRenderer.startWidth;
+        if(_particleSystem) _particleSystem.gameObject.transform.parent = null;
+        if(_particleSystem) _particleSystem.gameObject.transform.localScale = Vector3.one;
+        if (_lineRenderer) _savedWidth = _lineRenderer.startWidth;
     }
 
     void Update()
@@ -67,14 +68,14 @@ public class LaserShootEffect : BaseProjectile
 
         float powDeltaScale = Mathf.Pow(deltaScale, 3);
         _meshRenderer.material.color = _savedColor + (Color.white - _savedColor) * powDeltaScale;
-        _lineRenderer.startWidth = _lineRenderer.endWidth = _savedWidth * deltaScale;
-        
+        if (_lineRenderer) _lineRenderer.startWidth = _lineRenderer.endWidth = _savedWidth * deltaScale;
+
         Vector3 tempScale = _savedScale;
-        if (_useOnX) tempScale.x = _scale * deltaScale;
-        if (_useOnY) tempScale.y = _scale * deltaScale;
-        if (_useOnZ) tempScale.z = _scale * deltaScale;
+        if (_useOnX) tempScale.x = _scaleWithTime ? _scale * deltaScale : _scale;
+        if (_useOnY) tempScale.y = _scaleWithTime ? _scale * deltaScale : _scale;
+        if (_useOnZ) tempScale.z = _scaleWithTime ? _scale * deltaScale : _scale;
         
-        tempScale.z = deltaScaleForward;
+        tempScale.z = deltaScaleForward * _scaleMultiplier;
 
         transform.localScale = tempScale;
     }

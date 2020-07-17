@@ -23,17 +23,19 @@ enum TargetStates
 [Serializable]
 public struct ShootData
 {
+    public bool _isBullet;
     public int _shoots;
     public float _duration;
     public float _delay;
+    public float _postShootDelay;
 
-    public float GetShootTime()
+    public float GetNextShootTime()
     {
-        return (_duration + _delay);
+        return _duration + _delay;
     }
     public float GetTotalTime()
     {
-        return GetShootTime() * _shoots;
+        return _duration * _shoots + _delay * Mathf.Max(0, _shoots - 1) + _postShootDelay;
     }
 }
 
@@ -46,10 +48,12 @@ public class BeatShoot : BeatObject
     [SerializeField] private Transform _shootTransform;
     [Header("Beat Shooter")]
     [SerializeField] private float _preShootDelay;
+    [SerializeField] private bool _rescaleBeatObjectByProjectalieScale;
     [SerializeField] private float _shootAppearTime;
     [SerializeField] private float _projectileScale = 1.0f;
     [SerializeField] private ShootData _shootData;
     [SerializeField] private TargetStates _targetStates;
+    [Header("Beat Shooter Events")]
     [SerializeField] private UnityEvent _onPrepare;
     [SerializeField] private UnityEvent _onFinished;
 
@@ -74,6 +78,7 @@ public class BeatShoot : BeatObject
         _totalDuration = _shootData.GetTotalTime();
 
         _state = BeatShooterStates.Moving;
+        if(_rescaleBeatObjectByProjectalieScale) transform.localScale = transform.localScale * _projectileScale;
     }
 
     float GetShootTimeMarker()
@@ -91,9 +96,8 @@ public class BeatShoot : BeatObject
                 .GetComponent<BaseProjectile>()
                 .Init(gameObject, _shootTimeMarker, _shootData._duration, _shootAppearTime, _projectileScale);
 
-            _shootTimeMarker = GetShootTimeMarker();
             _shootIndexMarker++;
-            _shootTimeMarker += _shootData.GetShootTime() * _shootIndexMarker;
+            _shootTimeMarker = GetShootTimeMarker() + _shootData.GetNextShootTime() * _shootIndexMarker;
         }
     }
 
@@ -144,7 +148,8 @@ public class BeatShoot : BeatObject
         // shoot event logic
         if (LevelSequencer.instance.timeBPM >= GetShootTimeMarker())
         {
-            if (LevelSequencer.instance.timeBPM <= time + _totalDuration)
+            if (_state != BeatShooterStates.Finish 
+                && LevelSequencer.instance.timeBPM <= time + _totalDuration)
             {
                 _state = BeatShooterStates.Shoot;
             }
@@ -158,7 +163,8 @@ public class BeatShoot : BeatObject
         }
 
         // end state logic
-        if (LevelSequencer.instance.timeBPM >= time + _totalDuration)
+        if (LevelSequencer.instance.timeBPM >=
+            (_shootData._isBullet ? GetShootTimeMarker() + _totalDuration : time + _totalDuration))
         {
             if (_state != BeatShooterStates.Finish)
             {

@@ -21,7 +21,7 @@ public class BulletProjectile : BaseProjectile
 
     void Update()
     {
-        transform.position += transform.forward * _speed * Time.deltaTime * LevelSequencer.instance.audioSource.pitch;
+        transform.position += transform.forward * (_speed * Time.deltaTime * LevelSequencer.instance.audioSource.pitch);
         
         if (LevelSequencer.instance.timeBPM < _timeStamp 
             || LevelSequencer.instance.timeBPM > _timeStamp + 10)

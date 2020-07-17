@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,5 +27,16 @@ public class LevelEditor : MonoBehaviour
     {
         time *= LevelSequencer.instance.toTime;
         LevelSequencer.instance.audioSource.time = time;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (LevelSequencer.instance.audioSource.isPlaying)
+                LevelSequencer.instance.audioSource.Pause();
+            else
+                LevelSequencer.instance.audioSource.Play();
+        }
     }
 }

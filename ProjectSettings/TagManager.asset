@@ -15,7 +15,7 @@ TagManager:
   - 
   - Player
   - DamageObjects
-  - 
+  - NearObjects
   - 
   - 
   - 
@@ -38,6 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Glow
+    uniqueID: 3327702467
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
