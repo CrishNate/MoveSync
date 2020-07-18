@@ -28,9 +28,9 @@ public class TimelineScroll : MonoBehaviour
         _zoom = zoom;
         _editorGrid.SetGridParams(_zoom);
 
-        UpdateTimeline();
         UpdateScroll();
         UpdatePlayMarker();
+        UpdateTimeline(Mathf.Max(0, _scrollbar.value * (_length - _viewport.rect.width / _zoom)));
     }
     public void UpdateLength(float length)
     {
