@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
  
 public class Spectator : MonoBehaviour {
  
@@ -10,6 +11,7 @@ public class Spectator : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
+        if (EventSystem.current.currentSelectedGameObject != null) return;
 
         if (Input.GetMouseButton(1))
         {

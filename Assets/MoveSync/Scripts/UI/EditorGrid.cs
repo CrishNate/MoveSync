@@ -11,6 +11,9 @@ public class EditorGrid : MonoBehaviour
     [SerializeField] private RectTransform _timeline;
     [SerializeField] private GameObject _UIGrid;
 
+    private float _minDistDiv = 40.0f;
+    private int _div = 1;
+    
     private float _offset;
     private List<GameObject> _UIGrids = new List<GameObject>();
     private float _startOffset = 0.0f;
@@ -38,7 +41,7 @@ public class EditorGrid : MonoBehaviour
             foreach (var text in grid.GetComponentsInChildren<Text>())
             {
                 // some gay shit
-                text.text = (i + Mathf.Floor(_startOffset / _offset)).ToString();
+                text.text = ((i + Mathf.Floor(_startOffset / _offset)) * _div).ToString();
             }
         }
     }
@@ -47,7 +50,17 @@ public class EditorGrid : MonoBehaviour
     {
         _offset = offset;
 
-        int requireCount = Mathf.FloorToInt(_viewport.rect.width / _offset) + 1;
+        if (_offset < _minDistDiv)
+        {
+            _div = Mathf.NextPowerOfTwo(Mathf.CeilToInt(_minDistDiv / _offset));
+            _offset *= _div;
+        }
+        else
+        {
+            _div = 1;
+        }
+        
+        int requireCount = Mathf.CeilToInt(_viewport.rect.width / _offset) + 1;
         int count = Mathf.Max(_UIGrids.Count, requireCount);
         
         for (int i = 0; i < count; i++)

@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(RectTransform))]
-public class TimelineScroll : MonoBehaviour
+public class TimelineScroll : MonoBehaviour, IScrollHandler
 {
     [SerializeField] private RectTransform _content;
     [SerializeField] private RectTransform _viewport;
@@ -22,15 +23,32 @@ public class TimelineScroll : MonoBehaviour
     private float _offset;
     private float _time;
     private float _zoomLength => _length * _zoom;
+    private float _viewportWidth => _viewport.rect.width;
+    private float _lengthSubScreen => _length - _viewportWidth / _zoom;
 
+    
+    public void OnScroll(PointerEventData eventData)
+    {
+        float scrollDelta = eventData.scrollDelta.y;
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            UpdateZoom(_zoom * Mathf.Pow(1.1f, scrollDelta));
+        }
+        else
+        {
+            UpdateTimeline(_offset + scrollDelta);
+        }
+    }
+    
     public void UpdateZoom(float zoom)
     {
-        _zoom = zoom;
+        _zoom = Mathf.Max(zoom, _viewportWidth / _length);
         _editorGrid.SetGridParams(_zoom);
 
         UpdateScroll();
         UpdatePlayMarker();
-        UpdateTimeline(Mathf.Max(0, _scrollbar.value * (_length - _viewport.rect.width / _zoom)));
+        UpdateTimeline(_scrollbar.value * _lengthSubScreen);
     }
     public void UpdateLength(float length)
     {
@@ -39,7 +57,7 @@ public class TimelineScroll : MonoBehaviour
     }
     public void UpdateTimeline(float offset)
     {
-        _offset = offset;
+        _offset = Mathf.Clamp(offset, 0.0f, _lengthSubScreen);
         UpdateTimeline();
     }
     public void UpdateTimeline()
@@ -49,14 +67,12 @@ public class TimelineScroll : MonoBehaviour
         _content.localPosition = position;
         
         _editorGrid.UpdateOffsetGrid();
+        _scrollbar.SetValueWithoutNotify(Mathf.Clamp(_offset / _lengthSubScreen, 0.0f, 1.0f));
     }
-
-    public void IncreeaseZoom() { UpdateZoom(_zoom * 2); }
-    public void DecreaseZoom() { UpdateZoom(_zoom / 2); }
     
     void UpdateScroll()
     {
-        _scrollbar.size = _viewport.rect.width / _zoomLength;
+        _scrollbar.size = _viewportWidth / _zoomLength;
     }
     void UpdatePlayMarker()
     {
@@ -68,13 +84,13 @@ public class TimelineScroll : MonoBehaviour
 
         // updating small marker
         position = _playMarkerOnScrollRect.localPosition;
-        position.x = _time / _length * _viewport.rect.width;
+        position.x = _time / _length * _viewportWidth;
         _playMarkerOnScrollRect.localPosition = position;
     }
 
     void OnScrollChanged(float value)
     {
-        UpdateTimeline(Mathf.Max(0, value * (_length - _viewport.rect.width / _zoom)));
+        UpdateTimeline(value * (_length - _viewportWidth / _zoom));
     }
     void OnMarkerChanged(float value)
     {

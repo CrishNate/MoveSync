@@ -150,9 +150,9 @@ namespace MoveSync.UI
 
         public void ShowList()
         {
-            UpdateList();
-            
             _dropDown.SetActive(true);
+
+            UpdateList();
 
             if (!_blocker)
                 _blocker = CreateBlocker(_canvas);
@@ -160,8 +160,9 @@ namespace MoveSync.UI
 
         public void HideList()
         {
-            ClearList();
             _dropDown.SetActive(false);
+
+            ClearList();
 
             DestroyBlocker();
         }
@@ -174,6 +175,9 @@ namespace MoveSync.UI
         public void UpdateList(List<string> newOptions)
         {
             ClearList();
+
+            if (!_dropDown.activeInHierarchy)
+                return; 
 
             for (int i = 0; i < newOptions.Count; i++)
             {
