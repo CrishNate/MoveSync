@@ -2,81 +2,85 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LaserShootEffect : BaseProjectile
+namespace MoveSync
 {
-    [SerializeField] private bool _useOnX = true;
-    [SerializeField] private bool _useOnY = true;
-    [SerializeField] private bool _useOnZ = true;
-    [SerializeField] private bool _scaleWithTime = true;
-    [SerializeField] private float _disapearMultiplier = 2.0f;
-    [SerializeField] private float _scaleMultiplier = 1.0f;
-    [SerializeField] private MeshRenderer _meshRenderer;
-    [SerializeField] private LineRenderer _lineRenderer;
-
-    private BeatShoot _beatShoot;
-    private ParticleSystem _particleSystem;
-
-    private Vector3 _savedScale;
-    private Color _savedColor;
-    private float _savedWidth;
-    
-    public override void Init(GameObject instigator, float invokeTimeStamp, float duration, float appearTime, float scale)
+    public class LaserShootEffect : BaseProjectile
     {
-        base.Init(instigator, invokeTimeStamp, duration, appearTime, scale);
+        [SerializeField] private bool _useOnX = true;
+        [SerializeField] private bool _useOnY = true;
+        [SerializeField] private bool _useOnZ = true;
+        [SerializeField] private bool _scaleWithTime = true;
+        [SerializeField] private float _disapearMultiplier = 2.0f;
+        [SerializeField] private float _scaleMultiplier = 1.0f;
+        [SerializeField] private MeshRenderer _meshRenderer;
+        [SerializeField] private LineRenderer _lineRenderer;
 
-        _particleSystem = GetComponentInChildren<ParticleSystem>();
-        _savedScale = transform.localScale;
-        _savedColor = _meshRenderer.material.color;
-        
-        Vector3 tempScale = _savedScale;
-        if (_useOnX) tempScale.x = 0;
-        if (_useOnY) tempScale.y = 0;
-        if (_useOnZ) tempScale.z = 0;
-        
-        transform.localScale = tempScale;
-        
-        if(_particleSystem) _particleSystem.gameObject.transform.parent = null;
-        if(_particleSystem) _particleSystem.gameObject.transform.localScale = Vector3.one;
-        if (_lineRenderer) _savedWidth = _lineRenderer.startWidth;
-    }
+        private BeatShoot _beatShoot;
+        private ParticleSystem _particleSystem;
 
-    void Update()
-    {
-        if (_timeStamp <= 0) return;
+        private Vector3 _savedScale;
+        private Color _savedColor;
+        private float _savedWidth;
 
-        float endTimeStamp = _timeStamp + _appearTime + _duration;
-        float deltaScale = 0;
-        float deltaScaleForward = 0;
-        
-        if (LevelSequencer.instance.timeBPM < endTimeStamp)
+        public override void Init(GameObject instigator, float invokeTimeStamp, float duration, float appearTime,
+            float scale)
         {
-            deltaScale = (LevelSequencer.instance.timeBPM - _timeStamp) / _appearTime;
-            deltaScaleForward = Mathf.Min(1, deltaScale);
+            base.Init(instigator, invokeTimeStamp, duration, appearTime, scale);
+
+            _particleSystem = GetComponentInChildren<ParticleSystem>();
+            _savedScale = transform.localScale;
+            _savedColor = _meshRenderer.material.color;
+
+            Vector3 tempScale = _savedScale;
+            if (_useOnX) tempScale.x = 0;
+            if (_useOnY) tempScale.y = 0;
+            if (_useOnZ) tempScale.z = 0;
+
+            transform.localScale = tempScale;
+
+            if (_particleSystem) _particleSystem.gameObject.transform.parent = null;
+            if (_particleSystem) _particleSystem.gameObject.transform.localScale = Vector3.one;
+            if (_lineRenderer) _savedWidth = _lineRenderer.startWidth;
         }
-        else
+
+        void Update()
         {
-            deltaScale = 1 - (LevelSequencer.instance.timeBPM - endTimeStamp) / (_appearTime * _disapearMultiplier);
-            deltaScaleForward = 1.0f;
-            
-            if (deltaScale < 0)
+            if (_timeStamp <= 0) return;
+
+            float endTimeStamp = _timeStamp + _appearTime + _duration;
+            float deltaScale = 0;
+            float deltaScaleForward = 0;
+
+            if (LevelSequencer.instance.timeBPM < endTimeStamp)
             {
-                Destroy(gameObject);
+                deltaScale = (LevelSequencer.instance.timeBPM - _timeStamp) / _appearTime;
+                deltaScaleForward = Mathf.Min(1, deltaScale);
             }
+            else
+            {
+                deltaScale = 1 - (LevelSequencer.instance.timeBPM - endTimeStamp) / (_appearTime * _disapearMultiplier);
+                deltaScaleForward = 1.0f;
+
+                if (deltaScale < 0)
+                {
+                    Destroy(gameObject);
+                }
+            }
+
+            deltaScale = Mathf.Clamp(deltaScale, 0.0f, 1.0f);
+
+            float powDeltaScale = Mathf.Pow(deltaScale, 3);
+            _meshRenderer.material.color = _savedColor + (Color.white - _savedColor) * powDeltaScale;
+            if (_lineRenderer) _lineRenderer.startWidth = _lineRenderer.endWidth = _savedWidth * deltaScale;
+
+            Vector3 tempScale = _savedScale;
+            if (_useOnX) tempScale.x = _scaleWithTime ? _scale * deltaScale : _scale;
+            if (_useOnY) tempScale.y = _scaleWithTime ? _scale * deltaScale : _scale;
+            if (_useOnZ) tempScale.z = _scaleWithTime ? _scale * deltaScale : _scale;
+
+            tempScale.z = deltaScaleForward * _scaleMultiplier;
+
+            transform.localScale = tempScale;
         }
-
-        deltaScale = Mathf.Clamp(deltaScale, 0.0f, 1.0f);
-
-        float powDeltaScale = Mathf.Pow(deltaScale, 3);
-        _meshRenderer.material.color = _savedColor + (Color.white - _savedColor) * powDeltaScale;
-        if (_lineRenderer) _lineRenderer.startWidth = _lineRenderer.endWidth = _savedWidth * deltaScale;
-
-        Vector3 tempScale = _savedScale;
-        if (_useOnX) tempScale.x = _scaleWithTime ? _scale * deltaScale : _scale;
-        if (_useOnY) tempScale.y = _scaleWithTime ? _scale * deltaScale : _scale;
-        if (_useOnZ) tempScale.z = _scaleWithTime ? _scale * deltaScale : _scale;
-        
-        tempScale.z = deltaScaleForward * _scaleMultiplier;
-
-        transform.localScale = tempScale;
     }
 }

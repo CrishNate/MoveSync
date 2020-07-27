@@ -3,40 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelEditor : MonoBehaviour
+namespace MoveSync
 {
-    [HideInInspector] public static LevelEditor instance = null;
-
-    void Awake()
+    public class LevelEditor : Singleton<LevelEditor>
     {
-        if (!enabled) return;
-        
-        if (instance == null)
+        void Awake()
         {
-            instance = this;
-        } 
-        else if (instance == this)
-        {
-            Destroy(gameObject);
+            LevelSequencer.instance.audioSource.Stop();
         }
-        
-        LevelSequencer.instance.audioSource.Stop();
-    }
 
-    public void SetSongTime(float time)
-    {
-        time *= LevelSequencer.instance.toTime;
-        LevelSequencer.instance.audioSource.time = time;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
+        public void SetSongTime(float time)
         {
-            if (LevelSequencer.instance.audioSource.isPlaying)
-                LevelSequencer.instance.audioSource.Pause();
-            else
-                LevelSequencer.instance.audioSource.Play();
+            time *= LevelSequencer.instance.toTime;
+            LevelSequencer.instance.audioSource.time = time;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (LevelSequencer.instance.audioSource.isPlaying)
+                    LevelSequencer.instance.audioSource.Pause();
+                else
+                    LevelSequencer.instance.audioSource.Play();
+            }
         }
     }
 }

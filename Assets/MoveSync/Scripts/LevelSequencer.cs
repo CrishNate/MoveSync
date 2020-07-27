@@ -5,99 +5,90 @@ using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
-[Serializable]
-struct SongInfo
+namespace MoveSync
 {
-    public float bpm;
-    public float offset;
-}
-
-[RequireComponent(typeof(AudioSource))]
-public class LevelSequencer : MonoBehaviour
-{
-    [HideInInspector] public static LevelSequencer instance = null;
-
-    [Header("Song Settings")]
-    [SerializeField] private SongInfo _songInfo;
-
-    private AudioSource _audioSource;
-
-    [Header("Gameplay settings")] 
-    [SerializeField] private float _restartTime = 1.0f;
-
-    [Header("Events")] 
-    [SerializeField] private UnityEvent _onRestartFinished;
-    [SerializeField] private UnityEvent _onRestart;
-    
-    void Awake()
+    [Serializable]
+    struct SongInfo
     {
-        _audioSource = GetComponent<AudioSource>();
-        
-        if (instance == null)
-        {
-            instance = this;
-        } 
-        else if (instance == this)
-        {
-            Destroy(gameObject);
-        }
+        public float bpm;
+        public float offset;
     }
-    
-    IEnumerator RestartCoroutine()
+
+    [RequireComponent(typeof(AudioSource))]
+    public class LevelSequencer : Singleton<LevelSequencer>
     {
-        while (audioSource.pitch > 0)
+        [Header("Song Settings")] [SerializeField]
+        private SongInfo _songInfo;
+
+        private AudioSource _audioSource;
+
+        [Header("Gameplay settings")] [SerializeField]
+        private float _restartTime = 1.0f;
+
+        [Header("Events")] [SerializeField] private UnityEvent _onRestartFinished;
+        [SerializeField] private UnityEvent _onRestart;
+
+        void Awake()
         {
-            audioSource.pitch -= Time.deltaTime / _restartTime;
-            yield return null;
+            _audioSource = GetComponent<AudioSource>();
         }
 
-        audioSource.pitch = 0;
-
-        yield return new WaitForSeconds(1.0f);
-
-        RestartFinish();
-    }
-
-    public void Restart()
-    {
-        StartCoroutine(RestartCoroutine());
-        
-        _onRestart.Invoke();
-    }
-
-    void RestartFinish()
-    {
-        foreach (var beatObject in FindObjectsOfType<BeatObject>())
+        IEnumerator RestartCoroutine()
         {
-            Destroy(beatObject.gameObject);
+            while (audioSource.pitch > 0)
+            {
+                audioSource.pitch -= Time.deltaTime / _restartTime;
+                yield return null;
+            }
+
+            audioSource.pitch = 0;
+
+            yield return new WaitForSeconds(1.0f);
+
+            RestartFinish();
         }
-        
-        foreach (var projectile in FindObjectsOfType<BaseProjectile>())
+
+        public void Restart()
         {
-            Destroy(projectile.gameObject);
+            StartCoroutine(RestartCoroutine());
+
+            _onRestart.Invoke();
         }
-        
-        audioSource.pitch = 1.0f;
-        audioSource.Play();
 
-        PlayerBehaviour.instance.Restart();
-        _onRestartFinished.Invoke();
+        void RestartFinish()
+        {
+            foreach (var beatObject in FindObjectsOfType<BeatObject>())
+            {
+                Destroy(beatObject.gameObject);
+            }
+
+            foreach (var projectile in FindObjectsOfType<BaseProjectile>())
+            {
+                Destroy(projectile.gameObject);
+            }
+
+            audioSource.pitch = 1.0f;
+            audioSource.Play();
+
+            PlayerBehaviour.instance.Restart();
+            _onRestartFinished.Invoke();
+        }
+
+        public void SetSongTime(float songTime)
+        {
+            const float epsilon = 0.1f;
+
+            // epsiion prevent this error
+            // ERROR: Error executing result (An invalid seek position was passed to this function. )
+            _audioSource.time = Mathf.Min(songTime + songOffset, _audioSource.clip.length - epsilon);
+        }
+
+        public AudioSource audioSource => _audioSource;
+        public float timeBPM => time * toBPM;
+        public float bpm => _songInfo.bpm;
+        public float toBPM => _songInfo.bpm / 60.0f;
+        public float toTime => 60.0f / _songInfo.bpm;
+        public float time => _audioSource.time - songOffset;
+        public float songOffset => _songInfo.offset;
     }
-
-    public void SetSongTime(float songTime)
-    {
-        const float epsilon = 0.1f;
-        
-        // epsiion prevent this error
-        // ERROR: Error executing result (An invalid seek position was passed to this function. )
-        _audioSource.time = Mathf.Min(songTime + songOffset, _audioSource.clip.length - epsilon);
-    }
-
-    public AudioSource audioSource => _audioSource;
-    public float timeBPM => time * toBPM;
-    public float bpm => _songInfo.bpm;
-    public float toBPM => _songInfo.bpm / 60.0f;
-    public float toTime => 60.0f / _songInfo.bpm;
-    public float time => _audioSource.time - songOffset;
-    public float songOffset => _songInfo.offset;
 }

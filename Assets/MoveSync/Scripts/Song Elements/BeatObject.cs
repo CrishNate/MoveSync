@@ -4,66 +4,50 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public struct TransformData
+namespace MoveSync
 {
-    public Vector3 position;
-    public Quaternion rotation;
-}
-
-public abstract class BeatObject : MonoBehaviour
-{
-    [SerializeField] private UnityEvent _onTriggeredEvent;
-    
-    private float _time;
-    private TransformData _transformData;
-
-    private float _timeStamp;
-
-    private bool _triggered;
-    private float _dtime;
-
-    public void Initialize(float time, TransformData transformData)
+    public struct TransformData
     {
-        _time = time;
-        _transformData = transformData;
+        public Vector3 position;
+        public Quaternion rotation;
     }
 
-    protected virtual void Start()
+    public abstract class BeatObject : MonoBehaviour
     {
-        _timeStamp = LevelSequencer.instance.timeBPM;
-    }
-    
-    protected virtual void Update()
-    {
-        _dtime = (LevelSequencer.instance.timeBPM - _timeStamp) / (_time - _timeStamp);
-        
-        if (_dtime < 0)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        [SerializeField] private UnityEvent _onTriggeredEvent;
 
-        if (_dtime >= 1.0f)
+        private BeatObjectData _beatObjectData;
+        private bool _triggered;
+
+        protected virtual void Update()
         {
-            if (!_triggered)
+            if (dAppearTime < 0)
             {
-                OnTriggered();
-                _triggered = true;
+                Destroy(gameObject);
+                return;
+            }
+
+            if (dAppearTime >= 1.0f)
+            {
+                if (!_triggered)
+                {
+                    OnTriggered();
+                    _triggered = true;
+                }
+            }
+            else
+            {
+                _triggered = false;
             }
         }
-        else
-        {
-            _triggered = false;
-        }
-    }
 
-    protected void OnTriggered()
-    {
-        _onTriggeredEvent.Invoke();
+        protected void OnTriggered()
+        {
+            _onTriggeredEvent.Invoke();
+        }
+
+        protected BeatObjectData beatObjectData => _beatObjectData;
+        protected float appearTimeBPM => _beatObjectData.time - _beatObjectData.appearDuration;
+        protected float dAppearTime => (LevelSequencer.instance.timeBPM - _beatObjectData.time) / (_beatObjectData.time - appearTimeBPM);
     }
-    
-    protected float time => _time;
-    protected float dtime => _dtime;
-    protected float timeStamp => _timeStamp;
-    protected TransformData transformData => _transformData;
 }

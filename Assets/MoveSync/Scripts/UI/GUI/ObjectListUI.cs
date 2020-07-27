@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MoveSync;
 using MoveSync.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ObjectListUI : MonoBehaviour
 {

@@ -12,8 +12,12 @@ namespace MoveSync
     [Flags]
     public enum ModelInputUI
     {
+        NONE              = 0x00000,
         TRANSFORM         = 0x00001,
         INITIAL_TRANSFORM = 0x00002,
+        APPEAR            = 0x00004,
+        STAY              = 0x00008,
+        ANIMATION         = 0x00016,
     }
     
     public struct ObjectModel
@@ -30,10 +34,8 @@ namespace MoveSync
         public string prefabPath;
     }
 
-    public class ObjectManager : MonoBehaviour
+    public class ObjectManager : Singleton<ObjectManager>
     {
-        public static ObjectManager instance = null;
-
         [SerializeField] private UnityEvent _onObjectsLoaded;
 
         private Dictionary<PropertyName, ObjectModel> _objectModels = new Dictionary<PropertyName, ObjectModel>();
@@ -48,18 +50,6 @@ namespace MoveSync
         public void SetCurrentObject(PropertyName objectTag)
         {
             _currentObjectModel = _objectModels[objectTag];
-        }
-        
-        void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else if (instance == this)
-            {
-                Destroy(gameObject);
-            }
         }
 
         void AddSpawnTable(ObjectModel model)

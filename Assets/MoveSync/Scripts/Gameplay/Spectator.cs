@@ -12,6 +12,7 @@ public class Spectator : MonoBehaviour {
     void Update ()
     {
         if (EventSystem.current.currentSelectedGameObject != null) return;
+        if (EventSystem.current.IsPointerOverGameObject()) return;
 
         if (Input.GetMouseButton(1))
         {

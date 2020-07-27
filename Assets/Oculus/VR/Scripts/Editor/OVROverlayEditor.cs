@@ -469,7 +469,7 @@ public class OVROverlayEditor : Editor
 			return;
 		}
 
-		Vector2 mousePos = Event.current.mousePosition;
+		Vector2 mousePos = Input.mousePosition;
 		if (_DraggingRect == TextureRect.None && Event.current.type == EventType.MouseDown)
 		{
 			if (IsOverRectControls(drawingRectLeft, mousePos, rectLeft, ref _DraggingSide))

@@ -5,20 +5,24 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class TimelinePlayMarker : MonoBehaviour, IPointerClickHandler
+
+namespace MoveSync
 {
-     public UnityEventFloatParam onClick;
-
-     private RectTransform _rectTransform;
-
-     private void Start()
+     public class TimelinePlayMarker : MonoBehaviour, IPointerClickHandler
      {
-          _rectTransform = GetComponent<RectTransform>();
-          _rectTransform.pivot = Vector2.zero;
-     }
+          public UnityEventFloatParam onClick;
 
-     public void OnPointerClick(PointerEventData eventData)
-     {
-          onClick.Invoke(eventData.position.x - _rectTransform.position.x);
+          private RectTransform _rectTransform;
+
+          private void Start()
+          {
+               _rectTransform = GetComponent<RectTransform>();
+               _rectTransform.pivot = Vector2.zero;
+          }
+
+          public void OnPointerClick(PointerEventData eventData)
+          {
+               onClick.Invoke(eventData.position.x - _rectTransform.position.x);
+          }
      }
 }

@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class DragDropBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    [SerializeField] private bool _unrestricted = false;
     [SerializeField] private float maxDrag = 100.0f;
     [SerializeField] private float minDrag;
     [SerializeField] private RectTransform _content;
@@ -28,9 +29,12 @@ public class DragDropBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (!_vertical) offset.y = 0;
         
         Vector2 scale = _lastContentScale + offset;
-        if (_horizontal) scale.x = Mathf.Clamp(scale.x, minDrag, maxDrag);
-        if (_vertical) scale.y = Mathf.Clamp(scale.y, minDrag, maxDrag);
-        
+        if (!_unrestricted)
+        {
+            if (_horizontal) scale.x = Mathf.Clamp(scale.x, minDrag, maxDrag);
+            if (_vertical) scale.y = Mathf.Clamp(scale.y, minDrag, maxDrag);
+        }
+
         _content.sizeDelta = scale;
     }
 

@@ -51,6 +51,8 @@ namespace MoveSync.UI
         private Text _itemText;
         private Toggle _item;
 
+        private string _value;
+
         void Start()
         {
             _dropDown.SetActive(false);
@@ -206,6 +208,7 @@ namespace MoveSync.UI
         {
             _rootText.text = value;
             _onValueChanged.Invoke(value);
+            _value = value;
         }
 
         private DropdownItem AddItem(string name)
@@ -233,5 +236,7 @@ namespace MoveSync.UI
 
             _items.Clear();
         }
+        
+        public string currentValue => _value;
     }
 }
