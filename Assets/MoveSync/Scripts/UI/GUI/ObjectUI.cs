@@ -22,6 +22,11 @@ namespace MoveSync
         public void Init(BeatObjectData data)
         {
             beatObjectData = data;
+
+            ObjectModel model = ObjectManager.instance.objectModels[data.objectTag];
+
+            if ((model.inputUi & ModelInputUI.APPEAR) == 0) _appearRectTransform.gameObject.SetActive(false);
+            if ((model.inputUi & ModelInputUI.STAY) == 0) _durationRectTransform.gameObject.SetActive(false);
         }
 
         // Drag drop logic

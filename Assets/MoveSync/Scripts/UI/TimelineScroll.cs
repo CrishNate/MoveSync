@@ -26,9 +26,7 @@ namespace MoveSync
         private float _invZoom;
         private float _offset;
         private float _time;
-        private float _zoomLength => _length * _zoom;
-        private float _viewportWidth => _viewport.rect.width;
-        private float _lengthSubScreen => _length - _viewportWidth * _invZoom;
+        private bool _lockOnMarker;
 
 
         public void OnScroll(PointerEventData eventData)
@@ -125,6 +123,11 @@ namespace MoveSync
             {
                 UpdatePlayMarker();
             }
+
+            if (LockOnMarker && LevelSequencer.instance.audioSource.isPlaying)
+            {
+                UpdateTimeline(LevelSequencer.instance.timeBPM - _viewportWidth * invZoom * 0.5f);
+            }
         }
 
         void Start()
@@ -138,7 +141,20 @@ namespace MoveSync
             UpdateLength(Mathf.Floor(LevelSequencer.instance.audioSource.clip.length * LevelSequencer.instance.toBPM));
         }
 
+        public bool LockOnMarker
+        {
+            get => _lockOnMarker;
+            set
+            {
+                _lockOnMarker = value;
+                if (_lockOnMarker) UpdateTimeline(LevelSequencer.instance.timeBPM - _viewportWidth * zoom);
+            }
+        }
+
         public float zoom => _zoom;
         public float invZoom => _invZoom;
+        private float _zoomLength => _length * _zoom;
+        private float _viewportWidth => _viewport.rect.width;
+        private float _lengthSubScreen => _length - _viewportWidth * _invZoom;
     }
 }

@@ -3,46 +3,42 @@ using System.Collections;
 using System.Collections.Generic;
 using MoveSync;
 using UnityEngine;
+using UnityEngine.Events;
 
-public struct BindKey
+namespace MoveSync.UI
 {
-    public KeyCode key;
-    public PropertyName objectTag;
-    public int layer;
-}
-
-public class BindingManager : MonoBehaviour
-{
-    private List<BindKey> _bind = new List<BindKey>();
-
-    void AddKeyBind(BindKey bind)
+    public struct BindKey
     {
-        _bind.Add(bind);
+        public KeyCode key;
+        public PropertyName objectTag;
     }
 
-    private void Start()
+    public class BindingManager : MonoBehaviour
     {
-        AddKeyBind(new BindKey
-        {
-            key = KeyCode.H,
-            layer = 1,
-            objectTag = "test_item"
-        });
-        AddKeyBind(new BindKey
-        {
-            key = KeyCode.K,
-            layer = 2,
-            objectTag = "test_item"
-        });
-    }
+        private Dictionary<int, BindKey> _bind = new Dictionary<int, BindKey>();
 
-    private void Update()
-    {
-        foreach (var bind in _bind)
+        public void AddKeyBind(int layer, BindKey bind)
         {
-            if (Input.GetKeyDown(bind.key))
+            if (_bind.ContainsKey(layer))
             {
-                LevelDataManager.instance.NewBeatObjectAtMarker(bind.objectTag, bind.layer);
+                _bind[layer] = bind;
+            }
+            else
+            {
+                _bind.Add(layer, bind);
+            }
+        }
+
+        private void Update()
+        {
+            if (!LevelSequencer.instance.audioSource.isPlaying) return;
+            
+            foreach (var bind in _bind)
+            {
+                if (Input.GetKeyDown(bind.Value.key))
+                {
+                    LevelDataManager.instance.NewBeatObjectAtMarker(bind.Value.objectTag, bind.Key);
+                }
             }
         }
     }
