@@ -80,7 +80,7 @@ namespace MoveSync
 
             // epsiion prevent this error
             // ERROR: Error executing result (An invalid seek position was passed to this function. )
-            _audioSource.time = Mathf.Min(songTime + songOffset, _audioSource.clip.length - epsilon);
+            _audioSource.time = Mathf.Max(0, Mathf.Min(songTime + songOffset, _audioSource.clip.length - epsilon));
         }
 
         public AudioSource audioSource => _audioSource;

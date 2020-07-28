@@ -12,12 +12,12 @@ namespace MoveSync
     [Flags]
     public enum ModelInputUI
     {
-        NONE              = 0x00000,
-        TRANSFORM         = 0x00001,
-        INITIAL_TRANSFORM = 0x00002,
-        APPEAR            = 0x00004,
-        STAY              = 0x00008,
-        ANIMATION         = 0x00016,
+        NONE              = 0,
+        TRANSFORM         = 1,
+        INITIAL_TRANSFORM = 2,
+        APPEAR            = 4,
+        STAY              = 8,
+        ANIMATION         = 16,
     }
     
     public struct ObjectModel
@@ -59,12 +59,9 @@ namespace MoveSync
 
         void Start()
         {
-            AddSpawnTable(new ObjectModel("test_item", ModelInputUI.TRANSFORM, "Assets/MoveSync/Prefab/LaserFade.prefab"));
-            AddSpawnTable(new ObjectModel("test_item2", ModelInputUI.TRANSFORM & ModelInputUI.INITIAL_TRANSFORM, "Assets/MoveSync/Prefab/LaserFade.prefab"));
-            AddSpawnTable(new ObjectModel("test_item3", ModelInputUI.TRANSFORM & ModelInputUI.INITIAL_TRANSFORM, "Assets/MoveSync/Prefab/LaserFade.prefab"));
-            AddSpawnTable(new ObjectModel("test_item4", ModelInputUI.TRANSFORM & ModelInputUI.INITIAL_TRANSFORM, "Assets/MoveSync/Prefab/LaserFade.prefab"));
-            AddSpawnTable(new ObjectModel("test_item5", ModelInputUI.TRANSFORM & ModelInputUI.INITIAL_TRANSFORM, "Assets/MoveSync/Prefab/LaserFade.prefab"));
-            AddSpawnTable(new ObjectModel("test_item6", ModelInputUI.TRANSFORM & ModelInputUI.INITIAL_TRANSFORM, "Assets/MoveSync/Prefab/LaserFade.prefab"));
+            AddSpawnTable(new ObjectModel("laser_shooter", ModelInputUI.TRANSFORM | ModelInputUI.INITIAL_TRANSFORM | ModelInputUI.APPEAR | ModelInputUI.STAY, "Assets/MoveSync/Prefab/LaserFade.prefab"));
+            AddSpawnTable(new ObjectModel("shooter", ModelInputUI.TRANSFORM | ModelInputUI.INITIAL_TRANSFORM | ModelInputUI.APPEAR, "Assets/MoveSync/Prefab/LaserFade.prefab"));
+            AddSpawnTable(new ObjectModel("explosion", ModelInputUI.TRANSFORM | ModelInputUI.INITIAL_TRANSFORM, "Assets/MoveSync/Prefab/LaserFade.prefab"));
             
             _onObjectsLoaded.Invoke();
         }

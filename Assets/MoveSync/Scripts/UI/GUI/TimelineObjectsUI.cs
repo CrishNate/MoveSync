@@ -26,9 +26,9 @@ namespace MoveSync
         
         // selection
         [SerializeField] private GameObject _selectionUiInstance;
-        private GameObject _selectionUi;
+        private SelectionUI _selectionUi;
         private Dictionary<Guid, SelectedObject> _selectedObjects = new Dictionary<Guid, SelectedObject>();
-        
+        private SelectedObject _currentSelection;
         
         public void UpdateObjects()
         {
@@ -77,12 +77,15 @@ namespace MoveSync
         {
             if (eventData.button == PointerEventData.InputButton.Right)
             {
-                LevelDataManager.instance.NewBeatObject(ObjectManager.instance.currentObjectModel.objectTag, mouseTime, mouseLayer);
+                float time = mouseTime;
+                if (Input.GetKey(KeyCode.LeftShift)) time = Mathf.Round(time);
+                
+                LevelDataManager.instance.NewBeatObject(ObjectManager.instance.currentObjectModel.objectTag, time, mouseLayer);
             }
 
             if (eventData.button == PointerEventData.InputButton.Left)
             {
-                _selectedObjects.Clear();
+                ClearSelection();
             }
         }
         
@@ -93,45 +96,93 @@ namespace MoveSync
         {
             if (eventData.button != PointerEventData.InputButton.Left) return;
 
-            _selectionUi = Instantiate(_selectionUiInstance, _rectObjectsList);
-            _selectionUi.GetComponent<SelectionUI>().Init(eventData);
+            _selectionUi = Instantiate(_selectionUiInstance, _rectObjectsList).GetComponent<SelectionUI>();
+            _selectionUi.Init(eventData);
         }
 
         public void OnDrag(PointerEventData data)
         {
+
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
             if (eventData.button != PointerEventData.InputButton.Left) return;
 
-            Destroy(_selectionUi);
+            // select in rectangle
+            foreach (var objectUi in objectsUi)
+            {
+                if (_selectionUi.IsOverlapRect(objectUi.Value.rectTransform))
+                    AddSelection(objectUi.Value);
+            }
+            
+            Destroy(_selectionUi.gameObject);
         }
 
-        void AddSelection(ObjectUI objectUi)
+        bool AddSelection(ObjectUI objectUi)
         {
-            if (!_selectedObjects.ContainsKey(objectUi.beatObjectData.id))
+            if (_selectedObjects.ContainsKey(objectUi.beatObjectData.id)) return false;
+            
+            SelectedObject newSelectedObject = new SelectedObject
             {
-                SelectedObject newSelectedObject = new SelectedObject
-                {
-                    objectUi = objectUi
-                };
-                _selectedObjects.Add(objectUi.beatObjectData.id, newSelectedObject);
+                objectUi = objectUi
+            };
+
+            objectUi.OnSelect();
+            _selectedObjects.Add(objectUi.beatObjectData.id, newSelectedObject);
+
+            return true;
+        }
+
+        void RemoveSelection(ObjectUI objectUi)
+        {
+            objectUi.OnDeselect();
+            _selectedObjects.Remove(objectUi.beatObjectData.id);
+        }
+
+        void ClearSelection()
+        {
+            foreach (var selectedObject in _selectedObjects)
+            {
+                selectedObject.Value.objectUi.OnDeselect();
             }
+            _selectedObjects.Clear();
         }
         
         /*
-         * Selecting move
+         * Selection move
          */
         void OnStartDragObject(ObjectUI objectUi)
         {
-            AddSelection(objectUi);
+            // check for individual selection
+            if (AddSelection(objectUi))
+            {
+                // remove old selection
+                if (_currentSelection.objectUi != null &&
+                    _currentSelection.objectUi != _selectedObjects[objectUi.beatObjectData.id].objectUi)
+                {
+                    RemoveSelection(_currentSelection.objectUi);
+                }
+
+                _currentSelection = _selectedObjects[objectUi.beatObjectData.id];
+                
+                // remove all other selections
+                List<Guid> tempKeys = new List<Guid>(_selectedObjects.Keys);
+                foreach(var key in tempKeys)
+                {
+                    SelectedObject selectedObject = _selectedObjects[key];
+                    if (selectedObject.beatObjectData.id != objectUi.beatObjectData.id)
+                    {
+                        RemoveSelection(selectedObject.objectUi);
+                    }
+                }
+            }
             
+            // calculate offset for each element starting from dragging object
             List<Guid> keys = new List<Guid>(_selectedObjects.Keys);
             foreach(var key in keys)
             {
                 SelectedObject newSelectedObject = _selectedObjects[key];
-                // calculate offset for each element staring from dragging object
                 newSelectedObject.offset = newSelectedObject.beatObjectData.time - objectUi.beatObjectData.time;
                 newSelectedObject.offsetLayer = newSelectedObject.beatObjectData.editorLayer - objectUi.beatObjectData.editorLayer;
                 _selectedObjects[key] = newSelectedObject;
@@ -145,31 +196,15 @@ namespace MoveSync
             foreach(var key in keys)
             {
                 SelectedObject newSelectedObject = _selectedObjects[key];
-                int index = LevelDataManager.instance.levelInfo.beatObjectDatas.FindIndex(x => x.id == newSelectedObject.beatObjectData.id);;
-                BeatObjectData data = LevelDataManager.instance.levelInfo.beatObjectDatas[index];
+                BeatObjectData data = newSelectedObject.beatObjectData;
                 
                 // offsetting beat objects while moving
-                data.time = mouseTime + newSelectedObject.offset;
-                data.editorLayer = mouseLayer + newSelectedObject.offsetLayer;
-                LevelDataManager.instance.levelInfo.beatObjectDatas[index] = data;
-                
-                //newSelectedObject.objectUi.beatObjectData = data;
+                if (!Input.GetKey(KeyCode.LeftControl)) data.time = Mathf.Max(0, mouseTime + newSelectedObject.offset);
+                data.editorLayer = Mathf.Max(0, mouseLayer + newSelectedObject.offsetLayer);
+                // snapping
+                if (Input.GetKey(KeyCode.LeftShift)) data.time = Mathf.Round(data.time);
                 
                 UpdateObject(newSelectedObject.objectUi);
-            }
-            
-            foreach (var selectedObjectPair in _selectedObjects)
-            {
-                // offsetting beat objects while moving
-                BeatObjectData data = _selectedObjects[selectedObjectPair.Key].beatObjectData;
-                SelectedObject newSelectedObject = selectedObjectPair.Value;
-                data.time = mouseTime + newSelectedObject.offset;
-                data.editorLayer = mouseLayer + newSelectedObject.offsetLayer;
-
-                //newSelectedObject.objectUi.beatObjectData = data;
-                
-                UpdateObject(selectedObjectPair.Value.objectUi);
-                LevelDataManager.instance.levelInfo.beatObjectDatas.Find(x => x.id == selectedObjectPair.Value.objectUi.beatObjectData.id);
             }
         }
 
@@ -179,6 +214,7 @@ namespace MoveSync
             _timeline.onZoomUpdated.AddListener(UpdateObjects);
         }
 
+        
         public Vector2 localMousePosition => Input.mousePosition - _rectObjectsList.position;
         public float mouseTime => localMousePosition.x * _timeline.invZoom;
         public int mouseLayer => Mathf.FloorToInt(-localMousePosition.y / layerHeight);

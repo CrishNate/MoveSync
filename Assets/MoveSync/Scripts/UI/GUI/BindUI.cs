@@ -8,6 +8,7 @@ namespace MoveSync.UI
     {
         [SerializeField] private BindingManager _bindingManager;
         [SerializeField] private Text _text;
+        [SerializeField] private Text _objectTagText;
         [SerializeField] private int _layer = -1;
         
         private Button _button;
@@ -17,7 +18,6 @@ namespace MoveSync.UI
         void Start()
         {
             _button = GetComponent<Button>();
-
             _button.onClick.AddListener(OnClick);
         }
 
@@ -35,6 +35,12 @@ namespace MoveSync.UI
                 Event.current.isKey && 
                 Event.current.type == EventType.KeyDown)
             {
+                if (Event.current.keyCode == KeyCode.Escape)
+                {
+                    Cancel();
+                    return;
+                };
+                
                 _bindingManager.AddKeyBind(_layer, new BindKey
                 {
                     key = Event.current.keyCode,
@@ -42,12 +48,22 @@ namespace MoveSync.UI
                 });
                 
                 _awaitButton = false;
-                UpdateUI(Event.current.keyCode);
+                UpdateUI(Event.current.keyCode, ObjectManager.instance.currentObjectModel.objectTag);
             }
         }
-        
-        void UpdateUI(KeyCode key)
+
+        void Cancel()
         {
+            _awaitButton = false;
+            _text.text = "";
+            _objectTagText.text = "";
+            _bindingManager.RemoveKeyBind(_layer);
+        }
+        
+        void UpdateUI(KeyCode key, PropertyName objectTag)
+        {
+            string str = objectTag.ToString();
+            _objectTagText.text = str.Substring(0, str.IndexOf(':'));
             _text.text = key.ToString();
         }
     }

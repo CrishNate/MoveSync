@@ -17,6 +17,7 @@ namespace MoveSync.UI
     {
         private Dictionary<int, BindKey> _bind = new Dictionary<int, BindKey>();
 
+        
         public void AddKeyBind(int layer, BindKey bind)
         {
             if (_bind.ContainsKey(layer))
@@ -26,6 +27,14 @@ namespace MoveSync.UI
             else
             {
                 _bind.Add(layer, bind);
+            }
+        }
+        
+        public void RemoveKeyBind(int layer)
+        {
+            if (_bind.ContainsKey(layer))
+            {
+                _bind.Remove(layer);
             }
         }
 
@@ -41,5 +50,8 @@ namespace MoveSync.UI
                 }
             }
         }
+
+
+        public Dictionary<int, BindKey> bind => _bind;
     }
 }

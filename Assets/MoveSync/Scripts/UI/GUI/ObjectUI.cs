@@ -9,13 +9,14 @@ namespace MoveSync
     
     public class EventObjectUI : UnityEvent<ObjectUI>{};
     
-    public class ObjectUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class ObjectUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler 
     {
         [HideInInspector] public BeatObject _beatObject;
         [HideInInspector] public EventObjectUI onStartDrag = new EventObjectUI();
         [HideInInspector] public EventObjectUI onDrag = new EventObjectUI();
         [HideInInspector] public BeatObjectData beatObjectData;
 
+        [SerializeField] private GameObject _selection;
         [SerializeField] private RectTransform _appearRectTransform;
         [SerializeField] private RectTransform _durationRectTransform;
 
@@ -27,6 +28,14 @@ namespace MoveSync
 
             if ((model.inputUi & ModelInputUI.APPEAR) == 0) _appearRectTransform.gameObject.SetActive(false);
             if ((model.inputUi & ModelInputUI.STAY) == 0) _durationRectTransform.gameObject.SetActive(false);
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                onStartDrag.Invoke(this);
+            }
         }
 
         // Drag drop logic
@@ -51,8 +60,18 @@ namespace MoveSync
             _appearRectTransform.sizeDelta = new Vector2(beatObjectData.appearDuration * zoom, _appearRectTransform.sizeDelta.y);
             _durationRectTransform.sizeDelta = new Vector2(beatObjectData.duration * zoom, _durationRectTransform.sizeDelta.y);
         }
+        
+        public void OnSelect()
+        {
+            _selection.SetActive(true);
+        }
+        public void OnDeselect()
+        {
+            _selection.SetActive(false);
+        }
+        
 
-        public RectTransform rectTransform => (RectTransform)gameObject.transform;
+        public RectTransform rectTransform => (RectTransform)transform;
     }
 
 }
