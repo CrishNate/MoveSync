@@ -209,6 +209,8 @@ namespace MoveSync.UI
             _rootText.text = value;
             _onValueChanged.Invoke(value);
             _value = value;
+
+            HideList();
         }
 
         private DropdownItem AddItem(string name)

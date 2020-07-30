@@ -29,6 +29,11 @@ namespace MoveSync
         private bool _lockOnMarker;
 
 
+        public void OnSongLoaded()
+        {
+            UpdateLength(Mathf.Floor(LevelSequencer.instance.audioSource.clip.length * LevelSequencer.instance.toBPM));
+        }
+        
         public void OnScroll(PointerEventData eventData)
         {
             float scrollDelta = eventData.scrollDelta.y;
@@ -45,6 +50,8 @@ namespace MoveSync
 
         public void UpdateZoom(float zoom)
         {
+            if (!(_length > 0)) return;
+            
             _zoom = Mathf.Max(zoom, _viewportWidth / _length);
             _invZoom = 1 / zoom;
             _editorGrid.SetGridParams(_zoom);
@@ -64,12 +71,16 @@ namespace MoveSync
 
         public void UpdateTimeline(float offset)
         {
+            if (!(_length > 0)) return;
+            
             _offset = Mathf.Clamp(offset, 0.0f, _lengthSubScreen);
             UpdateTimeline();
         }
 
         public void UpdateTimeline()
         {
+            if (!(_length > 0)) return;
+            
             Vector2 position = _content.localPosition;
             position.x = -_offset * _zoom;
             _content.localPosition = position;
@@ -104,6 +115,8 @@ namespace MoveSync
 
         void OnMarkerChanged(float value)
         {
+            if (!(_length > 0)) return;
+            
             LevelSequencer.instance.SetSongTime((value / _zoom + _offset) *
                                                 LevelSequencer.instance.toTime);
 
@@ -132,13 +145,11 @@ namespace MoveSync
 
         void Start()
         {
+            LevelDataManager.instance.onLoadedSong.AddListener(OnSongLoaded);
             _scrollbar.onValueChanged.AddListener(OnScrollChanged);
             _playMarker.onClick.AddListener(OnMarkerChanged);
             _editorGrid.SetGridParams(_zoom);
             _invZoom = 1 / zoom;
-
-            // temp debug
-            UpdateLength(Mathf.Floor(LevelSequencer.instance.audioSource.clip.length * LevelSequencer.instance.toBPM));
         }
 
         public bool LockOnMarker

@@ -22,25 +22,25 @@ namespace MoveSync
         [SerializeField] private TimelineScroll _timeline;
         [SerializeField] private GameObject _objectUiInstance;
 
-        private Dictionary<Guid, ObjectUI> objectsUi = new Dictionary<Guid, ObjectUI>();
+        private Dictionary<int, ObjectUI> _objectsUi = new Dictionary<int, ObjectUI>();
         
         // selection
         [SerializeField] private GameObject _selectionUiInstance;
         private SelectionUI _selectionUi;
-        private Dictionary<Guid, SelectedObject> _selectedObjects = new Dictionary<Guid, SelectedObject>();
+        private Dictionary<int, SelectedObject> _selectedObjects = new Dictionary<int, SelectedObject>();
         private SelectedObject _currentSelection;
         
         public void UpdateObjects()
         {
             foreach (var data in LevelDataManager.instance.levelInfo.beatObjectDatas)
             {
-                if (!objectsUi.ContainsKey(data.id))
+                if (!_objectsUi.ContainsKey(data.id))
                 {
                     AddObject(data);
                 }
                 else
                 {
-                    UpdateObject(objectsUi[data.id]);
+                    UpdateObject(_objectsUi[data.id]);
                 }
             }
         }
@@ -48,14 +48,21 @@ namespace MoveSync
         public void AddObject(BeatObjectData data)
         {
             ObjectUI objectUi = Instantiate(_objectUiInstance, _rectObjectsList).GetComponent<ObjectUI>();
-            objectUi.Init(data);
+            objectUi.Init(data, _timeline);
             objectUi.onStartDrag.AddListener(OnStartDragObject);
             objectUi.onDrag.AddListener(OnDragObject);
             UpdateObject(objectUi);
             
-            objectsUi.Add(objectUi.beatObjectData.id, objectUi);
+            _objectsUi.Add(objectUi.beatObjectData.id, objectUi);
         }
 
+        public void RemoveObject(BeatObjectData data)
+        {
+            Destroy(_selectedObjects[data.id].objectUi.gameObject);
+            _selectedObjects.Remove(data.id);
+            _objectsUi.Remove(data.id);
+        }
+        
         public void UpdateObject(ObjectUI objectUi)
         {
             objectUi.UpdateUI(_timeline.zoom);
@@ -63,11 +70,11 @@ namespace MoveSync
         
         public void ClearObjects()
         {
-            foreach (var objectUi in objectsUi)
+            foreach (var objectUi in _objectsUi)
             {
                 Destroy(objectUi.Value.gameObject);
             }
-            objectsUi.Clear();
+            _objectsUi.Clear();
         }
 
         /*
@@ -80,7 +87,8 @@ namespace MoveSync
                 float time = mouseTime;
                 if (Input.GetKey(KeyCode.LeftShift)) time = Mathf.Round(time);
                 
-                LevelDataManager.instance.NewBeatObject(ObjectManager.instance.currentObjectModel.objectTag, time, mouseLayer);
+                if (!PropertyName.IsNullOrEmpty(ObjectManager.instance.currentObjectModel.objectTag))
+                    LevelDataManager.instance.NewBeatObject(ObjectManager.instance.currentObjectModel.objectTag, time, mouseLayer);
             }
 
             if (eventData.button == PointerEventData.InputButton.Left)
@@ -110,7 +118,7 @@ namespace MoveSync
             if (eventData.button != PointerEventData.InputButton.Left) return;
 
             // select in rectangle
-            foreach (var objectUi in objectsUi)
+            foreach (var objectUi in _objectsUi)
             {
                 if (_selectionUi.IsOverlapRect(objectUi.Value.rectTransform))
                     AddSelection(objectUi.Value);
@@ -167,7 +175,7 @@ namespace MoveSync
                 _currentSelection = _selectedObjects[objectUi.beatObjectData.id];
                 
                 // remove all other selections
-                List<Guid> tempKeys = new List<Guid>(_selectedObjects.Keys);
+                List<int> tempKeys = new List<int>(_selectedObjects.Keys);
                 foreach(var key in tempKeys)
                 {
                     SelectedObject selectedObject = _selectedObjects[key];
@@ -179,7 +187,7 @@ namespace MoveSync
             }
             
             // calculate offset for each element starting from dragging object
-            List<Guid> keys = new List<Guid>(_selectedObjects.Keys);
+            List<int> keys = new List<int>(_selectedObjects.Keys);
             foreach(var key in keys)
             {
                 SelectedObject newSelectedObject = _selectedObjects[key];
@@ -191,8 +199,7 @@ namespace MoveSync
 
         void OnDragObject(ObjectUI objectUi)
         {
-            
-            List<Guid> keys = new List<Guid>(_selectedObjects.Keys);
+            List<int> keys = new List<int>(_selectedObjects.Keys);
             foreach(var key in keys)
             {
                 SelectedObject newSelectedObject = _selectedObjects[key];
@@ -211,10 +218,26 @@ namespace MoveSync
         void Start()
         {
             LevelDataManager.instance.onNewObject.AddListener(AddObject);
+            LevelDataManager.instance.onRemoveObject.AddListener(RemoveObject);
+            LevelDataManager.instance.onLoadedSong.AddListener(UpdateObjects);
             _timeline.onZoomUpdated.AddListener(UpdateObjects);
         }
 
-        
+        void Update()
+        {
+            // destroying all selections
+            if (Input.GetKeyDown(KeyCode.Delete) &&
+                _selectedObjects.Count > 0)
+            {
+                List<int> keys = new List<int>(_selectedObjects.Keys);
+                foreach(var key in keys)
+                {
+                    LevelDataManager.instance.RemoveBeatObject(_selectedObjects[key].beatObjectData);
+                }
+            }
+        }
+
+
         public Vector2 localMousePosition => Input.mousePosition - _rectObjectsList.position;
         public float mouseTime => localMousePosition.x * _timeline.invZoom;
         public int mouseLayer => Mathf.FloorToInt(-localMousePosition.y / layerHeight);

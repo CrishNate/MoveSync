@@ -9,7 +9,7 @@ namespace MoveSync.UI
         [SerializeField] private BindingManager _bindingManager;
         [SerializeField] private Text _text;
         [SerializeField] private Text _objectTagText;
-        [SerializeField] private int _layer = -1;
+        public int layer = -1;
         
         private Button _button;
         private bool _awaitButton;
@@ -41,7 +41,7 @@ namespace MoveSync.UI
                     return;
                 };
                 
-                _bindingManager.AddKeyBind(_layer, new BindKey
+                _bindingManager.AddKeyBind(layer, new BindKey
                 {
                     key = Event.current.keyCode,
                     objectTag = ObjectManager.instance.currentObjectModel.objectTag
@@ -57,7 +57,7 @@ namespace MoveSync.UI
             _awaitButton = false;
             _text.text = "";
             _objectTagText.text = "";
-            _bindingManager.RemoveKeyBind(_layer);
+            _bindingManager.RemoveKeyBind(layer);
         }
         
         void UpdateUI(KeyCode key, PropertyName objectTag)

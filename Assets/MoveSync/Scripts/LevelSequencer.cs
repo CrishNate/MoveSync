@@ -8,17 +8,18 @@ using Random = UnityEngine.Random;
 namespace MoveSync
 {
     [Serializable]
-    struct SongInfo
+    public struct SongInfo
     {
         public float bpm;
         public float offset;
     }
 
+    
     [RequireComponent(typeof(AudioSource))]
     public class LevelSequencer : Singleton<LevelSequencer>
     {
-        [Header("Song Settings")] [SerializeField]
-        private SongInfo _songInfo;
+        [Header("Song Settings")]
+        public SongInfo songInfo;
 
         private AudioSource _audioSource;
 
@@ -82,13 +83,14 @@ namespace MoveSync
             // ERROR: Error executing result (An invalid seek position was passed to this function. )
             _audioSource.time = Mathf.Max(0, Mathf.Min(songTime + songOffset, _audioSource.clip.length - epsilon));
         }
+        
 
         public AudioSource audioSource => _audioSource;
         public float timeBPM => time * toBPM;
-        public float bpm => _songInfo.bpm;
-        public float toBPM => _songInfo.bpm / 60.0f;
-        public float toTime => 60.0f / _songInfo.bpm;
+        public float bpm => songInfo.bpm;
+        public float toBPM => songInfo.bpm / 60.0f;
+        public float toTime => 60.0f / songInfo.bpm;
         public float time => _audioSource.time - songOffset;
-        public float songOffset => _songInfo.offset;
+        public float songOffset => songInfo.offset;
     }
 }
