@@ -7,14 +7,6 @@ using Random = UnityEngine.Random;
 
 namespace MoveSync
 {
-    [Serializable]
-    public struct SongInfo
-    {
-        public float bpm;
-        public float offset;
-    }
-
-    
     [RequireComponent(typeof(AudioSource))]
     public class LevelSequencer : Singleton<LevelSequencer>
     {
@@ -58,16 +50,6 @@ namespace MoveSync
 
         void RestartFinish()
         {
-            foreach (var beatObject in FindObjectsOfType<BeatObject>())
-            {
-                Destroy(beatObject.gameObject);
-            }
-
-            foreach (var projectile in FindObjectsOfType<BaseProjectile>())
-            {
-                Destroy(projectile.gameObject);
-            }
-
             audioSource.pitch = 1.0f;
             audioSource.Play();
 

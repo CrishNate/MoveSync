@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using MoveSync.ModelData;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -29,13 +30,18 @@ namespace MoveSync
             beatObjectData = data;
             _timeline = timeline;
 
-            ObjectModel model = ObjectManager.instance.objectModels[data.objectTag];
-
-            if ((model.inputUi & ModelInputUI.APPEAR) == 0) _appearUI.gameObject.SetActive(false);
-            if ((model.inputUi & ModelInputUI.STAY) == 0) _durationUI.gameObject.SetActive(false);
+            if (beatObjectData.hasModel(APPEAR.TYPE))
+                _appearUI.onValueChanged.AddListener(OnSetAppear);
+            else
+                _appearUI.Hide();
             
-            _appearUI.onValueChanged.AddListener(OnSetAppear);
-            _durationUI.onValueChanged.AddListener(OnSetDuration);
+
+            if (beatObjectData.hasModel(DURATION.TYPE))
+                _durationUI.onValueChanged.AddListener(OnSetDuration);
+            else
+                _durationUI.Hide();
+            
+            
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -61,18 +67,18 @@ namespace MoveSync
         {
             rectTransform.localPosition = new Vector2(beatObjectData.time * zoom, TimelineObjectsUI.layerHeight * beatObjectData.editorLayer * -1.0f);
             
-            _appearUI.SetValue(beatObjectData.appearDuration * zoom);
-            _durationUI.SetValue(beatObjectData.duration * zoom);
+            if (beatObjectData.hasModel(APPEAR.TYPE)) _appearUI.SetValue(APPEAR.Get(beatObjectData.getModel(APPEAR.TYPE)) * zoom);
+            if (beatObjectData.hasModel(DURATION.TYPE)) _durationUI.SetValue(DURATION.Get(beatObjectData.getModel(DURATION.TYPE)) * zoom);
         }
 
         void OnSetAppear(float value)
         {
-            beatObjectData.appearDuration = value * _timeline.invZoom;
+            APPEAR.Set(beatObjectData.getModel(APPEAR.TYPE), value * _timeline.invZoom);
         }
         
         void OnSetDuration(float value)
         {
-            beatObjectData.duration = value * _timeline.invZoom;
+            DURATION.Set(beatObjectData.getModel(DURATION.TYPE), value * _timeline.invZoom);
         }
         
         public void OnSelect()

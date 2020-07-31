@@ -66,7 +66,7 @@ namespace MoveSync
 
         [SerializeField] private UnityEvent _onFinished;
 
-        private TransformData _transformOrigin;
+        private ExTransformData _transformOrigin;
         private float _totalDuration;
 
         private float _shootTimeMarker = -1;
@@ -76,7 +76,7 @@ namespace MoveSync
 
         void Start()
         {
-            _transformOrigin = new TransformData
+            _transformOrigin = new ExTransformData
             {
                 position = transform.position,
                 rotation = transform.rotation
@@ -110,37 +110,37 @@ namespace MoveSync
 
         Quaternion GetRotationByTargetState()
         {
-            switch (_targetStates)
-            {
-                case TargetStates.Direction:
-                    return beatObjectData.transformData.rotation;
-                case TargetStates.Camera:
-                    return Quaternion.LookRotation(Camera.main.transform.position - beatObjectData.transformData.position);
-            }
+            // switch (_targetStates)
+            // {
+            //     case TargetStates.Direction:
+            //         return beatObjectData.transformData.rotation;
+            //     case TargetStates.Camera:
+            //         return Quaternion.LookRotation(Camera.main.transform.position - beatObjectData.transformData.position);
+            // }
 
             return Quaternion.identity;
         }
 
         void UpdateMovement()
         {
-            float dTimeAppear = (LevelSequencer.instance.timeBPM - appearTimeBPM) /
-                                (GetShootTimeMarker() - _preShootDelay - appearTimeBPM);
-
-            dTimeAppear = Mathf.Min(1.0f, dTimeAppear);
-            dTimeAppear = (1 - Mathf.Pow(1 - dTimeAppear, 2.0f));
-
-            if (Math.Abs(dTimeAppear - 1.0f) < Mathf.Epsilon)
-            {
-                _onPrepare.Invoke();
-                _state = BeatShooterStates.Prepare;
-            }
-
-            transform.position = _transformOrigin.position +
-                                 (beatObjectData.transformData.position - _transformOrigin.position) * dTimeAppear;
-
-            float maxAngle = Quaternion.Angle(_transformOrigin.rotation, GetRotationByTargetState());
-            transform.rotation =
-                Quaternion.RotateTowards(_transformOrigin.rotation, GetRotationByTargetState(), maxAngle * dTimeAppear);
+            // float dTimeAppear = (LevelSequencer.instance.timeBPM - appearTimeBPM) /
+            //                     (GetShootTimeMarker() - _preShootDelay - appearTimeBPM);
+            //
+            // dTimeAppear = Mathf.Min(1.0f, dTimeAppear);
+            // dTimeAppear = (1 - Mathf.Pow(1 - dTimeAppear, 2.0f));
+            //
+            // if (Math.Abs(dTimeAppear - 1.0f) < Mathf.Epsilon)
+            // {
+            //     _onPrepare.Invoke();
+            //     _state = BeatShooterStates.Prepare;
+            // }
+            //
+            // // transform.position = _transformOrigin.position +
+            // //                      (beatObjectData.transformData.position - _transformOrigin.position) * dTimeAppear;
+            //
+            // float maxAngle = Quaternion.Angle(_transformOrigin.rotation, GetRotationByTargetState());
+            // transform.rotation =
+            //     Quaternion.RotateTowards(_transformOrigin.rotation, GetRotationByTargetState(), maxAngle * dTimeAppear);
         }
 
         protected override void Update()

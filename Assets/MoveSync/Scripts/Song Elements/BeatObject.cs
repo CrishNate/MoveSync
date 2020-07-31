@@ -6,12 +6,6 @@ using UnityEngine.Events;
 
 namespace MoveSync
 {
-    public struct TransformData
-    {
-        public Vector3 position;
-        public Quaternion rotation;
-    }
-
     public abstract class BeatObject : MonoBehaviour
     {
         [SerializeField] private UnityEvent _onTriggeredEvent;
@@ -21,24 +15,24 @@ namespace MoveSync
 
         protected virtual void Update()
         {
-            if (dAppearTime < 0)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            if (dAppearTime >= 1.0f)
-            {
-                if (!_triggered)
-                {
-                    OnTriggered();
-                    _triggered = true;
-                }
-            }
-            else
-            {
-                _triggered = false;
-            }
+            // if (dAppearTime < 0)
+            // {
+            //     Destroy(gameObject);
+            //     return;
+            // }
+            //
+            // if (dAppearTime >= 1.0f)
+            // {
+            //     if (!_triggered)
+            //     {
+            //         OnTriggered();
+            //         _triggered = true;
+            //     }
+            // }
+            // else
+            // {
+            //     _triggered = false;
+            // }
         }
 
         protected void OnTriggered()
@@ -47,7 +41,7 @@ namespace MoveSync
         }
 
         protected BeatObjectData beatObjectData => _beatObjectData;
-        protected float appearTimeBPM => _beatObjectData.time - _beatObjectData.appearDuration;
-        protected float dAppearTime => (LevelSequencer.instance.timeBPM - _beatObjectData.time) / (_beatObjectData.time - appearTimeBPM);
+        //protected float appearTimeBPM => _beatObjectData.time - _beatObjectData.appearDuration;
+        //protected float dAppearTime => (LevelSequencer.instance.timeBPM - _beatObjectData.time) / (_beatObjectData.time - appearTimeBPM);
     }
 }

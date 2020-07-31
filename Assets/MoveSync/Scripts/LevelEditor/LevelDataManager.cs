@@ -2,12 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using MoveSync.ModelData;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace MoveSync
 {
+    [Serializable]
+    public struct SongInfo
+    {
+        public float bpm;
+        public float offset;
+    }
+    
     [Serializable]
     public class ExTransformData
     {
@@ -21,7 +29,6 @@ namespace MoveSync
 
         public Vector3 position;
         public Quaternion rotation;
-        public float scale;
     }
     
     [Serializable]
@@ -38,28 +45,51 @@ namespace MoveSync
         {
             BeatObjectData other = (BeatObjectData) MemberwiseClone();
             other.id = SerializableGuid.NewGuid();
-            other.transformData = transformData.Clone();
-            other.initialTransformData = initialTransformData.Clone();
-            other.animation = new List<BeatAnimationData>();
-            foreach (var anim in animation)
-            {
-                other.animation.Add(new BeatAnimationData {time = anim.time, animation = anim.animation});
-            }
-            
+            other.modelInputsData = ModelInput.CloneInputs(modelInputsData);
+
             return other;
         }
-        
+
         public PropertyName objectTag;
         public SerializableGuid id;
+
         public float time;
+
         // editor
         public int editorLayer;
+
         // custom data
-        public float appearDuration;
-        public float duration;
-        public ExTransformData transformData;
-        public ExTransformData initialTransformData;
-        public List<BeatAnimationData> animation;
+        public ModelInput[] modelInputsData;
+        private Dictionary<PropertyName, ModelInput> modelInputs;
+
+        
+        public bool hasModel(PropertyName type)
+        {
+            if (modelInputs == null)
+            {
+                modelInputs = new Dictionary<PropertyName, ModelInput>();
+                foreach (var m in modelInputsData)
+                {
+                    modelInputs.Add(m.type, m);
+                }
+            }
+
+            return modelInputs.ContainsKey(type);
+        }
+
+        public ModelInput getModel(PropertyName type)
+        {
+            if (modelInputs == null)
+            {
+                modelInputs = new Dictionary<PropertyName, ModelInput>();
+                foreach (var m in modelInputsData)
+                {
+                    modelInputs.Add(m.type, m);
+                }
+            }
+
+            return modelInputs[type];
+        }
     }
 
     public class LevelInfo
@@ -105,9 +135,7 @@ namespace MoveSync
                 id = SerializableGuid.NewGuid(), 
                 time = time,
                 editorLayer = layer,
-                animation = new List<BeatAnimationData>(),
-                transformData = new ExTransformData(),
-                initialTransformData = new ExTransformData(),
+                modelInputsData = ModelInput.CloneInputs(ObjectManager.instance.objectModels[objectTag].modelInput),
             };
 
             if (history) BackupInfo();
@@ -117,7 +145,7 @@ namespace MoveSync
             return data;
         }
         
-        public BeatObjectData CopyBeatObject(BeatObjectData beatObjectData, float time = 0.0f, int layer = 0, bool history = true)
+        public void CopyBeatObject(BeatObjectData beatObjectData, float time = 0.0f, int layer = 0, bool history = true)
         {
             BeatObjectData data = beatObjectData.Clone();
             data.time = time;
@@ -126,13 +154,13 @@ namespace MoveSync
 
             levelInfo.beatObjectDatas.Add(data);
             onNewObject.Invoke(data);
-            return data;
         }
 
         public bool RemoveBeatObject(BeatObjectData beatObjectData, bool history = true)
         {
             if (history) BackupInfo();
             onRemoveObject.Invoke(beatObjectData);
+            SerializableGuid.RemoveId(beatObjectData.id);
             return levelInfo.beatObjectDatas.Remove(beatObjectData);
         }
         

@@ -1,32 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 
 namespace MoveSync
 {
     [Serializable]
-    public class SerializableGuid
+    public class SerializableGuid : ISerializationCallbackReceiver
     {
-        [NonSerialized] private static int _lastId;
         public int value;
-
-        public static implicit operator SerializableGuid(int index) => new SerializableGuid(index);
+        private static HashSet<int> _takenIds = new HashSet<int>();
+        private static int maxInt = 2147483647;
+        
+        
         public static implicit operator int(SerializableGuid guid) => guid.value;
-
+        public static void RemoveId(int id) {_takenIds.Remove(id);}
+        
         public static SerializableGuid NewGuid()
         {
-            return new SerializableGuid();
+            int id;
+            Random rnd = new Random();
+            do
+            {
+                id = rnd.Next(-maxInt, maxInt);
+            } while (!_takenIds.Add(id));
+
+            return new SerializableGuid{ value = id };
         }
 
-        SerializableGuid()
+        public void OnBeforeSerialize()
         {
-            value = ++_lastId;
         }
 
-        SerializableGuid(int id)
+        public void OnAfterDeserialize()
         {
-            _lastId = Mathf.Max(_lastId, id);
+            _takenIds.Add(value);
         }
     }
 }

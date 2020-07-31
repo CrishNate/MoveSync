@@ -6,33 +6,23 @@ using MoveSync.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using MoveSync.ModelData;
 
 namespace MoveSync
 {
-    [Flags]
-    public enum ModelInputUI
-    {
-        NONE              = 0,
-        TRANSFORM         = 1,
-        INITIAL_TRANSFORM = 2,
-        APPEAR            = 4,
-        STAY              = 8,
-        ANIMATION         = 16,
-    }
-    
-    public struct ObjectModel
-    {
-        public ObjectModel(PropertyName _objectTag, ModelInputUI _inputUi, string _prefabPath)
+   public struct ObjectModel
+   {
+        public ObjectModel(PropertyName _objectTag, ModelInput[] _modelInput, string _prefabPath)
         {
             objectTag = _objectTag;
-            inputUi = _inputUi;
+            modelInput = _modelInput;
             prefabPath = _prefabPath;
         }
         
         public PropertyName objectTag;
-        public ModelInputUI inputUi;
+        public ModelInput[] modelInput;
         public string prefabPath;
-    }
+   }
 
     public class ObjectManager : Singleton<ObjectManager>
     {
@@ -59,9 +49,9 @@ namespace MoveSync
 
         void Start()
         {
-            AddSpawnTable(new ObjectModel("laser_shooter", ModelInputUI.TRANSFORM | ModelInputUI.INITIAL_TRANSFORM | ModelInputUI.APPEAR | ModelInputUI.STAY, "Assets/MoveSync/Prefab/LaserFade.prefab"));
-            AddSpawnTable(new ObjectModel("shooter", ModelInputUI.TRANSFORM | ModelInputUI.INITIAL_TRANSFORM | ModelInputUI.APPEAR, "Assets/MoveSync/Prefab/LaserFade.prefab"));
-            AddSpawnTable(new ObjectModel("explosion", ModelInputUI.TRANSFORM | ModelInputUI.INITIAL_TRANSFORM, "Assets/MoveSync/Prefab/LaserFade.prefab"));
+            AddSpawnTable(new ObjectModel("laser_shooter", new[] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1") }, "Assets/MoveSync/Prefab/LaserFade.prefab"));
+            AddSpawnTable(new ObjectModel("shooter", new[] { ModelInput.APPEAR.defaultValue("2") } , "Assets/MoveSync/Prefab/LaserFade.prefab"));
+            AddSpawnTable(new ObjectModel("explosion", new ModelInput[] {}, "Assets/MoveSync/Prefab/LaserFade.prefab"));
             
             _onObjectsLoaded.Invoke();
         }

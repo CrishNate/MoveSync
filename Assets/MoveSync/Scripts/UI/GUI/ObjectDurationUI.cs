@@ -43,6 +43,11 @@ public class ObjectDurationUI : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     {
         _content.sizeDelta = new Vector2(value, _content.sizeDelta.y);
     }
+
+    public void Hide()
+    {
+        _content.gameObject.SetActive(false);
+    }
     
     void Update()
     {
