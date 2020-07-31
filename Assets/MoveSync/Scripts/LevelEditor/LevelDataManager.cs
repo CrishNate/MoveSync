@@ -105,7 +105,9 @@ namespace MoveSync
                 id = SerializableGuid.NewGuid(), 
                 time = time,
                 editorLayer = layer,
-                animation = new List<BeatAnimationData>()
+                animation = new List<BeatAnimationData>(),
+                transformData = new ExTransformData(),
+                initialTransformData = new ExTransformData(),
             };
 
             if (history) BackupInfo();
@@ -115,9 +117,11 @@ namespace MoveSync
             return data;
         }
         
-        public BeatObjectData CopyBeatObject(BeatObjectData beatObjectData, bool history = true)
+        public BeatObjectData CopyBeatObject(BeatObjectData beatObjectData, float time = 0.0f, int layer = 0, bool history = true)
         {
             BeatObjectData data = beatObjectData.Clone();
+            data.time = time;
+            data.editorLayer = layer;
             if (history) BackupInfo();
 
             levelInfo.beatObjectDatas.Add(data);
@@ -167,6 +171,9 @@ namespace MoveSync
             System.IO.File.WriteAllText(filePath, levelJson);
         }
 
+        /*
+         * History
+         */
         public void BackupInfo()
         {
             int diff = (_history.Count - _historyMarker) - 1;

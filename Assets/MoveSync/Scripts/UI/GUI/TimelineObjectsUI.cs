@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace MoveSync
 {
-    public struct SelectedObject
+    public struct SelectedObjectData
     {
         public ObjectUI objectUi;
         public float offset;
@@ -27,8 +27,11 @@ namespace MoveSync
         // selection
         [SerializeField] private GameObject _selectionUiInstance;
         private SelectionUI _selectionUi;
-        private Dictionary<int, SelectedObject> _selectedObjects = new Dictionary<int, SelectedObject>();
-        private SelectedObject _currentSelection;
+        private Dictionary<int, SelectedObjectData> _selectedObjects = new Dictionary<int, SelectedObjectData>();
+        private SelectedObjectData _currentSelection;
+        
+        // copy/paste
+        private Dictionary<int, SelectedObjectData> _copyObjects = new Dictionary<int, SelectedObjectData>();
         
         public void UpdateObjects()
         {
@@ -85,7 +88,7 @@ namespace MoveSync
             if (eventData.button == PointerEventData.InputButton.Right)
             {
                 float time = mouseTime;
-                if (Input.GetKey(KeyCode.LeftShift)) time = Mathf.Round(time);
+                if (InputData.shouldSnap) time = Mathf.Round(time);
                 
                 if (!PropertyName.IsNullOrEmpty(ObjectManager.instance.currentObjectModel.objectTag))
                     LevelDataManager.instance.NewBeatObject(ObjectManager.instance.currentObjectModel.objectTag, time, mouseLayer);
@@ -131,7 +134,7 @@ namespace MoveSync
         {
             if (_selectedObjects.ContainsKey(objectUi.beatObjectData.id)) return false;
             
-            SelectedObject newSelectedObject = new SelectedObject
+            SelectedObjectData newSelectedObject = new SelectedObjectData
             {
                 objectUi = objectUi
             };
@@ -156,6 +159,19 @@ namespace MoveSync
             }
             _selectedObjects.Clear();
         }
+
+        // calculate offset for each element starting from time/layer stamps
+        void CalculateOffsets(ref Dictionary<int, SelectedObjectData> selectedObjects, float timeStamp, int layerStamp)
+        {
+            List<int> keys = new List<int>(selectedObjects.Keys);
+            foreach(var key in keys)
+            {
+                SelectedObjectData newSelectedObject = selectedObjects[key];
+                newSelectedObject.offset = newSelectedObject.beatObjectData.time - timeStamp;
+                newSelectedObject.offsetLayer = newSelectedObject.beatObjectData.editorLayer - layerStamp;
+                selectedObjects[key] = newSelectedObject;
+            }
+        }
         
         /*
          * Selection move
@@ -178,23 +194,15 @@ namespace MoveSync
                 List<int> tempKeys = new List<int>(_selectedObjects.Keys);
                 foreach(var key in tempKeys)
                 {
-                    SelectedObject selectedObject = _selectedObjects[key];
+                    SelectedObjectData selectedObject = _selectedObjects[key];
                     if (selectedObject.beatObjectData.id != objectUi.beatObjectData.id)
                     {
                         RemoveSelection(selectedObject.objectUi);
                     }
                 }
             }
-            
-            // calculate offset for each element starting from dragging object
-            List<int> keys = new List<int>(_selectedObjects.Keys);
-            foreach(var key in keys)
-            {
-                SelectedObject newSelectedObject = _selectedObjects[key];
-                newSelectedObject.offset = newSelectedObject.beatObjectData.time - objectUi.beatObjectData.time;
-                newSelectedObject.offsetLayer = newSelectedObject.beatObjectData.editorLayer - objectUi.beatObjectData.editorLayer;
-                _selectedObjects[key] = newSelectedObject;
-            }
+
+            CalculateOffsets(ref _selectedObjects, objectUi.beatObjectData.time, objectUi.beatObjectData.editorLayer);
         }
 
         void OnDragObject(ObjectUI objectUi)
@@ -202,14 +210,13 @@ namespace MoveSync
             List<int> keys = new List<int>(_selectedObjects.Keys);
             foreach(var key in keys)
             {
-                SelectedObject newSelectedObject = _selectedObjects[key];
+                SelectedObjectData newSelectedObject = _selectedObjects[key];
                 BeatObjectData data = newSelectedObject.beatObjectData;
                 
                 // offsetting beat objects while moving
-                if (!Input.GetKey(KeyCode.LeftControl)) data.time = Mathf.Max(0, mouseTime + newSelectedObject.offset);
+                if (!InputData.shouldOnlyLayer) data.time = Mathf.Max(0, mouseTime + newSelectedObject.offset);
                 data.editorLayer = Mathf.Max(0, mouseLayer + newSelectedObject.offsetLayer);
-                // snapping
-                if (Input.GetKey(KeyCode.LeftShift)) data.time = Mathf.Round(data.time);
+                if (InputData.shouldSnap) data.time = Mathf.Round(data.time);
                 
                 UpdateObject(newSelectedObject.objectUi);
             }
@@ -226,13 +233,42 @@ namespace MoveSync
         void Update()
         {
             // destroying all selections
-            if (Input.GetKeyDown(KeyCode.Delete) &&
-                _selectedObjects.Count > 0)
+            if (InputData.shouldDelete && _selectedObjects.Count > 0)
             {
                 List<int> keys = new List<int>(_selectedObjects.Keys);
                 foreach(var key in keys)
                 {
                     LevelDataManager.instance.RemoveBeatObject(_selectedObjects[key].beatObjectData);
+                }
+            }
+            
+            // copy objects
+            if (InputData.shouldCopy)
+            {
+                _copyObjects.Clear();
+                float lessTime = -1;
+                int lessLayer = -1;
+                
+                foreach (var selectedObject in _selectedObjects)
+                {
+                    _copyObjects.Add(selectedObject.Key, selectedObject.Value);
+
+                    if (selectedObject.Value.beatObjectData.time < lessTime || lessTime < 0)
+                        lessTime = selectedObject.Value.beatObjectData.time;
+                    if (selectedObject.Value.beatObjectData.editorLayer < lessLayer || lessLayer < 0)
+                        lessLayer = selectedObject.Value.beatObjectData.editorLayer;
+                }
+
+                CalculateOffsets(ref _copyObjects, lessTime, lessLayer);
+            }
+                        
+            // paste objects
+            if (InputData.shouldPaste)
+            {
+                foreach (var copyObject in _copyObjects)
+                {
+                    LevelDataManager.instance.CopyBeatObject(copyObject.Value.beatObjectData,
+                        mouseTime + copyObject.Value.offset, mouseLayer + copyObject.Value.offsetLayer);
                 }
             }
         }
