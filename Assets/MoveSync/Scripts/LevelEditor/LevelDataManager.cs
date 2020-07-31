@@ -123,7 +123,10 @@ namespace MoveSync
          */
         public BeatObjectData NewBeatObjectAtMarker(PropertyName objectTag, int layer = 0)
         {
-            BeatObjectData data = NewBeatObject(objectTag, LevelSequencer.instance.timeBPM, layer);
+            float time = LevelSequencer.instance.timeBPM;
+            if (InputData.shouldSnap) time = Mathf.Round(time);
+            
+            BeatObjectData data = NewBeatObject(objectTag, time, layer);
             return data;
         }
         
