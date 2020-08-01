@@ -54,6 +54,7 @@ namespace MoveSync
             objectUi.Init(data, _timeline);
             objectUi.onStartDrag.AddListener(OnStartDragObject);
             objectUi.onDrag.AddListener(OnDragObject);
+            objectUi.onStopDrag.AddListener(OnStopDragObject);
             UpdateObject(objectUi);
             
             _objectsUi.Add(objectUi.beatObjectData.id, objectUi);
@@ -158,6 +159,7 @@ namespace MoveSync
                 selectedObject.Value.objectUi.OnDeselect();
             }
             _selectedObjects.Clear();
+            _currentSelection.objectUi = null;
         }
 
         // calculate offset for each element starting from time/layer stamps
@@ -222,12 +224,25 @@ namespace MoveSync
             }
         }
 
+        void OnStopDragObject(ObjectUI objectUi)
+        {
+            LevelDataManager.instance.SortBeatObjects();
+        }
+
         void Start()
         {
             LevelDataManager.instance.onNewObject.AddListener(AddObject);
             LevelDataManager.instance.onRemoveObject.AddListener(RemoveObject);
             LevelDataManager.instance.onLoadedSong.AddListener(UpdateObjects);
             _timeline.onZoomUpdated.AddListener(UpdateObjects);
+        }
+
+        public void DrawOnlyBeatKeys(bool draw)
+        {
+            foreach (var objectUi in _objectsUi)
+            {
+                objectUi.Value.ShowOnlyKey(draw);
+            }
         }
 
         void Update()
@@ -270,6 +285,8 @@ namespace MoveSync
                     LevelDataManager.instance.CopyBeatObject(copyObject.Value.beatObjectData,
                         mouseTime + copyObject.Value.offset, mouseLayer + copyObject.Value.offsetLayer);
                 }
+                
+                LevelDataManager.instance.SortBeatObjects();
             }
         }
 

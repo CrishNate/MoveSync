@@ -76,7 +76,6 @@ namespace MoveSync
 
             return modelInputs.ContainsKey(type);
         }
-
         public ModelInput getModel(PropertyName type)
         {
             if (modelInputs == null)
@@ -90,6 +89,17 @@ namespace MoveSync
 
             return modelInputs[type];
         }
+
+
+        public float spawnTime
+        {
+            get
+            {
+                if (hasModel(APPEAR.TYPE)) return time - APPEAR.Get(getModel(APPEAR.TYPE));
+
+                return time;
+            }
+        }
     }
 
     public class LevelInfo
@@ -101,16 +111,14 @@ namespace MoveSync
         public List<BeatObjectData> beatObjectDatas;
     }
 
-    public class EventBeatObject : UnityEvent<BeatObjectData> {};
+    public class EventBeatObjectData : UnityEvent<BeatObjectData> {};
     
     public class LevelDataManager : Singleton<LevelDataManager>
     {
         public static string levelFileType = "mslevel";
-        
-        public string levelName;
 
-        public EventBeatObject onNewObject = new EventBeatObject();
-        public EventBeatObject onRemoveObject = new EventBeatObject();
+        public EventBeatObjectData onNewObject = new EventBeatObjectData();
+        public EventBeatObjectData onRemoveObject = new EventBeatObjectData();
         public UnityEvent onLoadedSong = new UnityEvent();
         [HideInInspector] public LevelInfo levelInfo = new LevelInfo();
 
@@ -145,6 +153,8 @@ namespace MoveSync
 
             levelInfo.beatObjectDatas.Add(data);
             onNewObject.Invoke(data);
+
+            SortBeatObjects();
             return data;
         }
         
@@ -165,6 +175,11 @@ namespace MoveSync
             onRemoveObject.Invoke(beatObjectData);
             SerializableGuid.RemoveId(beatObjectData.id);
             return levelInfo.beatObjectDatas.Remove(beatObjectData);
+        }
+
+        public void SortBeatObjects()
+        {
+            levelInfo.beatObjectDatas.Sort((p1,p2)=>p1.spawnTime.CompareTo(p2.spawnTime));
         }
         
         /*

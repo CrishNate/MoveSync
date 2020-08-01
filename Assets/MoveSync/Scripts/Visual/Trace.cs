@@ -18,7 +18,7 @@ namespace MoveSync
         void Start()
         {
             _distance = _direction.magnitude;
-            radius = GetComponentInParent<BeatShoot>().projectileScale;
+            radius = GetComponentInParent<BeatShoot>().size;
             transform.localScale = new Vector3(radius, radius, 0.0f);
         }
 

@@ -17,11 +17,13 @@ namespace MoveSync
             objectTag = _objectTag;
             modelInput = _modelInput;
             prefabPath = _prefabPath;
+            prefab = Resources.Load<GameObject>(prefabPath);
         }
         
         public PropertyName objectTag;
         public ModelInput[] modelInput;
         public string prefabPath;
+        public GameObject prefab;
    }
 
     public class ObjectManager : Singleton<ObjectManager>
@@ -49,9 +51,9 @@ namespace MoveSync
 
         void Start()
         {
-            AddSpawnTable(new ObjectModel("laser_shooter", new[] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1") }, "Assets/MoveSync/Prefab/LaserFade.prefab"));
-            AddSpawnTable(new ObjectModel("shooter", new[] { ModelInput.APPEAR.defaultValue("2") } , "Assets/MoveSync/Prefab/LaserFade.prefab"));
-            AddSpawnTable(new ObjectModel("explosion", new ModelInput[] {}, "Assets/MoveSync/Prefab/LaserFade.prefab"));
+            //AddSpawnTable(new ObjectModel("laser_shooter", new[] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1") }, "MoveSync/Prefab/LaserFade.prefab"));
+            //AddSpawnTable(new ObjectModel("shooter", new[] { ModelInput.APPEAR.defaultValue("2") } , "MoveSync/Prefab/LaserFade.prefab"));
+            AddSpawnTable(new ObjectModel("explosion", new ModelInput[] {ModelInput.APPEAR.defaultValue("2"), ModelInput.SIZE.defaultValue("1")}, "MoveSync/BeatObjects/ProjectileSphereExplosion"));
             
             _onObjectsLoaded.Invoke();
         }

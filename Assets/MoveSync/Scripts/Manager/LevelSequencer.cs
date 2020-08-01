@@ -10,15 +10,13 @@ namespace MoveSync
     [RequireComponent(typeof(AudioSource))]
     public class LevelSequencer : Singleton<LevelSequencer>
     {
-        [Header("Song Settings")]
-        public SongInfo songInfo;
+        [HideInInspector] public SongInfo songInfo;
 
         private AudioSource _audioSource;
-
-        [Header("Gameplay settings")] [SerializeField]
         private float _restartTime = 1.0f;
 
-        [Header("Events")] [SerializeField] private UnityEvent _onRestartFinished;
+        [Header("Events")] 
+        [SerializeField] private UnityEvent _onRestartFinished;
         [SerializeField] private UnityEvent _onRestart;
 
         void Awake()
@@ -74,5 +72,6 @@ namespace MoveSync
         public float toTime => 60.0f / songInfo.bpm;
         public float time => _audioSource.time - songOffset;
         public float songOffset => songInfo.offset;
+        public bool songPlaying => _audioSource.isPlaying;
     }
 }

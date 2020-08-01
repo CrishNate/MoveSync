@@ -76,18 +76,10 @@ MonoBehaviour:
       m_Calls: []
   _projectileObject: {fileID: 2341723290652221099, guid: f9ddb4903afd2d34b82b3932a05a39f9,
     type: 3}
-  _shootTransform: {fileID: 1765459100110835883}
-  _preShootDelay: 1
-  _rescaleBeatObjectByProjectalieScale: 0
-  _shootAppearTime: 6
-  _projectileScale: 0.3
-  _shootData:
-    _isBullet: 1
-    _shoots: 1
-    _duration: 0
-    _delay: 0
-    _postShootDelay: 0
   _targetStates: 1
+  _shootTransform: {fileID: 1765459100110835883}
+  _shootAppearTime: 6
+  _moveTime: 0.5
   _onPrepare:
     m_PersistentCalls:
       m_Calls: []

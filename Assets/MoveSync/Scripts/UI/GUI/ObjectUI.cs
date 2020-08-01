@@ -10,11 +10,12 @@ namespace MoveSync
     
     public class EventObjectUI : UnityEvent<ObjectUI>{};
     
-    public class ObjectUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerClickHandler 
+    public class ObjectUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler 
     {
         [HideInInspector] public BeatObject _beatObject;
         [HideInInspector] public EventObjectUI onStartDrag = new EventObjectUI();
         [HideInInspector] public EventObjectUI onDrag = new EventObjectUI();
+        [HideInInspector] public EventObjectUI onStopDrag = new EventObjectUI();
         [HideInInspector] public BeatObjectData beatObjectData;
 
         [SerializeField] private RectTransform _middleHandler;
@@ -33,15 +34,12 @@ namespace MoveSync
             if (beatObjectData.hasModel(APPEAR.TYPE))
                 _appearUI.onValueChanged.AddListener(OnSetAppear);
             else
-                _appearUI.Hide();
-            
+                _appearUI.IsShown(false);
 
             if (beatObjectData.hasModel(DURATION.TYPE))
                 _durationUI.onValueChanged.AddListener(OnSetDuration);
             else
-                _durationUI.Hide();
-            
-            
+                _durationUI.IsShown(false);
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -61,6 +59,11 @@ namespace MoveSync
         public void OnDrag(PointerEventData data)
         {
             onDrag.Invoke(this);
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            onStopDrag.Invoke(this);
         }
 
         public void UpdateUI(float zoom)
@@ -88,6 +91,12 @@ namespace MoveSync
         public void OnDeselect()
         {
             _selection.SetActive(false);
+        }
+
+        public void ShowOnlyKey(bool show)
+        {
+            if (beatObjectData.hasModel(APPEAR.TYPE)) _appearUI.IsShown(!show);
+            if (beatObjectData.hasModel(DURATION.TYPE)) _durationUI.IsShown(!show);
         }
         
 
