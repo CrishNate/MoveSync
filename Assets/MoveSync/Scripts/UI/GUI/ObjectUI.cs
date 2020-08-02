@@ -70,18 +70,18 @@ namespace MoveSync
         {
             rectTransform.localPosition = new Vector2(beatObjectData.time * zoom, TimelineObjectsUI.layerHeight * beatObjectData.editorLayer * -1.0f);
             
-            if (beatObjectData.hasModel(APPEAR.TYPE)) _appearUI.SetValue(APPEAR.Get(beatObjectData.getModel(APPEAR.TYPE)) * zoom);
-            if (beatObjectData.hasModel(DURATION.TYPE)) _durationUI.SetValue(DURATION.Get(beatObjectData.getModel(DURATION.TYPE)) * zoom);
+            if (beatObjectData.hasModel(APPEAR.TYPE)) _appearUI.SetValue(beatObjectData.getModel<APPEAR>(APPEAR.TYPE).value * zoom);
+            if (beatObjectData.hasModel(DURATION.TYPE)) _durationUI.SetValue(beatObjectData.getModel<DURATION>(DURATION.TYPE).value * zoom);
         }
 
         void OnSetAppear(float value)
         {
-            APPEAR.Set(beatObjectData.getModel(APPEAR.TYPE), value * _timeline.invZoom);
+            beatObjectData.getModel<APPEAR>(APPEAR.TYPE).value = value * _timeline.invZoom;
         }
         
         void OnSetDuration(float value)
         {
-            DURATION.Set(beatObjectData.getModel(DURATION.TYPE), value * _timeline.invZoom);
+            beatObjectData.getModel<DURATION>(DURATION.TYPE).value = value * _timeline.invZoom;
         }
         
         public void OnSelect()

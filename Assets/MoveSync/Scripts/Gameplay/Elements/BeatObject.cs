@@ -23,13 +23,13 @@ namespace MoveSync
         
         protected virtual void Update()
         {
-            if (_spawnTimeBPM < 0)
+            if (LevelSequencer.instance.timeBPM < _spawnTimeBPM)
             {
                 Destroy(gameObject);
                 return;
             }
             
-            if (_spawnTimeBPM >= 1.0f)
+            if (LevelSequencer.instance.timeBPM >= beatObjectData.time)
             {
                 if (!_triggered)
                 {

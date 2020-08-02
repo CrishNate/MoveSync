@@ -15,7 +15,7 @@ namespace MoveSync
         {
             base.Init(instigator, invokeTimeStamp, duration, appearTime, scale);
 
-            _distance = (Camera.main.transform.position - transform.position).magnitude - _distanceOffset;
+            _distance = (PlayerBehaviour.instance.transform.position - transform.position).magnitude - _distanceOffset;
 
             transform.localScale = Vector3.one * scale;
             _speed = _distance / (appearTime * LevelSequencer.instance.toTime);

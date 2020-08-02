@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MoveSync.ModelData;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 namespace MoveSync
 {
@@ -41,15 +42,13 @@ namespace MoveSync
     public class BeatShoot : BeatObject
     {
         [SerializeField] private GameObject _projectileObject;
-        
-        [Header("Beat Shooter")]
+
+        [Header("Beat Shooter")] 
+        [SerializeField] private GameObject _shootPreview;
         [SerializeField] private TargetStates _targetStates;
         [SerializeField] private Transform _shootTransform;
         [SerializeField] private float _shootAppearTime = 0.2f;
         [SerializeField] private float _moveTime = 0.5f;
-
-        [Header("Beat Shooter Events")] [SerializeField]
-        private UnityEvent _onPrepare;
 
         [SerializeField] private UnityEvent _onFinished;
 
@@ -67,18 +66,21 @@ namespace MoveSync
         public override void Init(BeatObjectData beatObjectData)
         {
             base.Init(beatObjectData);
+
+            _transformEnd = beatObjectData.getModel<TRANSFORM>(TRANSFORM.TYPE).value;
+            _transformOrigin = _transformEnd.Clone();
+            _transformOrigin.position.y = -10;
+
+            Vector3 offset = Random.insideUnitCircle * 20.0f;
+            offset = new Vector3(offset.x, 10, offset.y);
+
+            _appearDuration = beatObjectData.getModel<APPEAR>(APPEAR.TYPE).value;
+            _duration = beatObjectData.getModel<DURATION>(DURATION.TYPE).value;
+            _size = beatObjectData.getModel<SIZE>(SIZE.TYPE).value;
             
-            _transformOrigin = new ExTransformData
-            {
-                position = transform.position,
-                rotation = transform.rotation
-            };
-            _appearDuration = APPEAR.Get(beatObjectData.getModel(APPEAR.TYPE));
-            _duration = DURATION.Get(beatObjectData.getModel(DURATION.TYPE));
-            _size = SIZE.Get(beatObjectData.getModel(SIZE.TYPE));
-            
-            transform.localScale = transform.localScale * _size;
             _shootTimeBPM = beatObjectData.time - _shootAppearTime;
+            transform.localScale = transform.localScale * _size;
+            transform.position = _transformOrigin.position;
         }
         
         void UpdateShoot()
@@ -88,9 +90,11 @@ namespace MoveSync
             if (LevelSequencer.instance.timeBPM > _shootTimeBPM)
             {
                 _shooted = true;
+                _shootPreview.SetActive(false);
+
                 Instantiate(_projectileObject, _shootTransform.position, _shootTransform.rotation)
                     .GetComponent<BaseProjectile>()
-                    .Init(gameObject, beatObjectData.time, _duration, _shootAppearTime, _size);
+                    .Init(gameObject, _shootTimeBPM, _duration, _shootAppearTime, _size);
             }
         }
 
@@ -101,7 +105,7 @@ namespace MoveSync
                 case TargetStates.Direction:
                     return _transformEnd.rotation;
                 case TargetStates.Camera:
-                    return Quaternion.LookRotation(Camera.main.transform.position - transform.position);
+                    return Quaternion.LookRotation(PlayerBehaviour.instance.transform.position - transform.position);
             }
 
             return Quaternion.identity;
@@ -112,13 +116,14 @@ namespace MoveSync
             if (_finishMove) return;
             
             float dTimeMove = (LevelSequencer.instance.timeBPM - spawnTimeBPM) / _moveTime;
-            if (dTimeMove > 1.0f) _finishMove = true;
+            if (dTimeMove > 1.0f)
+            {
+                _shootPreview.SetActive(true);
+                _finishMove = true;
+            }
             
             dTimeMove = Mathf.Min(1.0f, dTimeMove);
             dTimeMove = (1 - Mathf.Pow(1 - dTimeMove, 2.0f));
-            
-            if (Mathf.Abs(dTimeMove - 1.0f) < Mathf.Epsilon)
-                _onPrepare.Invoke();
 
             transform.position = _transformOrigin.position +
                                  (_transformEnd.position - _transformOrigin.position) * dTimeMove;
@@ -132,11 +137,9 @@ namespace MoveSync
         {
             base.Update();
 
-            // movement logic
             UpdateMovement();
             UpdateShoot();
 
-            // end state logic
             if (LevelSequencer.instance.timeBPM >= beatObjectData.time + _duration)
             {
                 _onFinished.Invoke();

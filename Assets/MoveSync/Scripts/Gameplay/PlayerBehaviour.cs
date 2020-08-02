@@ -5,10 +5,8 @@ using UnityEngine.Events;
 
 namespace MoveSync
 {
-    public class PlayerBehaviour : MonoBehaviour
+    public class PlayerBehaviour : Singleton<PlayerBehaviour>
     {
-        [HideInInspector] public static PlayerBehaviour instance = null;
-
         [Header("Events")] [SerializeField] private UnityEvent _onDeath;
         [SerializeField] private UnityEvent _onHit;
         [SerializeField] private UnityEvent _onInvincibilityEnd;
@@ -19,18 +17,6 @@ namespace MoveSync
         [SerializeField] private float _invincibilityTime;
 
         private float _invincibilityTimeStamp;
-
-        void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else if (instance == this)
-            {
-                Destroy(gameObject);
-            }
-        }
 
         void Start()
         {
@@ -51,7 +37,7 @@ namespace MoveSync
         {
             if (collider.gameObject.layer == LayerMask.NameToLayer("DamageObjects"))
             {
-                OnHit(collider.gameObject);
+                //OnHit(collider.gameObject);
             }
         }
 

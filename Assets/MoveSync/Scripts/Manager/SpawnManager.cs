@@ -11,6 +11,18 @@ namespace MoveSync
         private float lastTimeBPM;
 
 
+        public void ClearAll()
+        {
+            foreach (var beatObject in FindObjectsOfType<BeatObject>())
+            {
+                Destroy(beatObject.gameObject);
+            }
+            foreach (var projectile in FindObjectsOfType<BaseProjectile>())
+            {
+                Destroy(projectile.gameObject);
+            }
+        }
+
         void MoveBeatIndex()
         {
             lastTimeBPM = 0;
@@ -24,11 +36,11 @@ namespace MoveSync
 
         void SpawnObject(BeatObjectData beatObjectData)
         {
-            BeatObject beatObject = Instantiate(ObjectManager.instance.objectModels[beatObjectData.objectTag].prefab)
-                .GetComponent<BeatObject>();
+            BeatObject beatObject = Instantiate(ObjectManager.instance.objectModels[beatObjectData.objectTag].prefab).GetComponent<BeatObject>();
             beatObject.Init(beatObjectData);
+            beatObject.gameObject.SetActive(true);
         }
-
+        
         void Update()
         {
             // update on replaying

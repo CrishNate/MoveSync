@@ -68,26 +68,28 @@ namespace MoveSync
             if (modelInputs == null)
             {
                 modelInputs = new Dictionary<PropertyName, ModelInput>();
-                foreach (var m in modelInputsData)
+                for (int i = 0; i < modelInputsData.Length; i++)
                 {
+                    ModelInput m = modelInputsData[i] = ModelInput.RecreateRealModel(modelInputsData[i]);
                     modelInputs.Add(m.type, m);
                 }
             }
 
             return modelInputs.ContainsKey(type);
         }
-        public ModelInput getModel(PropertyName type)
+        public T getModel<T>(PropertyName type) where T : ModelInput
         {
             if (modelInputs == null)
             {
                 modelInputs = new Dictionary<PropertyName, ModelInput>();
-                foreach (var m in modelInputsData)
+                for (int i = 0; i < modelInputsData.Length; i++)
                 {
+                    ModelInput m = modelInputsData[i] = ModelInput.RecreateRealModel(modelInputsData[i]);
                     modelInputs.Add(m.type, m);
                 }
             }
 
-            return modelInputs[type];
+            return (T)modelInputs[type];
         }
 
 
@@ -95,7 +97,7 @@ namespace MoveSync
         {
             get
             {
-                if (hasModel(APPEAR.TYPE)) return time - APPEAR.Get(getModel(APPEAR.TYPE));
+                if (hasModel(APPEAR.TYPE)) return time - getModel<APPEAR>(APPEAR.TYPE).value;
 
                 return time;
             }
@@ -117,6 +119,7 @@ namespace MoveSync
     {
         public static string levelFileType = "mslevel";
 
+        public EventBeatObjectData onNewObjectCreated = new EventBeatObjectData();
         public EventBeatObjectData onNewObject = new EventBeatObjectData();
         public EventBeatObjectData onRemoveObject = new EventBeatObjectData();
         public UnityEvent onLoadedSong = new UnityEvent();
@@ -153,6 +156,7 @@ namespace MoveSync
 
             levelInfo.beatObjectDatas.Add(data);
             onNewObject.Invoke(data);
+            onNewObjectCreated.Invoke(data);
 
             SortBeatObjects();
             return data;

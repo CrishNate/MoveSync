@@ -12,7 +12,7 @@ namespace MoveSync
         [SerializeField] private GameObject _projectileObject;
 
         [Header("Beat Projectile Explosion")] 
-        [SerializeField] private int _spawnCount;
+        [SerializeField] private int _divisions = 10;
 
         [SerializeField] private float _maxAppearTime = 0.5f;
         [SerializeField] private float _projectileReachTimeBPM = 1f;
@@ -21,6 +21,7 @@ namespace MoveSync
         private ExTransformData _transformEnd;
         private float _appearDuration;
         private float _size;
+        private Vector3 _savedScale;
 
         private bool _finishMove;
 
@@ -28,22 +29,19 @@ namespace MoveSync
         public override void Init(BeatObjectData beatObjectData)
         {
             base.Init(beatObjectData);
-            
+
+            _transformEnd = beatObjectData.getModel<TRANSFORM>(TRANSFORM.TYPE).value;
             _transformOrigin = new ExTransformData
             {
-                position = transform.position,
-                rotation = transform.rotation
+                position = _transformEnd.position + new Vector3(0, -10.0f, 0),
             };
+            
+            _appearDuration = beatObjectData.getModel<APPEAR>(APPEAR.TYPE).value;
+            _size = beatObjectData.getModel<SIZE>(SIZE.TYPE).value;
 
-            _transformEnd = new ExTransformData
-            {
-                position = transform.position + new Vector3(0, 10.0f, 0),
-            };
-            
-            _appearDuration = APPEAR.Get(beatObjectData.getModel(APPEAR.TYPE));
-            _size = SIZE.Get(beatObjectData.getModel(SIZE.TYPE));
-            
-            transform.localScale = transform.localScale * _size;
+            _savedScale = transform.localScale;
+            transform.localScale = _savedScale * _size;
+            transform.position = _transformOrigin.position;
         }
 
         void UpdateMovement()
@@ -60,21 +58,22 @@ namespace MoveSync
                                  (_transformEnd.position - _transformOrigin.position) * dTimeMove;
         }
 
-        void Icosphere()
+        void SpawnExplosion()
         {
-            float offset = Random.Range(0, 360.0f);
+            float offset = Random.Range(0, Mathf.PI);
             
+            // generating icosphere points
             int ia, ib, nb;
             float x, y, z, r;
             float a, b, da, db;
-            da = Mathf.PI / (_spawnCount - 1);
-            for (a = -0.5f * Mathf.PI, ia = 0; ia < _spawnCount; ia++, a += da)
+            da = Mathf.PI / (_divisions - 1);
+            for (a = -0.5f * Mathf.PI, ia = 0; ia < _divisions; ia++, a += da)
             {
                 r = Mathf.Cos(a);
                 z = Mathf.Sin(a);
                 nb = Mathf.CeilToInt(2.0f * Mathf.PI * r / da);
                 db = 2.0f * Mathf.PI / nb;
-                if ((ia == 0) || (ia == _spawnCount - 1))
+                if ((ia == 0) || (ia == _divisions - 1))
                 {
                     nb = 1;
                     db = 0.0f;
@@ -85,27 +84,10 @@ namespace MoveSync
                     x = r * Mathf.Cos(b + offset);
                     y = r * Mathf.Sin(b + offset);
                     SpawnProjectile(new Vector3(x, y, z));
-                    double w = 1.2;
                 }
             }
         }
 
-        void SpawnExplosion()
-        {
-            // Evenly distributing n points on a sphere
-            float n = _spawnCount * 0.5f;
-            for (int x = 0; x < n; x++)
-            {
-                float lon = 360.0f * ((x + 0.5f) / n);
-                
-                for (int y = 0; y < n; y++)
-                {
-                    float midpt = (y + 0.5f) / n;
-                    float lat = 180 * Mathf.Asin(2 * ((y + 0.5f) / n - 0.5f));
-                    SpawnProjectile(new Vector3(lon, lat, 0));
-                }
-            }
-        }
         void SpawnProjectile(Vector3 direction)
         {
             Instantiate(_projectileObject, transform.position, Quaternion.LookRotation(direction))
@@ -116,14 +98,17 @@ namespace MoveSync
         protected override void Update()
         {
             base.Update();
+            transform.localScale = _savedScale * (_size + 0.1f * Mathf.Cos(Time.time * LevelSequencer.instance.toBPM * Mathf.PI * 2.0f));
             
             UpdateMovement();
+        }
 
-            if (LevelSequencer.instance.timeBPM >= beatObjectData.time)
-            {
-                Icosphere();
-                Destroy(gameObject);
-            }
+        protected override void OnTriggered()
+        {
+            base.OnTriggered();
+
+            SpawnExplosion();
+            Destroy(gameObject);
         }
     }
 }
