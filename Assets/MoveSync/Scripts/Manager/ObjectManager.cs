@@ -17,7 +17,17 @@ namespace MoveSync
             objectTag = _objectTag;
             modelInput = _modelInput;
             prefabPath = _prefabPath;
-            prefab = Resources.Load<GameObject>(prefabPath); prefab.SetActive(false);
+
+            prefab = Resources.Load<GameObject>(prefabPath);
+            prefab.SetActive(false);
+        }
+
+        public ObjectModel(PropertyName _objectTag, ModelInput[] _modelInput)
+        {
+            objectTag = _objectTag;
+            modelInput = _modelInput;
+            prefabPath = "";
+            prefab = null;
         }
         
         public PropertyName objectTag;
@@ -25,8 +35,6 @@ namespace MoveSync
         public string prefabPath;
         public GameObject prefab; 
     }
-
-    public class UnityEventPropertyName : UnityEvent<PropertyName> { };
 
     public class ObjectManager : Singleton<ObjectManager>
     {
@@ -55,8 +63,11 @@ namespace MoveSync
 
         void Start()
         {
-            AddSpawnTable(new ObjectModel("laser_shooter", new[] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("1"), ModelInput.TRANSFORM }, "MoveSync/BeatObjects/tetrahedron"));
+            AddSpawnTable(new ObjectModel("laser_shooter", new[] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.TRANSFORM }, "MoveSync/BeatObjects/Tetrahedron"));
+            AddSpawnTable(new ObjectModel("shooter", new [] { ModelInput.APPEAR.defaultValue("6"), ModelInput.DURATION.defaultValue("0"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.TRANSFORM }, "MoveSync/BeatObjects/Hexagon"));
             AddSpawnTable(new ObjectModel("explosion", new [] { ModelInput.APPEAR.defaultValue("2"), ModelInput.SIZE.defaultValue("1"), ModelInput.TRANSFORM }, "MoveSync/BeatObjects/ProjectileSphereExplosion"));
+            
+            AddSpawnTable(new ObjectModel("event_worm_swim", new [] { ModelInput.EVENT.defaultValue("event_worm_swim") }));
             
             _onObjectsLoaded.Invoke();
         }

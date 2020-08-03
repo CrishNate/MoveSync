@@ -34,11 +34,6 @@ namespace MoveSync
         }
     }
 
-    [Serializable]
-    public class UnityEventFloatParam : UnityEvent<float>
-    {
-    };
-
     public class BeatShoot : BeatObject
     {
         [SerializeField] private GameObject _projectileObject;
@@ -90,7 +85,7 @@ namespace MoveSync
             if (LevelSequencer.instance.timeBPM > _shootTimeBPM)
             {
                 _shooted = true;
-                _shootPreview.SetActive(false);
+                if (_shootPreview)_shootPreview.SetActive(false);
 
                 Instantiate(_projectileObject, _shootTransform.position, _shootTransform.rotation)
                     .GetComponent<BaseProjectile>()
@@ -118,7 +113,7 @@ namespace MoveSync
             float dTimeMove = (LevelSequencer.instance.timeBPM - spawnTimeBPM) / _moveTime;
             if (dTimeMove > 1.0f)
             {
-                _shootPreview.SetActive(true);
+                if (_shootPreview)_shootPreview.SetActive(true);
                 _finishMove = true;
             }
             

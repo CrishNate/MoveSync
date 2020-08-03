@@ -60,6 +60,8 @@ namespace MoveSync
 
         void SpawnExplosion()
         {
+            transform.position = _transformEnd.position;
+            
             float offset = Random.Range(0, Mathf.PI);
             
             // generating icosphere points

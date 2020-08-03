@@ -113,15 +113,13 @@ namespace MoveSync
         public List<BeatObjectData> beatObjectDatas;
     }
 
-    public class EventBeatObjectData : UnityEvent<BeatObjectData> {};
-    
     public class LevelDataManager : Singleton<LevelDataManager>
     {
         public static string levelFileType = "mslevel";
 
-        public EventBeatObjectData onNewObjectCreated = new EventBeatObjectData();
-        public EventBeatObjectData onNewObject = new EventBeatObjectData();
-        public EventBeatObjectData onRemoveObject = new EventBeatObjectData();
+        public UnityEventBeatObjectData onNewObjectCreated = new UnityEventBeatObjectData();
+        public UnityEventBeatObjectData onNewObject = new UnityEventBeatObjectData();
+        public UnityEventBeatObjectData onRemoveObject = new UnityEventBeatObjectData();
         public UnityEvent onLoadedSong = new UnityEvent();
         [HideInInspector] public LevelInfo levelInfo = new LevelInfo();
 

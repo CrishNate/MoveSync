@@ -9,9 +9,6 @@ using UnityEngine.UI;
 
 namespace MoveSync.UI
 {
-    [Serializable]
-    public class UnityEventDropDownChoose : UnityEvent<string> { };
-
     public class DropDownWithSearth : Selectable, IPointerClickHandler, ISubmitHandler, ICancelHandler
     {
         protected internal class DropdownItem : MonoBehaviour
@@ -35,7 +32,7 @@ namespace MoveSync.UI
         [SerializeField] private GameObject _dropDown;
         [SerializeField] private RectTransform _itemTemplate;
         [SerializeField] private InputField _inputField;
-        [SerializeField] private UnityEventDropDownChoose _onValueChanged;
+        [SerializeField] private UnityEventString _onValueChanged;
 
         [HideInInspector]
         public List<string> options

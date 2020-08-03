@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using MoveSync.ModelData;
 using UnityEngine;
 
 namespace MoveSync
@@ -34,11 +35,20 @@ namespace MoveSync
             }
         }
 
-        void SpawnObject(BeatObjectData beatObjectData)
+        void TriggerBeatObject(BeatObjectData beatObjectData)
         {
-            BeatObject beatObject = Instantiate(ObjectManager.instance.objectModels[beatObjectData.objectTag].prefab).GetComponent<BeatObject>();
-            beatObject.Init(beatObjectData);
-            beatObject.gameObject.SetActive(true);
+            if (beatObjectData.hasModel(EVENT.TYPE))
+            {
+                EventManager.instance.InvokeEvent(beatObjectData.getModel<EVENT>(EVENT.TYPE).value, beatObjectData.time);
+            }
+            else
+            {
+                BeatObject beatObject =
+                    Instantiate(ObjectManager.instance.objectModels[beatObjectData.objectTag].prefab)
+                        .GetComponent<BeatObject>();
+                beatObject.Init(beatObjectData);
+                beatObject.gameObject.SetActive(true);
+            }
         }
         
         void Update()
@@ -54,10 +64,9 @@ namespace MoveSync
             {
                 // update on moving playmarker
                 float timeBPM = LevelSequencer.instance.timeBPM;
-                if (lastTimeBPM > timeBPM)
+                if (lastTimeBPM > timeBPM || (lastTimeBPM - timeBPM) > 2.0f)
                     MoveBeatIndex();
 
-                // spawn logic
                 if (currentBeatIndex < LevelDataManager.instance.levelInfo.beatObjectDatas.Count)
                 {
                     BeatObjectData nextBeatObject =
@@ -65,7 +74,7 @@ namespace MoveSync
 
                     if (timeBPM > nextBeatObject.spawnTime)
                     {
-                        SpawnObject(nextBeatObject);
+                        TriggerBeatObject(nextBeatObject);
                         currentBeatIndex++;
                     }
                 }

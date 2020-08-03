@@ -26,8 +26,6 @@ namespace MoveSync
         public RandomSpawnType type;
     }
 
-    public class EventRandomSpawnType : UnityEvent<RandomSpawnType> { };
-
     public class RandomManager : Singleton<RandomManager>
     {
         public EventRandomSpawnType onRandomSpawnTypeChanged = new EventRandomSpawnType();
@@ -53,6 +51,7 @@ namespace MoveSync
 
         public void OnChangeType(RandomSpawnType type)
         {
+            if (!_randomSpawns.ContainsKey(ObjectManager.instance.currentObjectModel.objectTag)) return;
             _randomSpawns[ObjectManager.instance.currentObjectModel.objectTag].type = type;
 
             SpawnGizmo();
@@ -82,50 +81,51 @@ namespace MoveSync
             }
         }
 
-        public Vector3 GetRandomPoint()
+        public Vector3 GetRandomPoint(PropertyName objectTag)
         {
-            switch (_randomSpawn.type)
+            RandomSpawn randomSpawn = _randomSpawns[objectTag];
+            switch (randomSpawn.type)
             {
                 case RandomSpawnType.Point:
-                    return _randomSpawn.point1;
+                    return randomSpawn.point1;
                 case RandomSpawnType.Line:
-                    return Vector3.Lerp(_randomSpawn.point1, _randomSpawn.point2, Random.Range(0.0f, 1.0f));
+                    return Vector3.Lerp(randomSpawn.point1, randomSpawn.point2, Random.Range(0.0f, 1.0f));
                 case RandomSpawnType.Rect:
-                    return RandomInRect();
+                    return RandomInRect(randomSpawn);
                 case RandomSpawnType.Circle:
-                    return RandomInCircle();
+                    return RandomInCircle(randomSpawn);
                 case RandomSpawnType.Sphere:
-                    return RandomInSphere();
+                    return RandomInSphere(randomSpawn);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        Vector3 RandomInRect()
+        Vector3 RandomInRect(RandomSpawn randomSpawn)
         {
             return new Vector3(
-                Random.Range(_randomSpawn.point1.x, _randomSpawn.point2.x),
-                Random.Range(_randomSpawn.point1.y, _randomSpawn.point2.y),
-                Random.Range(_randomSpawn.point1.z, _randomSpawn.point2.z));
+                Random.Range(randomSpawn.point1.x, randomSpawn.point2.x),
+                Random.Range(randomSpawn.point1.y, randomSpawn.point2.y),
+                Random.Range(randomSpawn.point1.z, randomSpawn.point2.z));
         }
 
-        Vector3 RandomInCircle()
+        Vector3 RandomInCircle(RandomSpawn randomSpawn)
         {
-            Vector3 offset = Random.insideUnitCircle * Vector3.Distance(_randomSpawn.point1, _randomSpawn.point2);
+            Vector3 offset = Random.insideUnitCircle * Vector3.Distance(randomSpawn.point1, randomSpawn.point2);
             offset = new Vector3(offset.x, 0, offset.y);
-            return _randomSpawn.point1 + offset;
+            return randomSpawn.point1 + offset;
         }
 
-        Vector3 RandomInSphere()
+        Vector3 RandomInSphere(RandomSpawn randomSpawn)
         {
-            return _randomSpawn.point1 + Random.insideUnitSphere * Vector3.Distance(_randomSpawn.point1, _randomSpawn.point2);
+            return randomSpawn.point1 + Random.insideUnitSphere * Vector3.Distance(randomSpawn.point1, randomSpawn.point2);
         }
 
         void OnNewElement(BeatObjectData beatObjectData)
         {
             beatObjectData.getModel<TRANSFORM>(TRANSFORM.TYPE).value = new ExTransformData
             {
-                position = GetRandomPoint(),
+                position = GetRandomPoint(beatObjectData.objectTag),
                 rotation = Quaternion.identity
             };
         }

@@ -7,15 +7,12 @@ using UnityEngine.EventSystems;
 
 namespace MoveSync
 {
-    
-    public class EventObjectUI : UnityEvent<ObjectUI>{};
-    
     public class ObjectUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler 
     {
         [HideInInspector] public BeatObject _beatObject;
-        [HideInInspector] public EventObjectUI onStartDrag = new EventObjectUI();
-        [HideInInspector] public EventObjectUI onDrag = new EventObjectUI();
-        [HideInInspector] public EventObjectUI onStopDrag = new EventObjectUI();
+        [HideInInspector] public UnityEventObjectUI onStartDrag = new UnityEventObjectUI();
+        [HideInInspector] public UnityEventObjectUI onDrag = new UnityEventObjectUI();
+        [HideInInspector] public UnityEventObjectUI onStopDrag = new UnityEventObjectUI();
         [HideInInspector] public BeatObjectData beatObjectData;
 
         [SerializeField] private RectTransform _middleHandler;

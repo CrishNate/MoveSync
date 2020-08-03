@@ -6,8 +6,8 @@ namespace MoveSync
 {
     public class SelectionManager : Singleton<SelectionManager>
     {
-        public EventBeatObjectData onSelected;
-        public EventBeatObjectData onDeselected;
+        public UnityEventBeatObjectData onSelected;
+        public UnityEventBeatObjectData onDeselected;
         
         private BeatObjectData _selectedObject;
         private Dictionary<int, BeatObjectData> _selectedObjects;

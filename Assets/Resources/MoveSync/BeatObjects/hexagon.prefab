@@ -48,21 +48,11 @@ MonoBehaviour:
       m_Calls: []
   _projectileObject: {fileID: 2341723290652221099, guid: 96cb4ff6ae247544c91c4399b884dfb8,
     type: 3}
-  _shootTransform: {fileID: 1765459100110835883}
-  _preShootDelay: 1
-  _rescaleBeatObjectByProjectalieScale: 0
-  _shootAppearTime: 6
-  _projectileScale: 0.3
-  _shootData:
-    _isBullet: 1
-    _shoots: 2
-    _duration: 0
-    _delay: 1
-    _postShootDelay: 0
+  _shootPreview: {fileID: 0}
   _targetStates: 1
-  _onPrepare:
-    m_PersistentCalls:
-      m_Calls: []
+  _shootTransform: {fileID: 1765459100110835883}
+  _shootAppearTime: 5
+  _moveTime: 0.5
   _onFinished:
     m_PersistentCalls:
       m_Calls:
@@ -425,7 +415,12 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: caad8da2139412f47ad7f23b0f8aad85,
         type: 3}
       propertyPath: m_Name
-      value: hexagon
+      value: Hexagon
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: caad8da2139412f47ad7f23b0f8aad85,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: caad8da2139412f47ad7f23b0f8aad85, type: 3}

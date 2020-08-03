@@ -105,7 +105,7 @@ namespace MoveSync.ModelData
     }
     public class EVENT : ModelInput
     {
-        public static PropertyName TYPE = "TRANSFORM";
+        public static PropertyName TYPE = "EVENT";
         public EVENT() { type = TYPE; }
 
         public string value
