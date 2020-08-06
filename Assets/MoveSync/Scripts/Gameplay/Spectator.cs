@@ -14,6 +14,12 @@ public class Spectator : MonoBehaviour {
         if (EventSystem.current.currentSelectedGameObject != null) return;
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
+        
+        if (Input.GetMouseButtonDown(1))
+            Cursor.lockState = CursorLockMode.Locked;
+        if (Input.GetMouseButtonUp(1))
+            Cursor.lockState = CursorLockMode.None;
+
         if (Input.GetMouseButton(1))
         {
             Vector3 currentRotation = Camera.main.transform.rotation.eulerAngles;

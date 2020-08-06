@@ -104,6 +104,7 @@ namespace MoveSync
         }
     }
 
+    [Serializable]
     public class LevelEditorInfo
     {
         public int layersCount;
@@ -114,7 +115,7 @@ namespace MoveSync
         public string songName;
         public string songFile;
         public SongInfo songInfo;
-        [NonSerialized] public LevelEditorInfo levelEditorInfo;
+        public LevelEditorInfo levelEditorInfo;
 
         public List<BeatObjectData> beatObjectDatas;
     }

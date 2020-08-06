@@ -29,8 +29,12 @@ namespace MoveSync.UI
         }
         public void Cancel()
         {
+            if (_bindingManager.bind.ContainsKey(layer))
+                UpdateUI(_bindingManager.bind[layer]);
+            else
+                _text.text = "";
+
             _awaitButton = false;
-            UpdateUI(_bindingManager.bind[layer]);
             _lastBindUi = null;
         }
         
