@@ -74,7 +74,7 @@ namespace MoveSync
             _size = beatObjectData.getModel<SIZE>(SIZE.TYPE).value;
             
             _shootTimeBPM = beatObjectData.time - _shootAppearTime;
-            transform.localScale = transform.localScale * _size;
+            //transform.localScale = transform.localScale * _size;
             transform.position = _transformOrigin.position;
         }
         

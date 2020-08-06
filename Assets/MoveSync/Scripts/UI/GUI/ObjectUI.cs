@@ -9,7 +9,6 @@ namespace MoveSync
 {
     public class ObjectUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler 
     {
-        [HideInInspector] public BeatObject _beatObject;
         [HideInInspector] public UnityEventObjectUI onStartDrag = new UnityEventObjectUI();
         [HideInInspector] public UnityEventObjectUI onDrag = new UnityEventObjectUI();
         [HideInInspector] public UnityEventObjectUI onStopDrag = new UnityEventObjectUI();
@@ -62,23 +61,24 @@ namespace MoveSync
         {
             onStopDrag.Invoke(this);
         }
-
-        public void UpdateUI(float zoom)
+        public void UpdateUI()
         {
-            rectTransform.localPosition = new Vector2(beatObjectData.time * zoom, TimelineObjectsUI.layerHeight * beatObjectData.editorLayer * -1.0f);
+            rectTransform.localPosition = new Vector2(beatObjectData.time * _timeline.zoom, TimelineObjectsUI.layerHeight * beatObjectData.editorLayer * -1.0f);
             
-            if (beatObjectData.hasModel(APPEAR.TYPE)) _appearUI.SetValue(beatObjectData.getModel<APPEAR>(APPEAR.TYPE).value * zoom);
-            if (beatObjectData.hasModel(DURATION.TYPE)) _durationUI.SetValue(beatObjectData.getModel<DURATION>(DURATION.TYPE).value * zoom);
+            if (beatObjectData.hasModel(APPEAR.TYPE)) _appearUI.SetValue(beatObjectData.getModel<APPEAR>(APPEAR.TYPE).value * _timeline.zoom);
+            if (beatObjectData.hasModel(DURATION.TYPE)) _durationUI.SetValue(beatObjectData.getModel<DURATION>(DURATION.TYPE).value * _timeline.zoom);
         }
 
         void OnSetAppear(float value)
         {
             beatObjectData.getModel<APPEAR>(APPEAR.TYPE).value = value * _timeline.invZoom;
+            LevelDataManager.instance.UpdateBeatObject(beatObjectData);
         }
         
         void OnSetDuration(float value)
         {
             beatObjectData.getModel<DURATION>(DURATION.TYPE).value = value * _timeline.invZoom;
+            LevelDataManager.instance.UpdateBeatObject(beatObjectData);
         }
         
         public void OnSelect()

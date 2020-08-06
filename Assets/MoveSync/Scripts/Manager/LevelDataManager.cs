@@ -104,22 +104,33 @@ namespace MoveSync
         }
     }
 
+    public class LevelEditorInfo
+    {
+        public int layersCount;
+    }
+    
     public class LevelInfo
     {
         public string songName;
         public string songFile;
         public SongInfo songInfo;
+        [NonSerialized] public LevelEditorInfo levelEditorInfo;
 
         public List<BeatObjectData> beatObjectDatas;
     }
 
     public class LevelDataManager : Singleton<LevelDataManager>
     {
+        public static string resourcePath => Application.dataPath + "/Resources/";
         public static string levelFileType = "mslevel";
 
+        // event call when even NEW object is created
         public UnityEventBeatObjectData onNewObjectCreated = new UnityEventBeatObjectData();
+        // event call when ever new object is created or loaded from save
         public UnityEventBeatObjectData onNewObject = new UnityEventBeatObjectData();
+        public UnityEventBeatObjectData onUpdateObject = new UnityEventBeatObjectData();
         public UnityEventBeatObjectData onRemoveObject = new UnityEventBeatObjectData();
+        public UnityEvent onUpdateObjects = new UnityEvent();
         public UnityEvent onLoadedSong = new UnityEvent();
         [HideInInspector] public LevelInfo levelInfo = new LevelInfo();
 
@@ -128,7 +139,7 @@ namespace MoveSync
 
         
         /*
-         * Object Spawning
+         * Object controll
          */
         public BeatObjectData NewBeatObjectAtMarker(PropertyName objectTag, int layer = 0)
         {
@@ -179,9 +190,20 @@ namespace MoveSync
             return levelInfo.beatObjectDatas.Remove(beatObjectData);
         }
 
+        public void ClearLayer(int layer)
+        {
+            levelInfo.beatObjectDatas.RemoveAll(data => data.editorLayer == layer);
+            onUpdateObjects.Invoke();
+        }
+
         public void SortBeatObjects()
         {
             levelInfo.beatObjectDatas.Sort((p1,p2)=>p1.spawnTime.CompareTo(p2.spawnTime));
+        }
+
+        public void UpdateBeatObject(BeatObjectData beatObjectData)
+        {
+            onUpdateObject.Invoke(beatObjectData);
         }
         
         /*
@@ -197,6 +219,12 @@ namespace MoveSync
         {
             string path = EditorUtility.SaveFilePanel("Save Level", Application.persistentDataPath, "MoveSyncLevel", levelFileType);
             if (path.Length != 0) SaveFile(path);
+        }
+                
+        public void ExploreSongFile()
+        {
+            string path = EditorUtility.OpenFilePanel("Song File", resourcePath, "mp3,wave");
+            if (path.Length != 0) LoadSong(path);
         }
         
         /*
@@ -219,13 +247,23 @@ namespace MoveSync
             System.IO.File.WriteAllText(filePath, levelJson);
         }
 
+        public void LoadSong(string filePath)
+        {
+            levelInfo.songFile = Path.GetFileNameWithoutExtension(filePath.Replace(resourcePath, ""));
+            LevelSequencer.instance.songInfo = levelInfo.songInfo;
+            LevelSequencer.instance.audioSource.clip = Resources.Load<AudioClip>(levelInfo.songFile);
+            
+            onLoadedSong.Invoke();
+        }
+        
         /*
          * History
          */
         public void BackupInfo()
         {
             int diff = (_history.Count - _historyMarker) - 1;
-            if (diff > 0) _history.RemoveRange(_historyMarker, diff);
+            if (diff > 0) 
+                _history.RemoveRange(_historyMarker, diff);
 
             _history.Add(levelInfo);
             _historyMarker = _history.Count - 1;
@@ -248,6 +286,8 @@ namespace MoveSync
             this.levelInfo = levelInfo;
             LevelSequencer.instance.songInfo = levelInfo.songInfo;
             LevelSequencer.instance.audioSource.clip = Resources.Load<AudioClip>(levelInfo.songFile);
+            if (levelInfo.levelEditorInfo == null) 
+                levelInfo.levelEditorInfo = new LevelEditorInfo();
             
             onLoadedSong.Invoke();
         }
@@ -255,6 +295,7 @@ namespace MoveSync
         void Start()
         {
             levelInfo.beatObjectDatas = new List<BeatObjectData>();
+            levelInfo.levelEditorInfo = new LevelEditorInfo();
         }
     }
 }

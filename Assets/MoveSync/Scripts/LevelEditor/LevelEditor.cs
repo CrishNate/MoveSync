@@ -12,12 +12,6 @@ namespace MoveSync
             LevelSequencer.instance.audioSource.Stop();
         }
 
-        public void SetSongTime(float time)
-        {
-            time *= LevelSequencer.instance.toTime;
-            LevelSequencer.instance.audioSource.time = time;
-        }
-
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))

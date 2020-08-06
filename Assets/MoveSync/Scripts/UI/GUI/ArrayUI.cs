@@ -18,8 +18,6 @@ namespace UnityEditorEx.UI
             {
                 GameObject instance = Instantiate(_instanceUI, _instanceUI.transform.parent);
                 instance.transform.localPosition = _instanceUI.transform.localPosition + (Vector3) _offset * i;
-
-                instance.GetComponent<BindUI>().layer = i;
             }
         }
     }

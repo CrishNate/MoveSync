@@ -37,17 +37,21 @@ namespace MoveSync
         {
             foreach (var data in LevelDataManager.instance.levelInfo.beatObjectDatas)
             {
-                if (!_objectsUi.ContainsKey(data.id))
-                {
-                    AddObject(data);
-                }
-                else
-                {
-                    UpdateObject(_objectsUi[data.id]);
-                }
+                UpdateObject(_objectsUi[data.id]);
             }
         }
-
+        
+        public void RecreateObjects()
+        {
+            ClearObjects();
+            
+            foreach (var data in LevelDataManager.instance.levelInfo.beatObjectDatas)
+            {
+                if (!_objectsUi.ContainsKey(data.id))
+                    AddObject(data);
+            }
+        }
+        
         public void AddObject(BeatObjectData data)
         {
             ObjectUI objectUi = Instantiate(_objectUiInstance, _rectObjectsList).GetComponent<ObjectUI>();
@@ -66,10 +70,15 @@ namespace MoveSync
             _selectedObjects.Remove(data.id);
             _objectsUi.Remove(data.id);
         }
+
+        public void UpdateObject(BeatObjectData data)
+        {
+            _objectsUi[data.id].UpdateUI();
+        }
         
         public void UpdateObject(ObjectUI objectUi)
         {
-            objectUi.UpdateUI(_timeline.zoom);
+            objectUi.UpdateUI();
         }
         
         public void ClearObjects()
@@ -233,7 +242,9 @@ namespace MoveSync
         {
             LevelDataManager.instance.onNewObject.AddListener(AddObject);
             LevelDataManager.instance.onRemoveObject.AddListener(RemoveObject);
-            LevelDataManager.instance.onLoadedSong.AddListener(UpdateObjects);
+            LevelDataManager.instance.onUpdateObject.AddListener(UpdateObject);
+            LevelDataManager.instance.onLoadedSong.AddListener(RecreateObjects);
+            LevelDataManager.instance.onUpdateObjects.AddListener(RecreateObjects);
             _timeline.onZoomUpdated.AddListener(UpdateObjects);
         }
 

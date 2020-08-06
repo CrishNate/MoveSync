@@ -30,7 +30,7 @@ namespace MoveSync
             currentBeatIndex = 0;
             foreach (var beatObject in LevelDataManager.instance.levelInfo.beatObjectDatas)
             {
-                if (beatObject.spawnTime > LevelSequencer.instance.timeBPM) return;
+                if (beatObject.time > LevelSequencer.instance.timeBPM) return;
                 currentBeatIndex++;
             }
         }
@@ -64,7 +64,7 @@ namespace MoveSync
             {
                 // update on moving playmarker
                 float timeBPM = LevelSequencer.instance.timeBPM;
-                if (lastTimeBPM > timeBPM || (lastTimeBPM - timeBPM) > 2.0f)
+                if (lastTimeBPM > timeBPM || (timeBPM - lastTimeBPM) > 2.0f)
                     MoveBeatIndex();
 
                 if (currentBeatIndex < LevelDataManager.instance.levelInfo.beatObjectDatas.Count)
