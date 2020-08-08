@@ -47,8 +47,8 @@ namespace MoveSync
 
         [SerializeField] private UnityEvent _onFinished;
 
-        private ExTransformData _transformOrigin;
-        private ExTransformData _transformEnd;
+        private Vector3 _positionOrigin;
+        private Vector3 _positionEnd;
         private float _appearDuration;
         private float _duration;
         private float _size;
@@ -56,26 +56,27 @@ namespace MoveSync
 
         private bool _finishMove;
         private bool _shooted;
+        private bool _finished;
 
 
         public override void Init(BeatObjectData beatObjectData)
         {
             base.Init(beatObjectData);
 
-            _transformEnd = beatObjectData.getModel<TRANSFORM>(TRANSFORM.TYPE).value;
-            _transformOrigin = _transformEnd.Clone();
-            _transformOrigin.position.y = -10;
+            _positionEnd = beatObjectData.getModel<POSITION>().value;
+            _positionOrigin = _positionEnd;
+            _positionOrigin.y = -10;
 
             Vector3 offset = Random.insideUnitCircle * 20.0f;
             offset = new Vector3(offset.x, 10, offset.y);
 
-            _appearDuration = beatObjectData.getModel<APPEAR>(APPEAR.TYPE).value;
-            _duration = beatObjectData.getModel<DURATION>(DURATION.TYPE).value;
-            _size = beatObjectData.getModel<SIZE>(SIZE.TYPE).value;
+            _appearDuration = beatObjectData.getModel<APPEAR>().value;
+            _duration = beatObjectData.getModel<DURATION>().value;
+            _size = beatObjectData.getModel<SIZE>().value;
             
             _shootTimeBPM = beatObjectData.time - _shootAppearTime;
             //transform.localScale = transform.localScale * _size;
-            transform.position = _transformOrigin.position;
+            transform.position = _positionOrigin;
         }
         
         void UpdateShoot()
@@ -97,8 +98,6 @@ namespace MoveSync
         {
             switch (_targetStates)
             {
-                case TargetStates.Direction:
-                    return _transformEnd.rotation;
                 case TargetStates.Camera:
                     return Quaternion.LookRotation(PlayerBehaviour.instance.transform.position - transform.position);
             }
@@ -120,12 +119,11 @@ namespace MoveSync
             dTimeMove = Mathf.Min(1.0f, dTimeMove);
             dTimeMove = (1 - Mathf.Pow(1 - dTimeMove, 2.0f));
 
-            transform.position = _transformOrigin.position +
-                                 (_transformEnd.position - _transformOrigin.position) * dTimeMove;
+            transform.position = _positionOrigin + (_positionEnd - _positionOrigin) * dTimeMove;
             
-            float maxAngle = Quaternion.Angle(_transformOrigin.rotation, GetRotationByTargetState());
+            float maxAngle = Quaternion.Angle(transform.rotation, GetRotationByTargetState());
             transform.rotation =
-                Quaternion.RotateTowards(_transformOrigin.rotation, GetRotationByTargetState(), maxAngle * dTimeMove);
+                Quaternion.RotateTowards(transform.rotation, GetRotationByTargetState(), maxAngle * dTimeMove);
         }
 
         protected override void Update()
@@ -137,7 +135,11 @@ namespace MoveSync
 
             if (LevelSequencer.instance.timeBPM >= beatObjectData.time + _duration)
             {
-                _onFinished.Invoke();
+                if (!_finished)
+                {
+                    _onFinished.Invoke();
+                    _finished = true;
+                }
             }
         }
 

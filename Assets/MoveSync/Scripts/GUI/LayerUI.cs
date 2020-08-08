@@ -3,13 +3,13 @@ using UnityEngine.UI;
 
 namespace MoveSync.UI
 {
-    [RequireComponent(typeof(Button))]
+    [RequireComponent(typeof(ButtonEx))]
     public class LayerUI : MonoBehaviour
     {
         public int layer = -1;
 
         [SerializeField] private BindingManager _bindingManager;
-        [SerializeField] private Button _bindButton;
+        [SerializeField] private ButtonEx _bindButton;
         [SerializeField] private Button _clearLayerButton;
         [SerializeField] private Text _text;
         [SerializeField] private Text _objectTagText;
@@ -54,10 +54,16 @@ namespace MoveSync.UI
             _awaitButton = true;
             _lastBindUi = this;
         }
+        
+        void OpenBindProperties()
+        {
+            if (_bindingManager.bind.TryGetValue(layer, out var bindKey))
+                ObjectProperties.instance.OpenProperties(bindKey.objectModel.modelInput);
+        }
 
         void UpdateUI(BindKey bindKey)
         {
-            UpdateUI(bindKey.key, bindKey.objectTag);
+            UpdateUI(bindKey.key, bindKey.objectModel.objectTag);
         }
 
         void UpdateUI(KeyCode key, PropertyName objectTag)
@@ -69,7 +75,8 @@ namespace MoveSync.UI
     
         void Start()
         {
-            _bindButton.onClick.AddListener(OnStartBind);
+            _bindButton.onLeftClick.AddListener(OnStartBind);
+            _bindButton.onRightClick.AddListener(OpenBindProperties);
             _clearLayerButton.onClick.AddListener(OnClearLayer);
         }
 
@@ -86,7 +93,7 @@ namespace MoveSync.UI
                 _bindingManager.AddKeyBind(layer, new BindKey
                 {
                     key = Event.current.keyCode,
-                    objectTag = ObjectManager.instance.currentObjectModel.objectTag
+                    objectModel = ObjectManager.instance.currentObjectModel.Clone()
                 });
 
                 _lastBindUi = null;

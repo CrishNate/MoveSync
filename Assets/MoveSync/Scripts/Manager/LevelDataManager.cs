@@ -17,21 +17,6 @@ namespace MoveSync
     }
     
     [Serializable]
-    public class ExTransformData
-    {
-        public ExTransformData Clone()
-        {
-            ExTransformData other = (ExTransformData) MemberwiseClone();
-            other.position = new Vector3(position.x, position.y, position.z);
-            other.rotation = new Quaternion(rotation.x, rotation.y, rotation.z, rotation.w);
-            return other;
-        }
-
-        public Vector3 position;
-        public Quaternion rotation;
-    }
-    
-    [Serializable]
     public class BeatAnimationData
     {
         public float time;
@@ -41,63 +26,59 @@ namespace MoveSync
     [Serializable]
     public class BeatObjectData
     {
+        public PropertyName objectTag;
+        public SerializableGuid id;
+        public float time;
+        // editor
+        public int editorLayer;
+        // custom data
+        public ModelInput[] modelInputsData;
+        private Dictionary<Type, ModelInput> modelInputs;
+
+
         public BeatObjectData Clone()
         {
-            BeatObjectData other = (BeatObjectData) MemberwiseClone();
-            other.id = SerializableGuid.NewGuid();
-            other.modelInputsData = ModelInput.CloneInputs(modelInputsData);
+            BeatObjectData other = new BeatObjectData
+            {
+                objectTag = objectTag,
+                id = SerializableGuid.NewGuid(),
+                modelInputsData = ModelInput.CloneInputs(modelInputsData)
+            };
 
             return other;
         }
+        
+        void FixModelInputs()
+        {
+            if (modelInputs != null) return;
+            
+            modelInputs = new Dictionary<Type, ModelInput>();
+            for (int i = 0; i < modelInputsData.Length; i++)
+            {
+                ModelInput m = modelInputsData[i] = ModelInput.RecreateRealModel(modelInputsData[i]);
+                modelInputs.Add(m.GetType(), m);
+            }
+        }
 
-        public PropertyName objectTag;
-        public SerializableGuid id;
+        public bool hasModel<T>() where T : ModelInput
+        {
+            FixModelInputs();
 
-        public float time;
+            return modelInputs.ContainsKey(typeof(T));
+        }
+        public T getModel<T>() where T : ModelInput
+        {
+            FixModelInputs();
 
-        // editor
-        public int editorLayer;
-
-        // custom data
-        public ModelInput[] modelInputsData;
-        private Dictionary<PropertyName, ModelInput> modelInputs;
+            return (T)modelInputs[typeof(T)];
+        }
 
         
-        public bool hasModel(PropertyName type)
-        {
-            if (modelInputs == null)
-            {
-                modelInputs = new Dictionary<PropertyName, ModelInput>();
-                for (int i = 0; i < modelInputsData.Length; i++)
-                {
-                    ModelInput m = modelInputsData[i] = ModelInput.RecreateRealModel(modelInputsData[i]);
-                    modelInputs.Add(m.type, m);
-                }
-            }
-
-            return modelInputs.ContainsKey(type);
-        }
-        public T getModel<T>(PropertyName type) where T : ModelInput
-        {
-            if (modelInputs == null)
-            {
-                modelInputs = new Dictionary<PropertyName, ModelInput>();
-                for (int i = 0; i < modelInputsData.Length; i++)
-                {
-                    ModelInput m = modelInputsData[i] = ModelInput.RecreateRealModel(modelInputsData[i]);
-                    modelInputs.Add(m.type, m);
-                }
-            }
-
-            return (T)modelInputs[type];
-        }
-
-
         public float spawnTime
         {
             get
             {
-                if (hasModel(APPEAR.TYPE)) return time - getModel<APPEAR>(APPEAR.TYPE).value;
+                if (hasModel<APPEAR>()) return time - getModel<APPEAR>().value;
 
                 return time;
             }
@@ -129,8 +110,8 @@ namespace MoveSync
         public UnityEventBeatObjectData onNewObjectCreated = new UnityEventBeatObjectData();
         // event call when ever new object is created or loaded from save
         public UnityEventBeatObjectData onNewObject = new UnityEventBeatObjectData();
-        public UnityEventBeatObjectData onUpdateObject = new UnityEventBeatObjectData();
-        public UnityEventBeatObjectData onRemoveObject = new UnityEventBeatObjectData();
+        public UnityEventIntParam onUpdateObject = new UnityEventIntParam();
+        public UnityEventIntParam onRemoveObject = new UnityEventIntParam();
         public UnityEvent onUpdateObjects = new UnityEvent();
         public UnityEvent onLoadedSong = new UnityEvent();
         [HideInInspector] public LevelInfo levelInfo = new LevelInfo();
@@ -142,24 +123,25 @@ namespace MoveSync
         /*
          * Object controll
          */
-        public BeatObjectData NewBeatObjectAtMarker(PropertyName objectTag, int layer = 0)
+        public BeatObjectData NewBeatObjectAtMarker(ObjectModel objectModel, int layer = 0)
         {
             float time = LevelSequencer.instance.timeBPM;
-            if (InputData.shouldSnap) time = Mathf.Round(time);
+            if (InputData.shouldSnap) 
+                time = Mathf.Round(time);
             
-            BeatObjectData data = NewBeatObject(objectTag, time, layer);
+            BeatObjectData data = NewBeatObject(objectModel, time, layer);
             return data;
         }
-        
-        public BeatObjectData NewBeatObject(PropertyName objectTag, float time = 0.0f, int layer = 0, bool history = true)
+
+        public BeatObjectData NewBeatObject(ObjectModel objectModel, float time = 0.0f, int layer = 0, bool history = true)
         {
             BeatObjectData data = new BeatObjectData
             {
-                objectTag = objectTag, 
+                objectTag = objectModel.objectTag, 
                 id = SerializableGuid.NewGuid(), 
                 time = time,
                 editorLayer = layer,
-                modelInputsData = ModelInput.CloneInputs(ObjectManager.instance.objectModels[objectTag].modelInput),
+                modelInputsData = ModelInput.CloneInputs(objectModel.modelInput),
             };
 
             if (history) BackupInfo();
@@ -177,7 +159,8 @@ namespace MoveSync
             BeatObjectData data = beatObjectData.Clone();
             data.time = time;
             data.editorLayer = layer;
-            if (history) BackupInfo();
+            if (history) 
+                BackupInfo();
 
             levelInfo.beatObjectDatas.Add(data);
             onNewObject.Invoke(data);
@@ -186,8 +169,7 @@ namespace MoveSync
         public bool RemoveBeatObject(BeatObjectData beatObjectData, bool history = true)
         {
             if (history) BackupInfo();
-            onRemoveObject.Invoke(beatObjectData);
-            SerializableGuid.RemoveId(beatObjectData.id);
+            onRemoveObject.Invoke(beatObjectData.id);
             return levelInfo.beatObjectDatas.Remove(beatObjectData);
         }
 
@@ -202,9 +184,9 @@ namespace MoveSync
             levelInfo.beatObjectDatas.Sort((p1,p2)=>p1.spawnTime.CompareTo(p2.spawnTime));
         }
 
-        public void UpdateBeatObject(BeatObjectData beatObjectData)
+        public void UpdateBeatObject(int id)
         {
-            onUpdateObject.Invoke(beatObjectData);
+            onUpdateObject.Invoke(id);
         }
         
         /*

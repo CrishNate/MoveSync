@@ -10,7 +10,7 @@ using MoveSync.ModelData;
 
 namespace MoveSync
 {
-    public struct ObjectModel 
+    public class ObjectModel 
     {
         public ObjectModel(PropertyName _objectTag, ModelInput[] _modelInput, string _prefabPath)
         {
@@ -28,6 +28,13 @@ namespace MoveSync
             modelInput = _modelInput;
             prefabPath = "";
             prefab = null;
+        }
+
+        public ObjectModel Clone()
+        {
+            ObjectModel newObjectModel = (ObjectModel) MemberwiseClone();
+            newObjectModel.modelInput = ModelInput.CloneInputs(modelInput);
+            return newObjectModel;
         }
         
         public PropertyName objectTag;
@@ -63,9 +70,9 @@ namespace MoveSync
 
         void Start()
         {
-            AddSpawnTable(new ObjectModel("laser_shooter", new[] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.TRANSFORM }, "MoveSync/BeatObjects/Tetrahedron"));
-            AddSpawnTable(new ObjectModel("shooter", new [] { ModelInput.APPEAR.defaultValue("6"), ModelInput.DURATION.defaultValue("0"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.TRANSFORM }, "MoveSync/BeatObjects/Hexagon"));
-            AddSpawnTable(new ObjectModel("explosion", new [] { ModelInput.APPEAR.defaultValue("2"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.TRANSFORM }, "MoveSync/BeatObjects/ProjectileSphereExplosion"));
+            AddSpawnTable(new ObjectModel("laser_shooter", new[] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.POSITION }, "MoveSync/BeatObjects/Tetrahedron"));
+            AddSpawnTable(new ObjectModel("shooter", new [] { ModelInput.APPEAR.defaultValue("6"), ModelInput.DURATION.defaultValue("0"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.POSITION }, "MoveSync/BeatObjects/Hexagon"));
+            AddSpawnTable(new ObjectModel("explosion", new [] { ModelInput.APPEAR.defaultValue("2"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.POSITION }, "MoveSync/BeatObjects/ProjectileSphereExplosion"));
             
             AddSpawnTable(new ObjectModel("event", new [] { ModelInput.EVENT.defaultValue("event_none") }));
             

@@ -15,7 +15,6 @@ namespace MoveSync
         
         
         public static implicit operator int(SerializableGuid guid) => guid.value;
-        public static void RemoveId(int id) {_takenIds.Remove(id);}
         
         public static SerializableGuid NewGuid()
         {
@@ -30,12 +29,16 @@ namespace MoveSync
         }
 
         public void OnBeforeSerialize()
-        {
-        }
+        { }
 
         public void OnAfterDeserialize()
         {
             _takenIds.Add(value);
+        }
+
+        ~SerializableGuid()
+        {
+            _takenIds.Remove(value);
         }
     }
 }

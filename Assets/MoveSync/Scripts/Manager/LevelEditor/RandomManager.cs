@@ -123,11 +123,11 @@ namespace MoveSync
 
         void OnNewElement(BeatObjectData beatObjectData)
         {
-            beatObjectData.getModel<TRANSFORM>(TRANSFORM.TYPE).value = new ExTransformData
-            {
-                position = GetRandomPoint(beatObjectData.objectTag),
-                rotation = Quaternion.identity
-            };
+            // beatObjectData.getModel<TRANSFORM>(TRANSFORM.TYPE).value = new ExTransformData
+            // {
+            //     position = GetRandomPoint(beatObjectData.objectTag),
+            //     rotation = Quaternion.identity
+            // };
         }
 
         void Start()

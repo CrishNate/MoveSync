@@ -1,0 +1,38 @@
+using System.Linq;
+using MoveSync.ModelData;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace MoveSync.UI
+{
+    public abstract class ObjectProperty : MonoBehaviour
+    {
+        [HideInInspector] public ObjectProperties _parentObjectProperties;
+
+        protected ModelInput _modelInput;
+
+        [SerializeField] private Text _title;
+        
+
+        public virtual void Init(ModelInput modelInput, ObjectProperties parentObjectProperties)
+        {
+            _modelInput = modelInput;
+            _parentObjectProperties = parentObjectProperties;
+
+            string title = modelInput.type.ToString();
+            title = title.Substring(0, title.IndexOf(':')).ToLower();
+            title = title.First().ToString().ToUpper() + title.Substring(1); // converts string from POSITION to this Position
+            _title.text = title;
+
+            UpdateUI();
+        }
+        
+        public virtual void UpdateUI() { }
+
+        protected virtual void OnUpdateValue()
+        {
+            if (!_parentObjectProperties.hasObjectRef) return;
+            LevelDataManager.instance.UpdateBeatObject(_parentObjectProperties.currentId);
+        }
+    }
+}

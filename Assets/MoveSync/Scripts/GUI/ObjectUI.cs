@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using MoveSync.ModelData;
+using MoveSync.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -27,12 +28,12 @@ namespace MoveSync
             beatObjectData = data;
             _timeline = timeline;
 
-            if (beatObjectData.hasModel(APPEAR.TYPE))
+            if (beatObjectData.hasModel<APPEAR>())
                 _appearUI.onValueChanged.AddListener(OnSetAppear);
             else
                 _appearUI.IsShown(false);
 
-            if (beatObjectData.hasModel(DURATION.TYPE))
+            if (beatObjectData.hasModel<DURATION>())
                 _durationUI.onValueChanged.AddListener(OnSetDuration);
             else
                 _durationUI.IsShown(false);
@@ -40,8 +41,10 @@ namespace MoveSync
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.button == PointerEventData.InputButton.Left)
+            if (eventData.button == PointerEventData.InputButton.Left
+             && !eventData.dragging)
             {
+                ObjectProperties.instance.OpenProperties(beatObjectData.id, beatObjectData.modelInputsData);
                 onStartDrag.Invoke(this);
             }
         }
@@ -65,20 +68,20 @@ namespace MoveSync
         {
             rectTransform.localPosition = new Vector2(beatObjectData.time * _timeline.zoom, TimelineObjectsUI.layerHeight * beatObjectData.editorLayer * -1.0f);
             
-            if (beatObjectData.hasModel(APPEAR.TYPE)) _appearUI.SetValue(beatObjectData.getModel<APPEAR>(APPEAR.TYPE).value * _timeline.zoom);
-            if (beatObjectData.hasModel(DURATION.TYPE)) _durationUI.SetValue(beatObjectData.getModel<DURATION>(DURATION.TYPE).value * _timeline.zoom);
+            if (beatObjectData.hasModel<APPEAR>()) _appearUI.SetValue(beatObjectData.getModel<APPEAR>().value * _timeline.zoom);
+            if (beatObjectData.hasModel<DURATION>()) _durationUI.SetValue(beatObjectData.getModel<DURATION>().value * _timeline.zoom);
         }
 
         void OnSetAppear(float value)
         {
-            beatObjectData.getModel<APPEAR>(APPEAR.TYPE).value = value * _timeline.invZoom;
-            LevelDataManager.instance.UpdateBeatObject(beatObjectData);
+            beatObjectData.getModel<APPEAR>().value = value * _timeline.invZoom;
+            LevelDataManager.instance.UpdateBeatObject(beatObjectData.id);
         }
         
         void OnSetDuration(float value)
         {
-            beatObjectData.getModel<DURATION>(DURATION.TYPE).value = value * _timeline.invZoom;
-            LevelDataManager.instance.UpdateBeatObject(beatObjectData);
+            beatObjectData.getModel<DURATION>().value = value * _timeline.invZoom;
+            LevelDataManager.instance.UpdateBeatObject(beatObjectData.id);
         }
         
         public void OnSelect()
@@ -92,8 +95,8 @@ namespace MoveSync
 
         public void ShowOnlyKey(bool show)
         {
-            if (beatObjectData.hasModel(APPEAR.TYPE)) _appearUI.IsShown(!show);
-            if (beatObjectData.hasModel(DURATION.TYPE)) _durationUI.IsShown(!show);
+            if (beatObjectData.hasModel<APPEAR>()) _appearUI.IsShown(!show);
+            if (beatObjectData.hasModel<DURATION>()) _durationUI.IsShown(!show);
         }
         
 

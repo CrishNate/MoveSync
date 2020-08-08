@@ -15,7 +15,6 @@ namespace MoveSync.UI
         {
             Clear();
             
-            print(LevelDataManager.instance.levelInfo.levelEditorInfo.layersCount);
             for (int i = 0; i < LevelDataManager.instance.levelInfo.levelEditorInfo.layersCount; i++)
             {
                 AddLayer(i);

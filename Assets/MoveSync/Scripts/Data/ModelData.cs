@@ -1,7 +1,5 @@
 using System;
-using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 
 namespace MoveSync.ModelData
@@ -23,6 +21,7 @@ namespace MoveSync.ModelData
             stringValue = value;
             return this;
         }
+        
         public ModelInput CopyValues(ModelInput origin)
         {
             type = origin.type;
@@ -46,7 +45,8 @@ namespace MoveSync.ModelData
             if (origin.type == ModelData.DURATION.TYPE) return DURATION.CopyValues(origin);
             if (origin.type == ModelData.APPEAR.TYPE) return APPEAR.CopyValues(origin);
             if (origin.type == ModelData.SIZE.TYPE) return SIZE.CopyValues(origin);
-            if (origin.type == ModelData.TRANSFORM.TYPE) return TRANSFORM.CopyValues(origin);
+            if (origin.type == ModelData.POSITION.TYPE) return POSITION.CopyValues(origin);
+            if (origin.type == ModelData.ROTATION.TYPE) return ROTATION.CopyValues(origin);
             if (origin.type == ModelData.EVENT.TYPE) return EVENT.CopyValues(origin);
 
             return null;
@@ -55,55 +55,64 @@ namespace MoveSync.ModelData
         public static ModelInput DURATION => new DURATION();
         public static ModelInput APPEAR => new APPEAR();
         public static ModelInput SIZE => new SIZE();
-        public static ModelInput TRANSFORM => new TRANSFORM();
+        public static ModelInput POSITION => new POSITION();
+        public static ModelInput ROTATION => new ROTATION();
         public static ModelInput EVENT => new EVENT();
     }
 
-    public class DURATION : ModelInput
+    public abstract class FloatModelInput : ModelInput
     {
-        public static PropertyName TYPE = "DURATION";
-        public DURATION() { type = TYPE; }
-
         public float value
         {
             get => float.Parse(stringValue);
             set => stringValue = value.ToString();
         }
-    }
-    public class APPEAR : ModelInput
+    }    
+    public abstract class Vector3ModelInput : ModelInput
     {
-        public static PropertyName TYPE = "APPEAR";
-        public APPEAR() { type = TYPE; }
+        protected Vector3ModelInput() => stringValue = JsonUtility.ToJson(Vector3.zero);
 
-        public float value
+        public Vector3 value
         {
-            get => float.Parse(stringValue);
-            set => stringValue = value.ToString();
-        }
-    }
-    public class SIZE : ModelInput
-    {
-        public static PropertyName TYPE = "SIZE";
-        public SIZE() { type = TYPE; }
-        
-        public float value
-        {
-            get => float.Parse(stringValue);
-            set => stringValue = value.ToString();
-        }
-    }
-    public class TRANSFORM : ModelInput
-    {
-        public static PropertyName TYPE = "TRANSFORM";
-        public TRANSFORM() { type = TYPE; }
-
-        public ExTransformData value
-        {
-            get => JsonUtility.FromJson<ExTransformData>(stringValue);
+            get => JsonUtility.FromJson<Vector3>(stringValue);
             set => stringValue = JsonUtility.ToJson(value);
         }
     }
-    public class EVENT : ModelInput
+    public abstract class StringModelInput : ModelInput
+    {
+        public string value
+        {
+            get => value;
+            set => stringValue = value;
+        }
+    }
+    
+    public class DURATION : FloatModelInput
+    {
+        public static PropertyName TYPE = "DURATION";
+        public DURATION() { type = TYPE; }
+    }
+    public class APPEAR : FloatModelInput
+    {
+        public static PropertyName TYPE = "APPEAR";
+        public APPEAR() { type = TYPE; }
+    }
+    public class SIZE : FloatModelInput
+    {
+        public static PropertyName TYPE = "SIZE";
+        public SIZE() { type = TYPE; }
+    }
+    public class POSITION : Vector3ModelInput
+    {
+        public static PropertyName TYPE = "POSITION";
+        public POSITION() { type = TYPE; }
+    }
+    public class ROTATION : Vector3ModelInput
+    {
+        public static PropertyName TYPE = "ROTATION";
+        public ROTATION() { type = TYPE; }
+    }
+    public class EVENT : StringModelInput
     {
         public static PropertyName TYPE = "EVENT";
         public EVENT() { type = TYPE; }

@@ -37,9 +37,9 @@ namespace MoveSync
 
         void TriggerBeatObject(BeatObjectData beatObjectData)
         {
-            if (beatObjectData.hasModel(EVENT.TYPE))
+            if (beatObjectData.hasModel<EVENT>())
             {
-                EventManager.instance.InvokeEvent(beatObjectData.getModel<EVENT>(EVENT.TYPE).value, beatObjectData.time);
+                EventManager.instance.InvokeEvent(beatObjectData.getModel<EVENT>().value, beatObjectData.time);
             }
             else
             {

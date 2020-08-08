@@ -10,7 +10,7 @@ namespace MoveSync.UI
     public struct BindKey
     {
         public KeyCode key;
-        public PropertyName objectTag;
+        public ObjectModel objectModel;
     }
 
     public class BindingManager : MonoBehaviour
@@ -46,7 +46,7 @@ namespace MoveSync.UI
             {
                 if (Input.GetKeyDown(bind.Value.key))
                 {
-                    LevelDataManager.instance.NewBeatObjectAtMarker(bind.Value.objectTag, bind.Key);
+                    LevelDataManager.instance.NewBeatObjectAtMarker(bind.Value.objectModel, bind.Key);
                 }
             }
         }

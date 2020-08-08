@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MoveSync.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -64,16 +65,16 @@ namespace MoveSync
             _objectsUi.Add(objectUi.beatObjectData.id, objectUi);
         }
 
-        public void RemoveObject(BeatObjectData data)
+        public void RemoveObject(int id)
         {
-            Destroy(_selectedObjects[data.id].objectUi.gameObject);
-            _selectedObjects.Remove(data.id);
-            _objectsUi.Remove(data.id);
+            Destroy(_selectedObjects[id].objectUi.gameObject);
+            _selectedObjects.Remove(id);
+            _objectsUi.Remove(id);
         }
 
-        public void UpdateObject(BeatObjectData data)
+        public void UpdateObject(int id)
         {
-            _objectsUi[data.id].UpdateUI();
+            _objectsUi[id].UpdateUI();
         }
         
         public void UpdateObject(ObjectUI objectUi)
@@ -101,13 +102,16 @@ namespace MoveSync
                 if (InputData.shouldSnap) time = Mathf.Round(time);
                 
                 if (!PropertyName.IsNullOrEmpty(ObjectManager.instance.currentObjectModel.objectTag))
-                    LevelDataManager.instance.NewBeatObject(ObjectManager.instance.currentObjectModel.objectTag, time, mouseLayer);
+                    LevelDataManager.instance.NewBeatObject(ObjectManager.instance.currentObjectModel, time, mouseLayer);
             }
 
+            // wipe click
             if (eventData.button == PointerEventData.InputButton.Left)
             {
                 ClearSelection();
+                ObjectProperties.instance.CloseProperties();
             }
+
         }
         
         /*
@@ -117,8 +121,13 @@ namespace MoveSync
         {
             if (eventData.button != PointerEventData.InputButton.Left) return;
 
+            // select in rectangle
+            ClearSelection();
+
             _selectionUi = Instantiate(_selectionUiInstance, _rectObjectsList).GetComponent<SelectionUI>();
             _selectionUi.Init(eventData);
+
+            ObjectProperties.instance.CloseProperties();
         }
 
         public void OnDrag(PointerEventData data)

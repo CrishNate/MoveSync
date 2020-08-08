@@ -17,8 +17,8 @@ namespace MoveSync
         [SerializeField] private float _maxAppearTime = 0.5f;
         [SerializeField] private float _projectileReachTimeBPM = 1f;
 
-        private ExTransformData _transformOrigin;
-        private ExTransformData _transformEnd;
+        private Vector3 _positionOrigin;
+        private Vector3 _positionEnd;
         private float _appearDuration;
         private float _size;
         private Vector3 _savedScale;
@@ -30,18 +30,15 @@ namespace MoveSync
         {
             base.Init(beatObjectData);
 
-            _transformEnd = beatObjectData.getModel<TRANSFORM>(TRANSFORM.TYPE).value;
-            _transformOrigin = new ExTransformData
-            {
-                position = _transformEnd.position + new Vector3(0, -10.0f, 0),
-            };
+            _positionEnd = beatObjectData.getModel<POSITION>().value;
+            _positionOrigin = _positionEnd + new Vector3(0, -10.0f, 0);
             
-            _appearDuration = beatObjectData.getModel<APPEAR>(APPEAR.TYPE).value;
-            _size = beatObjectData.getModel<SIZE>(SIZE.TYPE).value;
+            _appearDuration = beatObjectData.getModel<APPEAR>().value;
+            _size = beatObjectData.getModel<SIZE>().value;
 
             _savedScale = transform.localScale;
             transform.localScale = _savedScale * _size;
-            transform.position = _transformOrigin.position;
+            transform.position = _positionOrigin;
         }
 
         void UpdateMovement()
@@ -54,13 +51,12 @@ namespace MoveSync
             dTimeMove = Mathf.Min(1.0f, dTimeMove);
             dTimeMove = (1 - Mathf.Pow(1 - dTimeMove, 2.0f));
 
-            transform.position = _transformOrigin.position +
-                                 (_transformEnd.position - _transformOrigin.position) * dTimeMove;
+            transform.position = _positionOrigin + (_positionEnd - _positionOrigin) * dTimeMove;
         }
 
         void SpawnExplosion()
         {
-            transform.position = _transformEnd.position;
+            transform.position = _positionEnd;
             
             float offset = Random.Range(0, Mathf.PI);
             

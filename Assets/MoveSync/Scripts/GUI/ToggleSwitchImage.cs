@@ -17,7 +17,7 @@ public class ToggleSwitchImage : MonoBehaviour
 
     void OnSwitchToggle(bool toggle)
     {
-        _imageOn.enabled = toggle;
-        _imageOff.enabled = !toggle;
+        _imageOn.gameObject.SetActive(toggle);
+        _imageOff.gameObject.SetActive(!toggle);
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DragDropBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class DragDropBoxScale : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] private bool _unrestricted = false;
     [SerializeField] private float maxDrag = 100.0f;

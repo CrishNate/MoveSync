@@ -10,7 +10,9 @@ public class SelectionUI : MonoBehaviour
     
     public bool IsOverlapRect(RectTransform other)
     {
-        Rect otherRect = new Rect(other.localPosition.x, -other.localPosition.y, other.rect.width, other.rect.height);
+        Vector2 position = (Vector2)other.localPosition - (Vector2.one - other.pivot) * new Vector2(other.rect.width, other.rect.height);
+        
+        Rect otherRect = new Rect(position.x, -position.y, other.rect.width, other.rect.height);
         FixRect(ref otherRect);
         
         return _rect.Overlaps(otherRect);
