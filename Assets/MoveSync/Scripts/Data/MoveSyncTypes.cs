@@ -12,4 +12,13 @@ namespace MoveSync
     public class EventRandomSpawnType : UnityEvent<RandomSpawnType> { };
     public class UnityEventBeatObjectData : UnityEvent<BeatObjectData> {};
     public class UnityEventObjectUI : UnityEvent<ObjectUI>{};
+    
+    public enum RandomSpawnType
+    {
+        None,
+        Line,
+        Rect,
+        Circle,
+        Sphere
+    }
 }

@@ -8,17 +8,18 @@ namespace MoveSync.LevelGizmos
     {
         private LineRenderer _lineRenderer;
 
-        void Start()
+        public override void Start()
         {
             _lineRenderer = GetComponent<LineRenderer>();
+            base.Start();
         }
 
         protected override void UpdateGizmo()
         {
             if (!_lineRenderer) _lineRenderer = GetComponent<LineRenderer>();
             
-            _lineRenderer.SetPosition(0, _gizmos1.transform.position);
-            _lineRenderer.SetPosition(1, _gizmos2.transform.position);
+            _lineRenderer.SetPosition(0, _pivot.transform.position);
+            _lineRenderer.SetPosition(1, _offset.transform.position);
         }
     }
 }

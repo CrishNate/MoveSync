@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 
@@ -31,13 +32,19 @@ namespace MoveSync.ModelData
 
         public static ModelInput[] CloneInputs(ModelInput[] modelInputs)
         {
-            ModelInput[] newModelInputs = new ModelInput[modelInputs.Length];
+            var arrayQuery = from obj in modelInputs
+                select obj.Clone();
 
-            for (int i = 0; i < newModelInputs.Length; i++)
-            {
-                newModelInputs[i] = modelInputs[i].Clone();
-            }
-            return newModelInputs;
+            return arrayQuery.ToArray();
+            
+            
+            // ModelInput[] newModelInputs = new ModelInput[modelInputs.Length];
+            //
+            // for (int i = 0; i < newModelInputs.Length; i++)
+            // {
+            //     newModelInputs[i] = modelInputs[i].Clone();
+            // }
+            // return newModelInputs;
         }
 
         public static ModelInput RecreateRealModel(ModelInput origin)
@@ -82,7 +89,7 @@ namespace MoveSync.ModelData
     {
         public string value
         {
-            get => value;
+            get => stringValue;
             set => stringValue = value;
         }
     }
@@ -106,21 +113,23 @@ namespace MoveSync.ModelData
     {
         public static PropertyName TYPE = "POSITION";
         public POSITION() { type = TYPE; }
+        public RandomSpawnType randomSpawnType;
+        public Vector3 pivot = Vector3.one;
     }
     public class ROTATION : Vector3ModelInput
     {
         public static PropertyName TYPE = "ROTATION";
         public ROTATION() { type = TYPE; }
+        
+        public Quaternion value
+        {
+            get => Quaternion.Euler(JsonUtility.FromJson<Vector3>(stringValue));
+            set => stringValue = JsonUtility.ToJson(value.eulerAngles);
+        }
     }
     public class EVENT : StringModelInput
     {
         public static PropertyName TYPE = "EVENT";
         public EVENT() { type = TYPE; }
-
-        public string value
-        {
-            get => value;
-            set => stringValue = value;
-        }
     }
 }

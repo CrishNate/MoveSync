@@ -26,9 +26,9 @@ namespace MoveSync.UI
             base.UpdateUI();
 
             Vector3 value = ((Vector3ModelInput) _modelInput).value;
-            _xInputTextField.text = value.x.ToString();
-            _yInputTextField.text = value.y.ToString();
-            _zInputTextField.text = value.z.ToString();
+            _xInputTextField.SetTextWithoutNotify(value.x.ToString());
+            _yInputTextField.SetTextWithoutNotify(value.y.ToString());
+            _zInputTextField.SetTextWithoutNotify(value.z.ToString());
         }
         
         protected override void OnUpdateValue()

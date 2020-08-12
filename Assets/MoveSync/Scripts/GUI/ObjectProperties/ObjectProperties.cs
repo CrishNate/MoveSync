@@ -7,51 +7,59 @@ namespace MoveSync.UI
 {
     public class ObjectProperties : Singleton<ObjectProperties>
     {
+        public UnityEventBeatObjectData onSelected = new UnityEventBeatObjectData();
+        public UnityEventBeatObjectData onDeselected = new UnityEventBeatObjectData();
+
         [SerializeField] private GameObject _objectProperty;
         [SerializeField] private GameObject _objectPropertyFloatInstance;
         [SerializeField] private GameObject _objectPropertyStringInstance;
         [SerializeField] private GameObject _objectPropertyVector3Instance;
         [SerializeField] private GameObject _objectPropertyPositionInstance;
         
+        private List<ObjectProperty> _propertiesObjects = new List<ObjectProperty>();
+        private BeatObjectData _selectedObject;
         
-        private ModelInput[] _currentModelInputs;
-        private int _currentId;
-        private bool _hasObjectRef;
-        private List<GameObject> _propertiesObjects = new List<GameObject>();
-
-
-        public void OpenProperties(int id, ModelInput[] modelInputs)
+        
+        public void Select(BeatObjectData beatObjectData)
         {
-            _objectProperty.SetActive(true);
-            _currentModelInputs = modelInputs;
-            _currentId = id;
-            _hasObjectRef = true;
+            if (_selectedObject != null)
+                onDeselected.Invoke(_selectedObject);
+
+            _selectedObject = beatObjectData;
+            onSelected.Invoke(_selectedObject);
+            OpenProperties();
+        }
+        
+        public void WipeSelections()
+        {
+            if (_selectedObject != null)
+                onDeselected.Invoke(_selectedObject);
             
-            CreateProperties();
+            _selectedObject = null;
+            CloseProperties();
         }
-        
-        public void OpenProperties(ModelInput[] modelInputs)
+
+        void OpenProperties()
         {
             _objectProperty.SetActive(true);
-            _currentModelInputs = modelInputs;
-            _hasObjectRef = false;
 
-            CreateProperties();
+            ConstructProperties();
         }
 
-        public void CloseProperties()
+        void CloseProperties()
         {
             _objectProperty.SetActive(false);
         }
 
-        void CreateProperties()
+        void ConstructProperties()
         {
             foreach (var propertiesObject in _propertiesObjects)
             {
-                Destroy(propertiesObject);
+                Destroy(propertiesObject.gameObject);
             }
+            _propertiesObjects.Clear();
             
-            foreach (var modelInput in _currentModelInputs)
+            foreach (var modelInput in _selectedObject.modelInputsData)
             {
                 GameObject instanceProperty = null;
                 if (modelInput is FloatModelInput) instanceProperty = _objectPropertyFloatInstance;
@@ -60,12 +68,30 @@ namespace MoveSync.UI
                 else if (modelInput is Vector3ModelInput) instanceProperty = _objectPropertyVector3Instance;
 
                 GameObject propertyObject = Instantiate(instanceProperty, instanceProperty.transform.parent);
-                propertyObject.GetComponent<ObjectProperty>().Init(modelInput, this);
                 propertyObject.SetActive(true);
-                _propertiesObjects.Add(propertyObject);
+
+                ObjectProperty objectProperty = propertyObject.GetComponent<ObjectProperty>();
+                objectProperty.Init(modelInput, this);
+                _propertiesObjects.Add(objectProperty);
             }
         }
 
+        void CheckObjectRemove(int id)
+        {
+            if (_selectedObject == null) return;
+            
+            if (id == _selectedObject.id)
+                WipeSelections();
+        }
+
+        void OnUpdateObjects(int id)
+        {
+            foreach (var propertyObject in _propertiesObjects)
+            {
+                propertyObject.UpdateUI();
+            }
+        }
+        
         void Start()
         {
             _objectPropertyFloatInstance.SetActive(false);
@@ -74,10 +100,12 @@ namespace MoveSync.UI
             _objectPropertyPositionInstance.SetActive(false);
             
             _objectProperty.SetActive(false);
+            
+            LevelDataManager.instance.onRemoveObject.AddListener(CheckObjectRemove);
+            LevelDataManager.instance.onUpdateObject.AddListener(OnUpdateObjects);
         }
         
         
-        public bool hasObjectRef => _hasObjectRef;
-        public int currentId => _currentId;
+        public BeatObjectData selectedObject => _selectedObject;
     }
 }

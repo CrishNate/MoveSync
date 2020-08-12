@@ -21,7 +21,7 @@ namespace MoveSync.UI
         {
             base.UpdateUI();
 
-            _inputTextField.text = _modelInput.stringValue;
+            _inputTextField.SetTextWithoutNotify(_modelInput.stringValue);
         }
 
         protected override void OnUpdateValue()

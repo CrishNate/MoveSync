@@ -33,6 +33,8 @@ namespace MoveSync
         
         // copy/paste
         private Dictionary<int, SelectedObjectData> _copyObjects = new Dictionary<int, SelectedObjectData>();
+
+        private bool _drawOnlyBeatKeys;
         
         public void UpdateObjects()
         {
@@ -62,6 +64,9 @@ namespace MoveSync
             objectUi.onStopDrag.AddListener(OnStopDragObject);
             UpdateObject(objectUi);
             
+            if (_drawOnlyBeatKeys)
+                objectUi.ShowOnlyKey(true);
+            
             _objectsUi.Add(objectUi.beatObjectData.id, objectUi);
         }
 
@@ -74,7 +79,8 @@ namespace MoveSync
 
         public void UpdateObject(int id)
         {
-            _objectsUi[id].UpdateUI();
+            if (_objectsUi.TryGetValue(id, out var objectUi))
+                objectUi.UpdateUI();
         }
         
         public void UpdateObject(ObjectUI objectUi)
@@ -109,9 +115,8 @@ namespace MoveSync
             if (eventData.button == PointerEventData.InputButton.Left)
             {
                 ClearSelection();
-                ObjectProperties.instance.CloseProperties();
+                ObjectProperties.instance.WipeSelections();
             }
-
         }
         
         /*
@@ -127,7 +132,7 @@ namespace MoveSync
             _selectionUi = Instantiate(_selectionUiInstance, _rectObjectsList).GetComponent<SelectionUI>();
             _selectionUi.Init(eventData);
 
-            ObjectProperties.instance.CloseProperties();
+            ObjectProperties.instance.WipeSelections();
         }
 
         public void OnDrag(PointerEventData data)
@@ -247,6 +252,18 @@ namespace MoveSync
             LevelDataManager.instance.SortBeatObjects();
         }
 
+        void OnSelect(BeatObjectData beatObjectData)
+        {
+            if (_objectsUi.TryGetValue(beatObjectData.id, out var objectUi))
+                objectUi.OnSelectProperties();
+        }
+        
+        void OnDeselect(BeatObjectData beatObjectData)
+        {
+            if (_objectsUi.TryGetValue(beatObjectData.id, out var objectUi))
+                objectUi.OnDeselectProperties();
+        }
+
         void Start()
         {
             LevelDataManager.instance.onNewObject.AddListener(AddObject);
@@ -254,11 +271,16 @@ namespace MoveSync
             LevelDataManager.instance.onUpdateObject.AddListener(UpdateObject);
             LevelDataManager.instance.onLoadedSong.AddListener(RecreateObjects);
             LevelDataManager.instance.onUpdateObjects.AddListener(RecreateObjects);
+            
+            ObjectProperties.instance.onSelected.AddListener(OnSelect);
+            ObjectProperties.instance.onDeselected.AddListener(OnDeselect);
+            
             _timeline.onZoomUpdated.AddListener(UpdateObjects);
         }
 
         public void DrawOnlyBeatKeys(bool draw)
         {
+            _drawOnlyBeatKeys = draw;
             foreach (var objectUi in _objectsUi)
             {
                 objectUi.Value.ShowOnlyKey(draw);

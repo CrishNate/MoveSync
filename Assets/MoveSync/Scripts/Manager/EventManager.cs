@@ -6,7 +6,7 @@ namespace MoveSync
 {
     public class EventManager : Singleton<EventManager>
     {
-        private Dictionary<PropertyName, UnityEventFloatParam> _events;
+        private Dictionary<PropertyName, UnityEventFloatParam> _events = new Dictionary<PropertyName, UnityEventFloatParam>();
 
 
         public void InvokeEvent(PropertyName name, float timeBPM)

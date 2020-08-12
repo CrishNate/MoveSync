@@ -17,6 +17,7 @@ namespace MoveSync
 
         [SerializeField] private RectTransform _middleHandler;
         [SerializeField] private GameObject _selection;
+        [SerializeField] private GameObject _selectionProperties;
         [SerializeField] private ObjectDurationUI _appearUI;
         [SerializeField] private ObjectDurationUI _durationUI;
 
@@ -41,11 +42,11 @@ namespace MoveSync
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.button == PointerEventData.InputButton.Left
-             && !eventData.dragging)
+            if (eventData.dragging) return;
+
+            if (eventData.button == PointerEventData.InputButton.Left)
             {
-                ObjectProperties.instance.OpenProperties(beatObjectData.id, beatObjectData.modelInputsData);
-                onStartDrag.Invoke(this);
+                ObjectProperties.instance.Select(beatObjectData);
             }
         }
 
@@ -91,6 +92,15 @@ namespace MoveSync
         public void OnDeselect()
         {
             _selection.SetActive(false);
+        }
+        
+        public void OnSelectProperties()
+        {
+            _selectionProperties.SetActive(true);
+        }
+        public void OnDeselectProperties()
+        {
+            _selectionProperties.SetActive(false);
         }
 
         public void ShowOnlyKey(bool show)

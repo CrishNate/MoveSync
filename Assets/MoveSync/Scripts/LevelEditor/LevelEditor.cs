@@ -7,11 +7,6 @@ namespace MoveSync
 {
     public class LevelEditor : Singleton<LevelEditor>
     {
-        void Awake()
-        {
-            LevelSequencer.instance.audioSource.Stop();
-        }
-
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))

@@ -32,17 +32,17 @@ public class EditorGrid : MonoBehaviour
         for (int i = 0; i < _UIGrids.Count; i++)
         {
             GameObject grid = _UIGrids[i];
-            RectTransform rectTransform = grid.GetComponent<RectTransform>();
+            RectTransform rectTransform = (RectTransform)grid.transform;
 
             Vector3 position = rectTransform.localPosition;
             position.x = i * _offset + offsetFromStart;
             rectTransform.localPosition = position;
 
-            foreach (var text in grid.GetComponentsInChildren<Text>())
-            {
-                // some gay shit
-                text.text = ((i + Mathf.Floor(_startOffset / _offset)) * _div).ToString();
-            }
+            // foreachf (var text in grid.GetComponentsInChildren<Text>())
+            // {
+            //     // some gay shit
+            //     text.text = ((i + Mathf.Floor(_startOffset / _offset)) * _div).ToString();
+            // }
         }
     }
     

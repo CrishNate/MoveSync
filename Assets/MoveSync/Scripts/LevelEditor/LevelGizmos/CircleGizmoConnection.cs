@@ -11,10 +11,11 @@ namespace MoveSync.LevelGizmos
 
         protected override void UpdateGizmo()
         {
-            if (initialScale.Equals(Vector3.zero)) initialScale = transform.localScale; 
-            
-            Vector3 offset = _gizmos2.transform.position - _gizmos1.transform.position;
-            transform.position = _gizmos1.transform.position;
+            if (initialScale.Equals(Vector3.zero)) initialScale = transform.localScale;
+
+            var position = _pivot.transform.position;
+            Vector3 offset = _offset.transform.position - position;
+            transform.position = position;
             transform.localScale = initialScale * offset.magnitude;
         }
     }

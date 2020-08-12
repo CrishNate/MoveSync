@@ -13,7 +13,8 @@ public class ObjectDurationUI : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     [SerializeField] private RectTransform _content;
     
     private float _dragOffset;
-    private bool _isDragging;
+    private float _lastPosition;
+    private Coroutine _draggingUpdate;
 
 
     public void OnPointerDown (PointerEventData eventData)
@@ -21,7 +22,7 @@ public class ObjectDurationUI : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             _dragOffset = eventData.position.x - transform.position.x;
-            _isDragging = true;
+            _draggingUpdate = StartCoroutine(Dragging());
         }
     }
 
@@ -29,15 +30,9 @@ public class ObjectDurationUI : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            _isDragging = false;
+            StopCoroutine(_draggingUpdate);
         }
     }
-
-    public void OnBeginDrag(PointerEventData eventData)
-    { }
-
-    public void OnDrag(PointerEventData eventData)
-    { }
 
     public void SetValue(float value)
     {
@@ -49,16 +44,30 @@ public class ObjectDurationUI : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         _content.gameObject.SetActive(show);
     }
     
-    void Update()
+    public void OnBeginDrag(PointerEventData eventData)
+    { }
+
+    public void OnDrag(PointerEventData eventData)
+    { }
+
+    IEnumerator Dragging()
     {
-        if (!_isDragging) return;
-        
-        float offset = Input.mousePosition.x - _content.transform.position.x - _dragOffset;
-        if (isLeft) offset *= -1;
-        offset = Mathf.Max(0, offset);
-        
-        _content.sizeDelta = new Vector2(offset, _content.sizeDelta.y);
-        
-        onValueChanged.Invoke(offset);
+        while (true)
+        {
+            float currentPosition = Input.mousePosition.x - _content.transform.position.x;
+
+            if (Mathf.Abs(currentPosition - _lastPosition) > Mathf.Epsilon)
+            {
+                float offset = currentPosition - _dragOffset;
+                if (isLeft) offset *= -1;
+                offset = Mathf.Max(0, offset);
+
+                _content.sizeDelta = new Vector2(offset, _content.sizeDelta.y);
+
+                onValueChanged.Invoke(offset);
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
     }
 }

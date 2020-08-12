@@ -44,7 +44,14 @@ namespace MoveSync
                 id = SerializableGuid.NewGuid(),
                 modelInputsData = ModelInput.CloneInputs(modelInputsData)
             };
-
+            
+            other.modelInputs = new Dictionary<Type, ModelInput>();
+            for (int i = 0; i < other.modelInputsData.Length; i++)
+            {
+                ModelInput m = other.modelInputsData[i];
+                other.modelInputs.Add(m.GetType(), m);
+            }
+            
             return other;
         }
         
@@ -59,7 +66,7 @@ namespace MoveSync
                 modelInputs.Add(m.GetType(), m);
             }
         }
-
+        
         public bool hasModel<T>() where T : ModelInput
         {
             FixModelInputs();
@@ -72,13 +79,21 @@ namespace MoveSync
 
             return (T)modelInputs[typeof(T)];
         }
+        public bool tryGetModel<T>(out T modelInput) where T : ModelInput
+        {
+            FixModelInputs();
 
+            ModelInput tempModelInput = null;
+            bool result = modelInputs.TryGetValue(typeof(T), out tempModelInput);
+            modelInput = (T)tempModelInput;
+            return result;
+        }
         
         public float spawnTime
         {
             get
             {
-                if (hasModel<APPEAR>()) return time - getModel<APPEAR>().value;
+                if (tryGetModel<APPEAR>(out var appear)) return time - appear.value;
 
                 return time;
             }
@@ -87,9 +102,7 @@ namespace MoveSync
 
     [Serializable]
     public class LevelEditorInfo
-    {
-        public int layersCount;
-    }
+    { }
     
     public class LevelInfo
     {
@@ -106,9 +119,6 @@ namespace MoveSync
         public static string resourcePath => Application.dataPath + "/Resources/";
         public static string levelFileType = "mslevel";
 
-        // event call when even NEW object is created
-        public UnityEventBeatObjectData onNewObjectCreated = new UnityEventBeatObjectData();
-        // event call when ever new object is created or loaded from save
         public UnityEventBeatObjectData onNewObject = new UnityEventBeatObjectData();
         public UnityEventIntParam onUpdateObject = new UnityEventIntParam();
         public UnityEventIntParam onRemoveObject = new UnityEventIntParam();
@@ -116,23 +126,14 @@ namespace MoveSync
         public UnityEvent onLoadedSong = new UnityEvent();
         [HideInInspector] public LevelInfo levelInfo = new LevelInfo();
 
+        // history
         private List<LevelInfo> _history = new List<LevelInfo>();
         private int _historyMarker;
 
-        
         /*
          * Object controll
          */
-        public BeatObjectData NewBeatObjectAtMarker(ObjectModel objectModel, int layer = 0)
-        {
-            float time = LevelSequencer.instance.timeBPM;
-            if (InputData.shouldSnap) 
-                time = Mathf.Round(time);
-            
-            BeatObjectData data = NewBeatObject(objectModel, time, layer);
-            return data;
-        }
-
+        
         public BeatObjectData NewBeatObject(ObjectModel objectModel, float time = 0.0f, int layer = 0, bool history = true)
         {
             BeatObjectData data = new BeatObjectData
@@ -144,11 +145,11 @@ namespace MoveSync
                 modelInputsData = ModelInput.CloneInputs(objectModel.modelInput),
             };
 
-            if (history) BackupInfo();
+            if (history) 
+                BackupInfo();
 
             levelInfo.beatObjectDatas.Add(data);
             onNewObject.Invoke(data);
-            onNewObjectCreated.Invoke(data);
 
             SortBeatObjects();
             return data;
@@ -159,6 +160,7 @@ namespace MoveSync
             BeatObjectData data = beatObjectData.Clone();
             data.time = time;
             data.editorLayer = layer;
+            
             if (history) 
                 BackupInfo();
 
@@ -168,7 +170,9 @@ namespace MoveSync
 
         public bool RemoveBeatObject(BeatObjectData beatObjectData, bool history = true)
         {
-            if (history) BackupInfo();
+            if (history) 
+                BackupInfo();
+            
             onRemoveObject.Invoke(beatObjectData.id);
             return levelInfo.beatObjectDatas.Remove(beatObjectData);
         }

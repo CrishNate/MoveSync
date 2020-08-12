@@ -1,3 +1,4 @@
+using MoveSync.ModelData;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,100 +7,72 @@ namespace MoveSync.UI
     [RequireComponent(typeof(ButtonEx))]
     public class LayerUI : MonoBehaviour
     {
-        public int layer = -1;
-
-        [SerializeField] private BindingManager _bindingManager;
-        [SerializeField] private ButtonEx _bindButton;
+        [HideInInspector] public int layer = -1;
+        public ButtonEx bindButton;
+        
         [SerializeField] private Button _clearLayerButton;
+        [SerializeField] private Outline _bindButtonOutline;
+        [SerializeField] private Outline _layerOuntline;
         [SerializeField] private Text _text;
         [SerializeField] private Text _objectTagText;
-        
-        private bool _awaitButton;
-        private static LayerUI _lastBindUi;
 
-        
-        public void ClearBind()
+
+        public void OnStartListening()
         {
-            _awaitButton = false;
-            _text.text = "";
-            _objectTagText.text = "";
-            _lastBindUi = null;
-
-            _bindingManager.RemoveKeyBind(layer);
+            Clear();
+            _bindButtonOutline.enabled = true;
         }
-        public void Cancel()
-        {
-            if (_bindingManager.bind.ContainsKey(layer))
-                UpdateUI(_bindingManager.bind[layer]);
-            else
-                _text.text = "";
 
-            _awaitButton = false;
-            _lastBindUi = null;
+        public void OnFinishListening()
+        {
+            if (BindingManager.instance.bind.ContainsKey(layer))
+                UpdateUI(BindingManager.instance.bind[layer]);
+            else
+                Clear();
+            
+            _bindButtonOutline.enabled = false;
+        }
+
+        void Clear()
+        {
+            _text.text = "";
+        }
+
+        public void OnSelected()
+        {
+            _layerOuntline.enabled = true;
+        }
+        
+        public void OnDeselect()
+        {
+            _layerOuntline.enabled = false;
         }
         
         void OnClearLayer()
         {
             LevelDataManager.instance.ClearLayer(layer);
         }
-        
-        void OnStartBind()
-        {
-            if (_lastBindUi != null)
-                _lastBindUi.Cancel();
-                
-            if (ObjectManager.instance.currentObjectModel.objectTag == null) return;
-            
-            _text.text = "_";
-            _awaitButton = true;
-            _lastBindUi = this;
-        }
-        
-        void OpenBindProperties()
-        {
-            if (_bindingManager.bind.TryGetValue(layer, out var bindKey))
-                ObjectProperties.instance.OpenProperties(bindKey.objectModel.modelInput);
-        }
 
         void UpdateUI(BindKey bindKey)
         {
-            UpdateUI(bindKey.key, bindKey.objectModel.objectTag);
+            string str = bindKey.beatObjectData.objectTag.ToString();
+            _objectTagText.text = str.Substring(0, str.IndexOf(':'));
+            _text.text = bindKey.key.ToString();
         }
 
-        void UpdateUI(KeyCode key, PropertyName objectTag)
+        void SelectProperties()
         {
-            string str = objectTag.ToString();
-            _objectTagText.text = str.Substring(0, str.IndexOf(':'));
-            _text.text = key.ToString();
+            if (BindingManager.instance.bind.TryGetValue(layer, out var bindKey))
+                ObjectProperties.instance.Select(bindKey.beatObjectData);
         }
-    
+
         void Start()
         {
-            _bindButton.onLeftClick.AddListener(OnStartBind);
-            _bindButton.onRightClick.AddListener(OpenBindProperties);
+            bindButton.onLeftClick.AddListener(() => BindingManager.instance.StartListening(layer));
+            bindButton.onMiddleClick.AddListener(() => BindingManager.instance.RemoveKeyBind(layer));
+            bindButton.onRightClick.AddListener(SelectProperties);
+            
             _clearLayerButton.onClick.AddListener(OnClearLayer);
-        }
-
-        void OnGUI()
-        {
-            if (_awaitButton && Event.current.isKey && Event.current.type == EventType.KeyDown)
-            {
-                if (Event.current.keyCode == KeyCode.Escape)
-                {
-                    ClearBind();
-                    return;
-                };
-                
-                _bindingManager.AddKeyBind(layer, new BindKey
-                {
-                    key = Event.current.keyCode,
-                    objectModel = ObjectManager.instance.currentObjectModel.Clone()
-                });
-
-                _lastBindUi = null;
-                _awaitButton = false;
-                UpdateUI(Event.current.keyCode, ObjectManager.instance.currentObjectModel.objectTag);
-            }
         }
     }
 }

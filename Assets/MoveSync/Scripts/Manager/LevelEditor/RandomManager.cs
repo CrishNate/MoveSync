@@ -9,131 +9,62 @@ using Random = UnityEngine.Random;
 
 namespace MoveSync
 {
-    [Serializable]
-    public enum RandomSpawnType
-    {
-        Point,
-        Line,
-        Rect,
-        Circle,
-        Sphere
-    }
-
-    public class RandomSpawn
-    {
-        public Vector3 point1;
-        public Vector3 point2;
-        public RandomSpawnType type;
-    }
-
     public class RandomManager : Singleton<RandomManager>
     {
-        public EventRandomSpawnType onRandomSpawnTypeChanged = new EventRandomSpawnType();
-
-        [SerializeField] private GameObject _gizmo;
-        [SerializeField] private List<GameObject> _gizmoInstances;
-        private Dictionary<PropertyName, RandomSpawn> _randomSpawns = new Dictionary<PropertyName, RandomSpawn>();
-        private List<GameObject> _gizmos = new List<GameObject>();
-        private RandomSpawn _randomSpawn;
-        
-        public void OnSelectedTag(PropertyName objectTag)
+        public Vector3 GetRandomPoint(POSITION position)
         {
-            if (!_randomSpawns.ContainsKey(objectTag))
+            Vector3 point1 = position.value;
+            Vector3 point2 = point1 + position.pivot;
+            
+            switch (position.randomSpawnType)
             {
-                _randomSpawns.Add(objectTag, new RandomSpawn());
-            }
-
-            _randomSpawn = _randomSpawns[objectTag];
-            onRandomSpawnTypeChanged.Invoke(_randomSpawns[objectTag].type);
-
-            SpawnGizmo();
-        }
-
-        public void OnChangeType(RandomSpawnType type)
-        {
-            if (!_randomSpawns.ContainsKey(ObjectManager.instance.currentObjectModel.objectTag)) return;
-            _randomSpawns[ObjectManager.instance.currentObjectModel.objectTag].type = type;
-
-            SpawnGizmo();
-        }
-
-        public void SpawnGizmo()
-        {
-            foreach (var gizmo in _gizmos)
-            {
-                Destroy(gizmo);
-            }
-            _gizmos.Clear();
-
-            BaseGizmo gizmo1 = Instantiate(_gizmo, _randomSpawn.point1, Quaternion.identity).GetComponent<BaseGizmo>();
-            gizmo1.onGizmoMoved.AddListener(x=> _randomSpawn.point1 = x);
-            _gizmos.Add(gizmo1.gameObject);
-
-            if (_randomSpawn.type != RandomSpawnType.Point)
-            {
-                BaseGizmo gizmo2 = Instantiate(_gizmo, _randomSpawn.point2, Quaternion.identity).GetComponent<BaseGizmo>();
-                gizmo2.onGizmoMoved.AddListener(x => _randomSpawn.point2 = x);
-                _gizmos.Add(gizmo2.gameObject);
-
-                BaseGizmoConnection gizmoConnection = Instantiate(_gizmoInstances[(int)_randomSpawn.type]).GetComponent<BaseGizmoConnection>();
-                gizmoConnection.Initialize(gizmo1, gizmo2);
-                _gizmos.Add(gizmoConnection.gameObject);
-            }
-        }
-
-        public Vector3 GetRandomPoint(PropertyName objectTag)
-        {
-            RandomSpawn randomSpawn = _randomSpawns[objectTag];
-            switch (randomSpawn.type)
-            {
-                case RandomSpawnType.Point:
-                    return randomSpawn.point1;
                 case RandomSpawnType.Line:
-                    return Vector3.Lerp(randomSpawn.point1, randomSpawn.point2, Random.Range(0.0f, 1.0f));
+                    return Vector3.Lerp(point1, point2, Random.Range(0.0f, 1.0f));
                 case RandomSpawnType.Rect:
-                    return RandomInRect(randomSpawn);
+                    return RandomInRect(point1, point2);
                 case RandomSpawnType.Circle:
-                    return RandomInCircle(randomSpawn);
+                    return RandomInCircle(point1, point2);
                 case RandomSpawnType.Sphere:
-                    return RandomInSphere(randomSpawn);
+                    return RandomInSphere(point1, point2);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
-
-        Vector3 RandomInRect(RandomSpawn randomSpawn)
+        
+        Vector3 RandomInRect(Vector3 point1, Vector3 point2)
         {
             return new Vector3(
-                Random.Range(randomSpawn.point1.x, randomSpawn.point2.x),
-                Random.Range(randomSpawn.point1.y, randomSpawn.point2.y),
-                Random.Range(randomSpawn.point1.z, randomSpawn.point2.z));
+                Random.Range(point1.x, point2.x),
+                Random.Range(point1.y, point2.y),
+                Random.Range(point1.z, point2.z));
         }
-
-        Vector3 RandomInCircle(RandomSpawn randomSpawn)
+        
+        Vector3 RandomInCircle(Vector3 point1, Vector3 point2)
         {
-            Vector3 offset = Random.insideUnitCircle * Vector3.Distance(randomSpawn.point1, randomSpawn.point2);
+            Vector3 offset = Random.insideUnitCircle * Vector3.Distance(point1, point2);
             offset = new Vector3(offset.x, 0, offset.y);
-            return randomSpawn.point1 + offset;
+            return point1 + offset;
         }
-
-        Vector3 RandomInSphere(RandomSpawn randomSpawn)
+        
+        Vector3 RandomInSphere(Vector3 point1, Vector3 point2)
         {
-            return randomSpawn.point1 + Random.insideUnitSphere * Vector3.Distance(randomSpawn.point1, randomSpawn.point2);
+            return point1 + Random.insideUnitSphere * Vector3.Distance(point1, point2);
         }
-
+        
         void OnNewElement(BeatObjectData beatObjectData)
         {
-            // beatObjectData.getModel<TRANSFORM>(TRANSFORM.TYPE).value = new ExTransformData
-            // {
-            //     position = GetRandomPoint(beatObjectData.objectTag),
-            //     rotation = Quaternion.identity
-            // };
-        }
+            POSITION position = beatObjectData.getModel<POSITION>();
 
+            if (position.randomSpawnType != RandomSpawnType.None)
+            {
+                position.value = GetRandomPoint(position);
+                position.pivot = Vector3.zero;
+            }
+        }
+        
         void Start()
         {
-            ObjectManager.instance.onSelectedCurrentObject.AddListener(OnSelectedTag);
-            LevelDataManager.instance.onNewObjectCreated.AddListener(OnNewElement);
+            LevelDataManager.instance.onNewObject.AddListener(OnNewElement);
         }
     }
 }

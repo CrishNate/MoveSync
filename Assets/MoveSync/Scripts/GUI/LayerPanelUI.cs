@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,50 +7,71 @@ namespace MoveSync.UI
 {
     public class LayerPanelUI : MonoBehaviour
     {
+        [SerializeField] private RectTransform _content;
         [SerializeField] private GameObject _instance;
-        [SerializeField] private GameObject _addLayerButton;
-        private List<GameObject> _layers = new List<GameObject>();
+        private List<LayerUI> _layers = new List<LayerUI>();
+        private static int layersCount = 0;
 
-        
-        public void OnSongLoaded()
-        {
-            Clear();
-            
-            for (int i = 0; i < LevelDataManager.instance.levelInfo.levelEditorInfo.layersCount; i++)
-            {
-                AddLayer(i);
-            }
-        }
-
-        public void Clear()
-        {
-            foreach (var layer in _layers)
-            {
-                Destroy(layer);
-            }
-            _layers.Clear();
-        }
-
-        public void AddNewLayer()
-        {
-            AddLayer(LevelDataManager.instance.levelInfo.levelEditorInfo.layersCount++);
-        }        
         
         void AddLayer(int layer)
         {
             GameObject obj = Instantiate(_instance, _instance.transform.parent);
-            obj.GetComponent<LayerUI>().layer = layer;
             obj.SetActive(true);
+
+            var layerUi = obj.GetComponent<LayerUI>();
+            layerUi.layer = layer;
             
-            _addLayerButton.transform.SetAsLastSibling();
-            _layers.Add(obj);
+            _layers.Add(layerUi);
+        }
+
+        private void Update()
+        {
+            int requireCount = Mathf.CeilToInt(_content.rect.height / ((RectTransform) _instance.transform).rect.height);
+            if (requireCount > _layers.Count)
+            {
+                for (int i = 0; i < requireCount - _layers.Count; i++)
+                {
+                    AddLayer(layersCount++);
+                }
+            }
+        }
+
+        bool TryGetLayerByData(BeatObjectData beatObjectData, out LayerUI layerUi)
+        {
+            foreach (var bindKey in BindingManager.instance.bind)
+            {
+                if (bindKey.Value.beatObjectData.id == beatObjectData.id)
+                {
+                    layerUi = _layers[beatObjectData.editorLayer];
+                    return true;
+                }
+            }
+
+            layerUi = null;
+            return false;
+        }
+
+        void OnSelectedLayer(BeatObjectData beatObjectData)
+        {
+            if (TryGetLayerByData(beatObjectData, out var layerUi))
+                layerUi.OnSelected();
+        }
+        
+        void OnDeselectedLayer(BeatObjectData beatObjectData)
+        {
+            if (TryGetLayerByData(beatObjectData, out var layerUi))
+                layerUi.OnDeselect();
         }
 
         void Start()
         {
             _instance.SetActive(false);
+
+            BindingManager.instance.onStartListening.AddListener(x => _layers[x].OnStartListening());
+            BindingManager.instance.onFinishListening.AddListener(x => _layers[x].OnFinishListening());
             
-            LevelDataManager.instance.onLoadedSong.AddListener(OnSongLoaded);
+            ObjectProperties.instance.onSelected.AddListener(OnSelectedLayer);
+            ObjectProperties.instance.onDeselected.AddListener(OnDeselectedLayer);
         }
     }
 }

@@ -31,8 +31,7 @@ namespace MoveSync.UI
 
         protected virtual void OnUpdateValue()
         {
-            if (!_parentObjectProperties.hasObjectRef) return;
-            LevelDataManager.instance.UpdateBeatObject(_parentObjectProperties.currentId);
+            LevelDataManager.instance.UpdateBeatObject(_parentObjectProperties.selectedObject.id);
         }
     }
 }
