@@ -30,13 +30,6 @@ namespace MoveSync
             prefab = null;
         }
 
-        public ObjectModel Clone()
-        {
-            ObjectModel newObjectModel = (ObjectModel) MemberwiseClone();
-            newObjectModel.modelInput = ModelInput.CloneInputs(modelInput);
-            return newObjectModel;
-        }
-        
         public PropertyName objectTag;
         public ModelInput[] modelInput;
         public string prefabPath;

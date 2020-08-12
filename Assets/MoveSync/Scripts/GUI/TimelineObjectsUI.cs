@@ -333,8 +333,8 @@ namespace MoveSync
         }
 
 
-        public Vector2 localMousePosition => Input.mousePosition - _rectObjectsList.position;
-        public float mouseTime => localMousePosition.x * _timeline.invZoom;
-        public int mouseLayer => Mathf.FloorToInt(-localMousePosition.y / layerHeight);
+        private Vector2 localMousePosition => Input.mousePosition - _rectObjectsList.position;
+        private float mouseTime => Mathf.Max(0, localMousePosition.x * _timeline.invZoom);
+        private int mouseLayer => Mathf.Max(0, Mathf.FloorToInt(-localMousePosition.y / layerHeight));
     }
 }

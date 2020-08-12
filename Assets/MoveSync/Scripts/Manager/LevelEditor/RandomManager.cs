@@ -58,7 +58,8 @@ namespace MoveSync
             if (position.randomSpawnType != RandomSpawnType.None)
             {
                 position.value = GetRandomPoint(position);
-                position.pivot = Vector3.zero;
+                position.pivot = Vector3.one;
+                position.randomSpawnType = RandomSpawnType.None;
             }
         }
         

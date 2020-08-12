@@ -36,6 +36,7 @@ namespace MoveSync.UI
         void Clear()
         {
             _text.text = "";
+            _objectTagText.text = "";
         }
 
         public void OnSelected()

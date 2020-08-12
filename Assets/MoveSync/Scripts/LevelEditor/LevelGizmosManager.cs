@@ -21,13 +21,30 @@ namespace MoveSync
 
         void OnSelected(BeatObjectData beatObjectData)
         {
+            GameObject gizmo = null;
             foreach (var modelInput in beatObjectData.modelInputsData)
             {
-                if (modelInput is POSITION input)
+                if (modelInput is POSITION || modelInput is ROTATION)
                 {
-                    GameObject gameObject = Instantiate(instancePositionGizmo);
-                    gameObject.GetComponent<PositionGizmo>().InitGizmo(beatObjectData.id, input);
-                    _gizmos.Add(gameObject);
+                    if (gizmo == null)
+                    {
+                        gizmo = Instantiate(instancePositionGizmo);
+                        _gizmos.Add(gizmo);
+                    }
+                }
+
+                if (modelInput is ROTATION rotation)
+                {
+                    RotationGizmo rotationGizmo = gizmo.GetComponentInChildren<RotationGizmo>();
+                    rotationGizmo.enabled = true;
+                    rotationGizmo.InitGizmo(beatObjectData.id, rotation);
+                }
+
+                if (modelInput is POSITION position)
+                {
+                    PositionGizmo positionGizmo = gizmo.GetComponent<PositionGizmo>();
+                    positionGizmo.enabled = true;
+                    positionGizmo.InitGizmo(beatObjectData.id, position);
                 }
             }
         }
