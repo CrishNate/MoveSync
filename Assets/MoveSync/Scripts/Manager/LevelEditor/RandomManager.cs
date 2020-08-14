@@ -11,24 +11,38 @@ namespace MoveSync
 {
     public class RandomManager : Singleton<RandomManager>
     {
+        private static Vector3 _lastSpawnPosition;
+        
+        
         public Vector3 GetRandomPoint(POSITION position)
         {
             Vector3 point1 = position.value;
             Vector3 point2 = point1 + position.pivot;
+            float radius = position.pivot.magnitude;
             
-            switch (position.randomSpawnType)
+            Vector3 newSpawnPoint = Vector3.zero;
+            do
             {
-                case RandomSpawnType.Line:
-                    return Vector3.Lerp(point1, point2, Random.Range(0.0f, 1.0f));
-                case RandomSpawnType.Rect:
-                    return RandomInRect(point1, point2);
-                case RandomSpawnType.Circle:
-                    return RandomInCircle(point1, point2);
-                case RandomSpawnType.Sphere:
-                    return RandomInSphere(point1, point2);
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                switch (position.randomSpawnType)
+                {
+                    case RandomSpawnType.Line:
+                        newSpawnPoint = Vector3.Lerp(point1, point2, Random.Range(0.0f, 1.0f));
+                        break;
+                    case RandomSpawnType.Rect:
+                        newSpawnPoint = RandomInRect(point1, point2);
+                        break;
+                    case RandomSpawnType.Circle:
+                        newSpawnPoint = RandomInCircle(point1, point2);
+                        break;
+                    case RandomSpawnType.Sphere:
+                        newSpawnPoint = RandomInSphere(point1, point2);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            } while (Vector3.Distance(newSpawnPoint, _lastSpawnPosition) < Mathf.Sin(Random.Range(0.0f, (float)Math.PI * 0.5f)) * radius);
+
+            return _lastSpawnPosition = newSpawnPoint;
         }
         
         Vector3 RandomInRect(Vector3 point1, Vector3 point2)
@@ -53,13 +67,14 @@ namespace MoveSync
         
         void OnNewElement(BeatObjectData beatObjectData)
         {
-            POSITION position = beatObjectData.getModel<POSITION>();
-
-            if (position.randomSpawnType != RandomSpawnType.None)
+            if (beatObjectData.tryGetModel<POSITION>(out var position))
             {
-                position.value = GetRandomPoint(position);
-                position.pivot = Vector3.one;
-                position.randomSpawnType = RandomSpawnType.None;
+                if (position.randomSpawnType != RandomSpawnType.None)
+                {
+                    position.value = GetRandomPoint(position);
+                    position.pivot = Vector3.one;
+                    position.randomSpawnType = RandomSpawnType.None;
+                }
             }
         }
         

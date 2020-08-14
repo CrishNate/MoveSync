@@ -82,13 +82,13 @@ namespace MoveSync.UI
         {
             if (_awaitButton && Event.current.isKey && Event.current.type == EventType.KeyDown)
             {
-                if (Event.current.keyCode == KeyCode.Escape)
+                if (InputData.shouldClose)
                 {
                     FinishListening();
                     return;
                 };
 
-                if (Event.current.keyCode == KeyCode.Delete)
+                if (InputData.shouldDelete)
                 {
                     RemoveKeyBind(_currentLayer);
                     FinishListening();

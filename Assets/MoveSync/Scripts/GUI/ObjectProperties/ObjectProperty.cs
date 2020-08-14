@@ -19,8 +19,7 @@ namespace MoveSync.UI
             _modelInput = modelInput;
             _parentObjectProperties = parentObjectProperties;
 
-            string title = modelInput.type.ToString();
-            title = title.Substring(0, title.IndexOf(':')).ToLower();
+            string title = LevelDataManager.PropertyNameToString(modelInput.type).ToLower();
             title = title.First().ToString().ToUpper() + title.Substring(1); // converts string from TEXT to this Text
             _title.text = title;
 

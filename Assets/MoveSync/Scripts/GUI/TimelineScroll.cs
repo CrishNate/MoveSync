@@ -15,8 +15,6 @@ namespace MoveSync
         [SerializeField] private RectTransform _viewport;
         [SerializeField] private Scrollbar _scrollbar;
         [SerializeField] private EditorGrid _editorGrid;
-        [Header("Marker")] [SerializeField] private RectTransform _playMarkerRect;
-        [SerializeField] private RectTransform _playMarkerOnScrollRect;
         [SerializeField] private TimelinePlayMarker _playMarker;
 
         public UnityEvent onZoomUpdated;
@@ -97,15 +95,7 @@ namespace MoveSync
         void UpdatePlayMarker()
         {
             _time = LevelSequencer.instance.timeBPM;
-
-            Vector2 position = _playMarkerRect.localPosition;
-            position.x = _time * _zoom;
-            _playMarkerRect.localPosition = position;
-
-            // updating small marker
-            position = _playMarkerOnScrollRect.localPosition;
-            position.x = _time / _length * _viewportWidth;
-            _playMarkerOnScrollRect.localPosition = position;
+            _playMarker.UpdateUI(_time * _zoom, _time / _length * _viewportWidth);
         }
 
         void OnScrollChanged(float value)

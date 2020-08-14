@@ -46,6 +46,10 @@ namespace MoveSync
 
             if (eventData.button == PointerEventData.InputButton.Left)
             {
+                onStartDrag.Invoke(this);
+            }
+            if (eventData.button == PointerEventData.InputButton.Right)
+            {
                 ObjectProperties.instance.Select(beatObjectData);
             }
         }

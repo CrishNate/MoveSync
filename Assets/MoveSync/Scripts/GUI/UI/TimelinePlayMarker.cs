@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 
 namespace MoveSync
@@ -12,17 +13,33 @@ namespace MoveSync
      {
           public UnityEventFloatParam onClick;
 
-          private RectTransform _rectTransform;
-
-          private void Start()
-          {
-               _rectTransform = GetComponent<RectTransform>();
-               _rectTransform.pivot = Vector2.zero;
-          }
+          [SerializeField] private RectTransform _playMarkerRect;
+          [SerializeField] private RectTransform _playMarkerOnScrollRect;
+          [SerializeField] private Text _timeText;
+          private RectTransform _viewport;
 
           public void OnPointerClick(PointerEventData eventData)
           {
-               onClick.Invoke(eventData.position.x - _rectTransform.position.x);
+               onClick.Invoke(eventData.position.x - _viewport.position.x);
+          }
+
+          public void UpdateUI(float markerX, float smallMarkerX)
+          {
+               Vector2 position = _playMarkerRect.localPosition;
+               position.x = markerX;
+               _playMarkerRect.localPosition = position;
+               
+               position = _playMarkerOnScrollRect.localPosition;
+               position.x = smallMarkerX;
+               _playMarkerOnScrollRect.localPosition = position;
+
+               _timeText.text = Mathf.FloorToInt(LevelSequencer.instance.timeBPM).ToString();
+          }
+
+          private void Start()
+          {
+               _viewport = GetComponent<RectTransform>();
+               _viewport.pivot = Vector2.zero;
           }
      }
 }

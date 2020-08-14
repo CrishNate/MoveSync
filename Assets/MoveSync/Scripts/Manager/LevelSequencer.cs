@@ -10,14 +10,16 @@ namespace MoveSync
     [RequireComponent(typeof(AudioSource))]
     public class LevelSequencer : Singleton<LevelSequencer>
     {
-        [HideInInspector] public SongInfo songInfo;
-
-        private AudioSource _audioSource;
-        private float _restartTime = 1.0f;
-
         [Header("Events")] 
         [SerializeField] private UnityEvent _onRestartFinished;
         [SerializeField] private UnityEvent _onRestart;
+
+        private float _frequency;
+        private SongInfo _songInfo;
+        private AudioSource _audioSource;
+        private float _restartTime = 1.0f;
+        private float _toBPM;
+        private float _toTime;
 
         void Awake()
         {
@@ -46,6 +48,25 @@ namespace MoveSync
             _onRestart.Invoke();
         }
 
+        public void Play()
+        {
+            audioSource.Play();
+        }
+
+        public void Stop()
+        {
+            audioSource.Stop();
+        }
+        
+        public void SetSongTime(float songTime)
+        {
+            const float epsilon = 0.1f;
+
+            // epsiion prevent this error
+            // ERROR: Error executing result (An invalid seek position was passed to this function. )
+            _audioSource.time = Mathf.Clamp(songTime + songOffset, 0, _audioSource.clip.length - epsilon);
+        }
+        
         void RestartFinish()
         {
             audioSource.pitch = 1.0f;
@@ -55,22 +76,24 @@ namespace MoveSync
             _onRestartFinished.Invoke();
         }
 
-        public void SetSongTime(float songTime)
+
+        public SongInfo songInfo
         {
-            const float epsilon = 0.1f;
-
-            // epsiion prevent this error
-            // ERROR: Error executing result (An invalid seek position was passed to this function. )
-            _audioSource.time = Mathf.Max(0, Mathf.Min(songTime + songOffset, _audioSource.clip.length - epsilon));
+            get => _songInfo;
+            set
+            {
+                _songInfo = value;
+                _toBPM = value.bpm / 60.0f;
+                _toTime = 60.0f / value.bpm;
+                _frequency = 1.0f / audioSource.clip.frequency;
+            }
         }
-        
-
         public AudioSource audioSource => _audioSource;
         public float timeBPM => time * toBPM;
         public float bpm => songInfo.bpm;
-        public float toBPM => songInfo.bpm / 60.0f;
-        public float toTime => 60.0f / songInfo.bpm;
-        public float time => _audioSource.time - songOffset;
+        public float toBPM => _toBPM;
+        public float toTime => _toTime;
+        public float time => audioSource.time - songOffset;
         public float songOffset => songInfo.offset;
         public bool songPlaying => _audioSource.isPlaying;
     }

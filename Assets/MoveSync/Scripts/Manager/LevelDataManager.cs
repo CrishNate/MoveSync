@@ -83,8 +83,7 @@ namespace MoveSync
         {
             FixModelInputs();
 
-            ModelInput tempModelInput = null;
-            bool result = modelInputs.TryGetValue(typeof(T), out tempModelInput);
+            bool result = modelInputs.TryGetValue(typeof(T), out var tempModelInput);
             modelInput = (T)tempModelInput;
             return result;
         }
@@ -130,6 +129,14 @@ namespace MoveSync
         private List<LevelInfo> _history = new List<LevelInfo>();
         private int _historyMarker;
 
+
+        public static string PropertyNameToString(PropertyName objectTag)
+        {
+            string str = objectTag.ToString();
+            str = str.Substring(0, str.IndexOf(':'));
+            return str;
+        }
+        
         /*
          * Object controll
          */
@@ -271,10 +278,10 @@ namespace MoveSync
         void LoadInfo(LevelInfo levelInfo)
         {
             this.levelInfo = levelInfo;
-            LevelSequencer.instance.songInfo = levelInfo.songInfo;
             LevelSequencer.instance.audioSource.clip = Resources.Load<AudioClip>(levelInfo.songFile);
             if (levelInfo.levelEditorInfo == null) 
                 levelInfo.levelEditorInfo = new LevelEditorInfo();
+            LevelSequencer.instance.songInfo = levelInfo.songInfo;
             
             onLoadedSong.Invoke();
         }

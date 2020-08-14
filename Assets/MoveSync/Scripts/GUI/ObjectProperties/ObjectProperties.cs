@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using MoveSync.ModelData;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MoveSync.UI
 {
@@ -10,6 +11,7 @@ namespace MoveSync.UI
         public UnityEventBeatObjectData onSelected = new UnityEventBeatObjectData();
         public UnityEventBeatObjectData onDeselected = new UnityEventBeatObjectData();
 
+        [SerializeField] private Text _itemTag;
         [SerializeField] private GameObject _objectProperty;
         [SerializeField] private GameObject _objectPropertyFloatInstance;
         [SerializeField] private GameObject _objectPropertyStringInstance;
@@ -53,6 +55,8 @@ namespace MoveSync.UI
 
         void ConstructProperties()
         {
+            _itemTag.text = LevelDataManager.PropertyNameToString(_selectedObject.objectTag);
+            
             foreach (var propertiesObject in _propertiesObjects)
             {
                 Destroy(propertiesObject.gameObject);

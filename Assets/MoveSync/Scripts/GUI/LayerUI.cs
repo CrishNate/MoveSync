@@ -11,7 +11,7 @@ namespace MoveSync.UI
         public ButtonEx bindButton;
         
         [SerializeField] private Button _clearLayerButton;
-        [SerializeField] private Outline _bindButtonOutline;
+        [SerializeField] private GameObject _bindButtonSelected;
         [SerializeField] private Outline _layerOuntline;
         [SerializeField] private Text _text;
         [SerializeField] private Text _objectTagText;
@@ -20,7 +20,7 @@ namespace MoveSync.UI
         public void OnStartListening()
         {
             Clear();
-            _bindButtonOutline.enabled = true;
+            _bindButtonSelected.SetActive(true);
         }
 
         public void OnFinishListening()
@@ -30,7 +30,7 @@ namespace MoveSync.UI
             else
                 Clear();
             
-            _bindButtonOutline.enabled = false;
+            _bindButtonSelected.SetActive(false);
         }
 
         void Clear()
@@ -57,7 +57,7 @@ namespace MoveSync.UI
         void UpdateUI(BindKey bindKey)
         {
             string str = bindKey.beatObjectData.objectTag.ToString();
-            _objectTagText.text = str.Substring(0, str.IndexOf(':'));
+            _objectTagText.text = LevelDataManager.PropertyNameToString(bindKey.beatObjectData.objectTag);
             _text.text = bindKey.key.ToString();
         }
 

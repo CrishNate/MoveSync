@@ -6,25 +6,22 @@ namespace MoveSync
 {
     public class AnimationMusicSequence : MonoBehaviour
     {
-        private float _timeBPM;
+        private Animator _animator;
+        
 
         void Start()
         {
-            Animator animator = GetComponent<Animator>();
-            animator.speed = LevelSequencer.instance.toBPM;
+            _animator = GetComponent<Animator>();
+            
+            EventManager.instance.BindEvent("event_swim", PlayAnim);
         }
 
-        void Update()
+        void PlayAnim(float timeBPM)
         {
-            Animator animator = GetComponent<Animator>();
-            float difference = LevelSequencer.instance.timeBPM - _timeBPM;
+            _animator.speed = LevelSequencer.instance.toBPM;
 
-            if (difference > 0.0f)
-            {
-                _timeBPM += 8.0f;
-
-                animator.Play("Base Layer.Swim", 0, difference * LevelSequencer.instance.toTime);
-            }
+            float difference = LevelSequencer.instance.timeBPM - timeBPM;
+            _animator.Play("Base Layer.Swim", 0, difference * LevelSequencer.instance.toTime);
         }
     }
 }

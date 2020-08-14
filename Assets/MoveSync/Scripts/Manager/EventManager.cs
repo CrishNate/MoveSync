@@ -18,7 +18,7 @@ namespace MoveSync
             }
             else
             {
-                Debug.LogError("No Event Is Binded");
+                Debug.Log("No Event Is Binded");
             }
         }
         

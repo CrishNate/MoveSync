@@ -25,6 +25,7 @@ namespace MoveSync.UI
             public Toggle        toggle        { get { return m_Toggle;        } set { m_Toggle = value;         } }
         }
         
+        
         [Header("Drop Down /w/ Searth")] [SerializeField]
         private Canvas _canvas;
 
@@ -33,29 +34,22 @@ namespace MoveSync.UI
         [SerializeField] private RectTransform _itemTemplate;
         [SerializeField] private InputField _inputField;
         [SerializeField] private UnityEventString _onValueChanged;
-
-        [HideInInspector]
-        public List<string> options
-        {
-            get { return _options; }
-            set { _options = value; UpdateList(); }
-        }
         [SerializeField] private List<string> _options;
 
         private List<DropdownItem> _items = new List<DropdownItem>();
         private GameObject _blocker;
-
         private Text _itemText;
         private Toggle _item;
-
         private string _value;
 
+        
         void Start()
         {
             _dropDown.SetActive(false);
             _itemTemplate.gameObject.SetActive(false);
 
             _inputField.onValueChanged.AddListener(FilterList);
+            _inputField.onEndEdit.AddListener(OnSearthSubmit);
         }
 
         private static T GetOrAddComponent<T>(GameObject go) where T : Component
@@ -69,6 +63,8 @@ namespace MoveSync.UI
         public void OnPointerClick(PointerEventData eventData)
         {
             ShowList();
+            _inputField.Select();
+            _inputField.ActivateInputField();
         }
 
         public void OnSubmit(BaseEventData eventData)
@@ -235,7 +231,22 @@ namespace MoveSync.UI
 
             _items.Clear();
         }
+
+        void OnSearthSubmit(string text)
+        {
+            // if (_items.Count > 0)
+            // {
+            //     ValueChanged(_items[0].text.text);
+            // }
+        }
+        
         
         public string currentValue => _value;
+        
+        public List<string> options
+        {
+            get { return _options; }
+            set { _options = value; UpdateList(); }
+        }
     }
 }

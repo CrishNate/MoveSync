@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DefaultGizmoOffsetMaterial
+  m_Name: DefaultGizmoRotationMaterial
   m_Shader: {fileID: 10101, guid: 0000000000000000e000000000000000, type: 0}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -89,7 +89,7 @@ Material:
     - _UseUIAlphaClip: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.142, g: 0.645, b: 0.177, a: 1}
+    - _Color: {r: 0.72300005, g: 0.1587073, b: 0.1587073, a: 1}
     - _ColorBottom: {r: 0.36154413, g: 0.560827, b: 0.8088235, a: 1}
     - _ColorPrimary: {r: 0.75735295, g: 0.75735295, b: 0.75735295, a: 1}
     - _ColorTop: {r: 1, g: 1, b: 1, a: 1}

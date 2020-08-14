@@ -107,7 +107,19 @@ namespace MoveSync
                 float time = mouseTime;
                 if (InputData.shouldSnap) time = Mathf.Round(time);
                 
-                if (!PropertyName.IsNullOrEmpty(ObjectManager.instance.currentObjectModel.objectTag))
+                // spawning object from bind data
+                bool usedBind = false;
+                foreach (var bind in BindingManager.instance.bind)
+                {
+                    if (Input.GetKey(bind.Value.key))
+                    {
+                        LevelDataManager.instance.CopyBeatObject(bind.Value.beatObjectData, time, mouseLayer);
+                        usedBind = true;
+                        break;
+                    }
+                }
+                
+                if (!usedBind && ObjectManager.instance.currentObjectModel != null)
                     LevelDataManager.instance.NewBeatObject(ObjectManager.instance.currentObjectModel, time, mouseLayer);
             }
 
