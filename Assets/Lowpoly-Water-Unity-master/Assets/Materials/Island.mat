@@ -9,8 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Island
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_ShaderKeywords: _EMISSION
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -90,7 +90,7 @@ Material:
     - _EmissionScaleUI: 0
     - _Gloss: 1
     - _GlossMapScale: 1
-    - _Glossiness: 1
+    - _Glossiness: 0
     - _GlossyReflections: 1
     - _Lightmapping: 1
     - _Metallic: 0
@@ -109,7 +109,7 @@ Material:
     - _Color: {r: 0.20754719, g: 0.20754719, b: 0.20754719, a: 1}
     - _Color1: {r: 0.67910445, g: 0.67910445, b: 0.67910445, a: 1}
     - _Color2: {r: 0.14179105, g: 0.14179105, b: 0.14179105, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _EmissionColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 0}
     - _EmissionColorUI: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColorWithMapUI: {r: 1, g: 1, b: 1, a: 1}
     - _Indicator: {r: 1, g: 0, b: 0, a: 1}

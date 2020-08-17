@@ -157,8 +157,8 @@ namespace MoveSync
 
             levelInfo.beatObjectDatas.Add(data);
             onNewObject.Invoke(data);
-
             SortBeatObjects();
+
             return data;
         }
         

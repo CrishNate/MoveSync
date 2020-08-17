@@ -74,7 +74,10 @@ namespace MoveSync.UI
             foreach (var bind in _bind)
             {
                 if (Input.GetKeyDown(bind.Value.key))
+                {
                     LevelDataManager.instance.CopyBeatObject(bind.Value.beatObjectData, time, bind.Key);
+                    LevelDataManager.instance.SortBeatObjects();
+                }
             }
         }
         

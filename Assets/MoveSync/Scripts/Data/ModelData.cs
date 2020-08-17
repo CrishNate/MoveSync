@@ -36,15 +36,6 @@ namespace MoveSync.ModelData
                 select obj.Clone();
 
             return arrayQuery.ToArray();
-            
-            
-            // ModelInput[] newModelInputs = new ModelInput[modelInputs.Length];
-            //
-            // for (int i = 0; i < newModelInputs.Length; i++)
-            // {
-            //     newModelInputs[i] = modelInputs[i].Clone();
-            // }
-            // return newModelInputs;
         }
 
         public static ModelInput RecreateRealModel(ModelInput origin)
@@ -55,6 +46,7 @@ namespace MoveSync.ModelData
             if (origin.type == ModelData.POSITION.TYPE) return POSITION.CopyValues(origin);
             if (origin.type == ModelData.ROTATION.TYPE) return ROTATION.CopyValues(origin);
             if (origin.type == ModelData.EVENT.TYPE) return EVENT.CopyValues(origin);
+            if (origin.type == ModelData.COUNT.TYPE) return COUNT.CopyValues(origin);
 
             return null;
         }
@@ -65,6 +57,7 @@ namespace MoveSync.ModelData
         public static ModelInput POSITION => new POSITION();
         public static ModelInput ROTATION => new ROTATION();
         public static ModelInput EVENT => new EVENT();
+        public static ModelInput COUNT => new COUNT();
     }
 
     public abstract class FloatModelInput : ModelInput
@@ -74,7 +67,15 @@ namespace MoveSync.ModelData
             get => float.Parse(stringValue);
             set => stringValue = value.ToString();
         }
-    }    
+    }
+    public abstract class IntModelInput : ModelInput
+    {
+        public int value
+        {
+            get => int.Parse(stringValue);
+            set => stringValue = value.ToString();
+        }
+    }
     public abstract class Vector3ModelInput : ModelInput
     {
         protected Vector3ModelInput() => stringValue = JsonUtility.ToJson(Vector3.zero);
@@ -126,6 +127,11 @@ namespace MoveSync.ModelData
             get => Quaternion.Euler(JsonUtility.FromJson<Vector3>(stringValue));
             set => stringValue = JsonUtility.ToJson(value.eulerAngles);
         }
+    }
+    public class COUNT : IntModelInput
+    {
+        public static PropertyName TYPE = "COUNT";
+        public COUNT() { type = TYPE; }
     }
     public class EVENT : StringModelInput
     {

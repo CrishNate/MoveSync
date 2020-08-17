@@ -14,6 +14,7 @@ namespace MoveSync.UI
         [SerializeField] private Text _itemTag;
         [SerializeField] private GameObject _objectProperty;
         [SerializeField] private GameObject _objectPropertyFloatInstance;
+        [SerializeField] private GameObject _objectPropertyIntInstance;
         [SerializeField] private GameObject _objectPropertyStringInstance;
         [SerializeField] private GameObject _objectPropertyVector3Instance;
         [SerializeField] private GameObject _objectPropertyPositionInstance;
@@ -53,6 +54,17 @@ namespace MoveSync.UI
             _objectProperty.SetActive(false);
         }
 
+        GameObject GetInstanceProperty(ModelInput modelInput)
+        {
+            if (modelInput is FloatModelInput) return _objectPropertyFloatInstance;
+            if (modelInput is IntModelInput) return _objectPropertyIntInstance;
+            if (modelInput is StringModelInput) return _objectPropertyStringInstance;
+            if (modelInput is POSITION) return _objectPropertyPositionInstance;
+            if (modelInput is Vector3ModelInput) return _objectPropertyVector3Instance;
+
+            return null;
+        }
+
         void ConstructProperties()
         {
             _itemTag.text = LevelDataManager.PropertyNameToString(_selectedObject.objectTag);
@@ -65,12 +77,8 @@ namespace MoveSync.UI
             
             foreach (var modelInput in _selectedObject.modelInputsData)
             {
-                GameObject instanceProperty = null;
-                if (modelInput is FloatModelInput) instanceProperty = _objectPropertyFloatInstance;
-                else if (modelInput is StringModelInput) instanceProperty = _objectPropertyStringInstance;
-                else if (modelInput is POSITION) instanceProperty = _objectPropertyPositionInstance;
-                else if (modelInput is Vector3ModelInput) instanceProperty = _objectPropertyVector3Instance;
-
+                GameObject instanceProperty = GetInstanceProperty(modelInput);
+                
                 GameObject propertyObject = Instantiate(instanceProperty, instanceProperty.transform.parent);
                 propertyObject.SetActive(true);
 
@@ -99,6 +107,7 @@ namespace MoveSync.UI
         void Start()
         {
             _objectPropertyFloatInstance.SetActive(false);
+            _objectPropertyIntInstance.SetActive(false);
             _objectPropertyStringInstance.SetActive(false);
             _objectPropertyVector3Instance.SetActive(false);
             _objectPropertyPositionInstance.SetActive(false);
