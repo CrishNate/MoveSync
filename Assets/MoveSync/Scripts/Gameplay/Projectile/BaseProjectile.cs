@@ -4,18 +4,27 @@ using UnityEngine;
 
 public abstract class BaseProjectile : MonoBehaviour
 {
-    protected float _duration;
-    protected float _appearTime;
-    protected float _scale;
-    
-    protected float _timeStamp = -1;
+    protected float duration;
+    protected float appearTime;
+    protected float scale;
+    protected float timeStamp = -1;
 
-    public virtual void Init(GameObject instigator, float invokeTimeStamp, float duration, float appearTime, float scale)
+    
+    public virtual void Init(GameObject instigator, float invokeTimeStamp, float _duration, float _appearTime, float _scale)
     {
-        _duration = duration;
-        _appearTime = appearTime;
-        _scale = scale;
+        duration = _duration;
+        appearTime = _appearTime;
+        scale = _scale;
         
-        _timeStamp = invokeTimeStamp;
+        timeStamp = invokeTimeStamp;
     }
+
+    public virtual float GetDisappearTime()
+    {
+        return 0.0f;
+    }
+
+
+    public float Duration => duration;
+    public float AppearTime => appearTime;
 }

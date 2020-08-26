@@ -9,7 +9,6 @@ namespace MoveSync
     [Serializable] public class UnityEventIntParam : UnityEvent<int> {};
     public class UnityEventPropertyName : UnityEvent<PropertyName> { };
     public class UnityEventVector3 : UnityEvent<Vector3>{ };
-    public class EventRandomSpawnType : UnityEvent<RandomSpawnType> { };
     public class UnityEventBeatObjectData : UnityEvent<BeatObjectData> {};
     public class UnityEventObjectUI : UnityEvent<ObjectUI>{};
     

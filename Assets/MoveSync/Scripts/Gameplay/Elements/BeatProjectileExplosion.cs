@@ -57,33 +57,8 @@ namespace MoveSync
         void SpawnExplosion()
         {
             transform.position = _positionEnd;
-            
-            float offset = Random.Range(0, Mathf.PI);
-            
-            // generating icosphere points
-            int ia, ib, nb;
-            float x, y, z, r;
-            float a, b, da, db;
-            da = Mathf.PI / (_divisions - 1);
-            for (a = -0.5f * Mathf.PI, ia = 0; ia < _divisions; ia++, a += da)
-            {
-                r = Mathf.Cos(a);
-                z = Mathf.Sin(a);
-                nb = Mathf.CeilToInt(2.0f * Mathf.PI * r / da);
-                db = 2.0f * Mathf.PI / nb;
-                if ((ia == 0) || (ia == _divisions - 1))
-                {
-                    nb = 1;
-                    db = 0.0f;
-                }
 
-                for (b = 0.0f, ib = 0; ib < nb; ib++, b += db)
-                {
-                    x = r * Mathf.Cos(b + offset);
-                    y = r * Mathf.Sin(b + offset);
-                    SpawnProjectile(new Vector3(x, y, z));
-                }
-            }
+            MathEx.ExecuteInIsometricSphere(SpawnProjectile, _divisions);
         }
 
         void SpawnProjectile(Vector3 direction)
@@ -96,7 +71,7 @@ namespace MoveSync
         protected override void Update()
         {
             base.Update();
-            transform.localScale = _savedScale * (_size + 0.1f * Mathf.Cos(Time.time * LevelSequencer.instance.toBPM * Mathf.PI * 2.0f));
+            transform.localScale = _savedScale * (_size + _size * 0.3f * Mathf.Cos(LevelSequencer.instance.timeBPM * Mathf.PI * 2f + Mathf.PI));
             
             UpdateMovement();
         }

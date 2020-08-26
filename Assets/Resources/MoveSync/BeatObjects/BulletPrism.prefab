@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8156985080443624255}
-  - component: {fileID: -6595740722261413706}
+  - component: {fileID: 6743847928756299311}
   m_Layer: 0
-  m_Name: Laser
+  m_Name: BulletPrism
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-6595740722261413706
+--- !u!114 &6743847928756299311
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,11 +40,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5145423521493952812}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02730dd5195b43269d976154a9d20271, type: 3}
+  m_Script: {fileID: 11500000, guid: 2363d088a7527624b8032c14923c1ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _onTriggeredEvent:
     m_PersistentCalls:
       m_Calls: []
-  projectile: {fileID: 7183579001196472452, guid: 81cd180cd7b785c40b1205a36159b48f,
+  projectile: {fileID: 867890515098498087, guid: 292b4a2cb9b8c3e468c8c4ae076ed9d6,
     type: 3}

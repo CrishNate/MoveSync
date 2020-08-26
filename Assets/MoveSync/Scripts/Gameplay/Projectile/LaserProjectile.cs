@@ -38,19 +38,24 @@ namespace MoveSync
 
             _warningGameObject.SetActive(true);
 
-            _endTimeStamp = _timeStamp + _duration;
-            _laserWarning.Init(_timeStamp - appearTime, scale);
+            _endTimeStamp = timeStamp + duration;
+            _laserWarning.Init(timeStamp - appearTime, scale);
+        }
+
+        public override float GetDisappearTime()
+        {
+            return _scaleTime;
         }
 
         void Update()
         {
-            if (_timeStamp <= 0) return;
+            if (timeStamp <= 0) return;
 
             float deltaScale = 0;
             float deltaScaleForward = 0;
 
             // laser warning
-            if (LevelSequencer.instance.timeBPM < _timeStamp - _scaleTime)
+            if (LevelSequencer.instance.timeBPM < timeStamp - _scaleTime)
             {
                 
             }
@@ -60,7 +65,7 @@ namespace MoveSync
                 _warningGameObject.SetActive(false);
                 _laserGameObject.SetActive(true);
 
-                deltaScale = (LevelSequencer.instance.timeBPM - (_timeStamp - _scaleTime)) / _scaleTime;
+                deltaScale = (LevelSequencer.instance.timeBPM - (timeStamp - _scaleTime)) / _scaleTime;
                 deltaScaleForward = Mathf.Min(1, deltaScale);
             }
             // laser fade
@@ -82,7 +87,7 @@ namespace MoveSync
                 _lineRenderer.startWidth = _lineRenderer.endWidth = _savedWidth * deltaScale;
 
             Vector3 tempScale = _savedScale;
-            tempScale.x = tempScale.y = _scale * deltaScale;
+            tempScale.x = tempScale.y = scale * deltaScale;
             tempScale.z = deltaScaleForward * _scaleMultiplier;
             _laserGameObject.transform.localScale = tempScale;
         }
