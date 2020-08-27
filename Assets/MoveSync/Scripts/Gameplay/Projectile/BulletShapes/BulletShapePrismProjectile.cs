@@ -12,9 +12,9 @@ namespace MoveSync
             Vector3 p3 = new Vector3(Mathf.Cos(div * 3), Mathf.Sin(div * 3));
 
             float x = (float) bulletIndex / count;
-            if (x < 0.33333333f) return Vector3.Lerp(p1, p2, x * 3 % 1f);
-            if (x < 0.66666666f) return Vector3.Lerp(p2, p3, x * 3 % 1f);
-            return Vector3.Lerp(p3, p1, x * 3 % 1f);
+            if (x < 0.33333333f) return Vector3.Lerp(p1, p2, x * 3 % 1f) * radius;
+            if (x < 0.66666666f) return Vector3.Lerp(p2, p3, x * 3 % 1f) * radius;
+            return Vector3.Lerp(p3, p1, x * 3 % 1f) * radius;
         }
     }
 }

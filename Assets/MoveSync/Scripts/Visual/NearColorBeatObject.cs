@@ -26,10 +26,16 @@ namespace MoveSync
 
             if (initial || dColor < 1.0f)
             {
+                float alpha = _meshRenderer.material.color.a;
                 _meshRenderer.material.color = Color.Lerp(
                     MoveSyncData.instance.colorData.NearBeatObjectColor,
                     MoveSyncData.instance.colorData.FarBeatObjectColor,
                     dColor);
+                _meshRenderer.material.color = new Color(_meshRenderer.material.color.r,
+                    _meshRenderer.material.color.g,
+                    _meshRenderer.material.color.b,
+                    alpha);
+                
             }
         }
     }

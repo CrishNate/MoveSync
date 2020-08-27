@@ -8,12 +8,13 @@ namespace MoveSync
 {
     public class LevelEditor : Singleton<LevelEditor>
     {
+        [SerializeField] private GameObject _vrPlayer;
         private static float _scrollSpeed;
         private bool _isSimulation;
-        [SerializeField] private GameObject _vrPlayer;
-        
-        
-        public void SimulationMode(bool simulation)
+        private bool _block;
+
+
+            public void SimulationMode(bool simulation)
         {
             _isSimulation = simulation;
             if (_isSimulation)
@@ -41,16 +42,24 @@ namespace MoveSync
             {
                 LevelSequencer.instance.SetSongTime(0.0f);
             }
-            
-            if (OVRInput.GetDown(OVRInput.Button.PrimaryThumbstickRight))
-            {
-                LevelSequencer.instance.SetSongTime(LevelSequencer.instance.time + _scrollSpeed);
-            }
 
-            if (OVRInput.GetDown(OVRInput.Button.PrimaryThumbstickLeft))
+            if (!_block)
             {
-                LevelSequencer.instance.SetSongTime(LevelSequencer.instance.time - _scrollSpeed);
+                if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickRight))
+                {
+                    LevelSequencer.instance.SetSongTime(LevelSequencer.instance.time + _scrollSpeed);
+                    _block = true;
+                }
+
+                if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickLeft))
+                {
+                    LevelSequencer.instance.SetSongTime(LevelSequencer.instance.time - _scrollSpeed);
+                    _block = true;
+                }
             }
+            else if (!OVRInput.Get(OVRInput.Button.SecondaryThumbstickRight) &&
+                     !OVRInput.Get(OVRInput.Button.SecondaryThumbstickLeft))
+                _block = false;
         }
     }
 }

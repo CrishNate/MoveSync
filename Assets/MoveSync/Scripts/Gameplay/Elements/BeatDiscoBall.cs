@@ -7,23 +7,20 @@ using UnityEngine.Events;
 
 namespace MoveSync
 {
-    public class BeatProjectileExplosion : BeatObject
+    public class BeatDiscoBall : BeatObject
     {
-        [SerializeField] private GameObject _projectileObject;
-
-        [Header("Beat Projectile Explosion")] 
-        [SerializeField] private int _divisions = 10;
-
+        [Header("Beat Disco Ball")] 
+        [SerializeField] private BaseProjectile _projectileObject;
         [SerializeField] private float _maxAppearTime = 0.5f;
-        [SerializeField] private float _projectileReachTimeBPM = 1f;
+        [SerializeField] private Vector3 _dRotation;
 
         private Vector3 _positionOrigin;
         private Vector3 _positionEnd;
         private float _appearDuration;
+        private float _duration;
         private float _size;
-        private Vector3 _savedScale;
-
         private bool _finishMove;
+        private int _count;
 
 
         public override void Init(BeatObjectData beatObjectData)
@@ -34,11 +31,14 @@ namespace MoveSync
             _positionOrigin = _positionEnd + new Vector3(0, -10.0f, 0);
             
             _appearDuration = beatObjectData.getModel<APPEAR>().value;
+            _duration = beatObjectData.getModel<DURATION>().value;
             _size = beatObjectData.getModel<SIZE>().value;
+            _count = beatObjectData.getModel<COUNT>().value;
 
-            _savedScale = transform.localScale;
-            transform.localScale = _savedScale * _size;
+            transform.localScale *= _size;
             transform.position = _positionOrigin;
+            
+            SpawnDisco();
         }
 
         void UpdateMovement()
@@ -51,37 +51,31 @@ namespace MoveSync
             dTimeMove = Mathf.Min(1.0f, dTimeMove);
             dTimeMove = Mathf.Max(0, 1 - Mathf.Pow(1 - dTimeMove, 2.0f));
 
-            transform.position = _positionOrigin + (_positionEnd - _positionOrigin) * dTimeMove;
+            transform.position = Vector3.Lerp(_positionOrigin, _positionEnd, dTimeMove);
         }
 
-        void SpawnExplosion()
+        void SpawnDisco()
         {
-            transform.position = _positionEnd;
-
-            MathEx.ExecuteInIsometricSphere(SpawnProjectile, _divisions);
+            MathEx.ExecuteInIsometricSphere(SpawnProjectile, _count);
         }
 
         void SpawnProjectile(Vector3 direction)
         {
-            Instantiate(_projectileObject, transform.position, Quaternion.LookRotation(direction))
-                .GetComponent<BaseProjectile>()
-                .Init(gameObject, beatObjectData.time, 0, _projectileReachTimeBPM, _size);
+            GameObject projectileObj = Instantiate(_projectileObject.gameObject, transform.position + direction * _size, 
+                Quaternion.LookRotation(direction));
+            
+            projectileObj.GetComponent<BaseProjectile>().Init(gameObject, beatObjectData.time, _duration, _appearDuration, _size);
+            projectileObj.transform.parent = transform;
         }
 
         protected override void Update()
         {
             base.Update();
-            transform.localScale = _savedScale * (_size + _size * 0.3f * Mathf.Cos(LevelSequencer.instance.timeBPM * Mathf.PI * 2f + Mathf.PI));
             
             UpdateMovement();
-        }
 
-        protected override void OnTriggered()
-        {
-            base.OnTriggered();
-
-            SpawnExplosion();
-            Destroy(gameObject);
+            if (LevelSequencer.instance.timeBPM > beatObjectData.time + _duration + _projectileObject.GetDisappearTime())
+                Destroy(gameObject);
         }
     }
 }

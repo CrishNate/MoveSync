@@ -74,29 +74,7 @@ MonoBehaviour:
   _onTriggeredEvent:
     m_PersistentCalls:
       m_Calls: []
-  _projectileObject: {fileID: 2341723290652221099, guid: f9ddb4903afd2d34b82b3932a05a39f9,
-    type: 3}
-  _targetStates: 1
-  _shootTransform: {fileID: 1765459100110835883}
-  _shootAppearTime: 6
-  _moveTime: 0.5
-  _onPrepare:
-    m_PersistentCalls:
-      m_Calls: []
-  _onFinished:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3745440843233871753}
-        m_MethodName: Drop
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  projectile: {fileID: 0}
 --- !u!114 &4053413561014784492
 MonoBehaviour:
   m_ObjectHideFlags: 0

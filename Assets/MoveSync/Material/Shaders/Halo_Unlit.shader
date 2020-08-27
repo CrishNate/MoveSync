@@ -26,7 +26,6 @@ Shader "MoveSync/Halo_Unlit" {
         void surf (Input IN, inout SurfaceOutput o) {
             half4 c = tex2D (_MainTex, IN.uv_MainTex);
             half factor = dot(normalize(IN.viewDir),o.Normal);
-            //o.Albedo = _Color * _Fill + _Color * (_Shininess - factor * _Shininess);
             o.Emission.rgb = _Color * _Fill + _Color * (_Shininess - factor * _Shininess);
             o.Alpha = c.a;
         }

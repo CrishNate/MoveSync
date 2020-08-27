@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class SpinObject : MonoBehaviour
 {
-    [SerializeField] private float _multiplySpeed = 1.0f;
-    [SerializeField] private bool _useOnP = false;
-    [SerializeField] private bool _useOnY = false;
-    [SerializeField] private bool _useOnR = false;
+    [SerializeField] private Vector3 _dRotation;
+    private float timeStamp;
+
+
+    void Start()
+    {
+        timeStamp = Time.time;
+    }
 
     void Update()
     {
-        float p = _useOnP ? Time.time * _multiplySpeed : 0.0f;
-        float y = _useOnY ? Time.time * _multiplySpeed : 0.0f;
-        float r = _useOnR ? Time.time * _multiplySpeed : 0.0f;
-        
+        float t = Time.time - timeStamp;
+        float p = Mathf.Abs(_dRotation.x) > 0f ? t * _dRotation.x : 0f;
+        float y = Mathf.Abs(_dRotation.y) > 0f ? t * _dRotation.y : 0f;
+        float r = Mathf.Abs(_dRotation.z) > 0f ? t * _dRotation.z : 0f;
+
         transform.localRotation = Quaternion.Euler(p, y, r);
     }
 }

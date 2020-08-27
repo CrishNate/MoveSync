@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2341723290652221099
+--- !u!1 &5145423521493952812
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,44 +8,43 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4978967972134587898}
-  - component: {fileID: -4260251746924209329}
-  m_Layer: 9
-  m_Name: BulletCicleProjectile
+  - component: {fileID: 8156985080443624255}
+  - component: {fileID: 6743847928756299311}
+  m_Layer: 0
+  m_Name: BulletX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4978967972134587898
+--- !u!4 &8156985080443624255
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2341723290652221099}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_GameObject: {fileID: 5145423521493952812}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-4260251746924209329
+--- !u!114 &6743847928756299311
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2341723290652221099}
+  m_GameObject: {fileID: 5145423521493952812}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31381d52cdb34ca2801bc63409df6e62, type: 3}
+  m_Script: {fileID: 11500000, guid: 2363d088a7527624b8032c14923c1ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  count: 10
-  dRotation: -1
-  dRadius: 0
-  radius: 2
-  _bulletInstanceModel: {fileID: 6637416293251459964, guid: 5b09dbcffd9489c41af92436b8d43f57,
+  _onTriggeredEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  projectile: {fileID: 5390824764915981596, guid: 7b43cf28f7a529c41bea1c0de1a2816a,
     type: 3}

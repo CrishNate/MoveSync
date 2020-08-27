@@ -20,7 +20,7 @@ namespace MoveSync
         private AppearStates _appearStates = AppearStates.Appear;
 
         private static float _distanceOffset = 1.0f;
-        private static float _disappearSpeed = 1.0f;
+        private static float _appearSpeed = 1.0f;
         private static float _disappearAfterTimeBPM = 10.0f;
         
         
@@ -42,7 +42,7 @@ namespace MoveSync
             AppearUpdate();
             
             if (LevelSequencer.instance.timeBPM < (timeStamp - appearTime)
-                || LevelSequencer.instance.timeBPM > (timeStamp + _disappearAfterTimeBPM + _disappearSpeed))
+                || LevelSequencer.instance.timeBPM > (timeStamp + _disappearAfterTimeBPM + _appearSpeed))
             {
                 Destroy(gameObject);
             }
@@ -54,11 +54,11 @@ namespace MoveSync
             switch (_appearStates)
             {
                 case AppearStates.Appear:
-                    dTime = (LevelSequencer.instance.timeBPM - (timeStamp - appearTime)) / _disappearSpeed;
+                    dTime = (LevelSequencer.instance.timeBPM - (timeStamp - appearTime)) / _appearSpeed;
                     dTime = Mathf.Min(dTime, 1f);
                     transform.localScale = Vector3.one * (scale * dTime);
 
-                    if (LevelSequencer.instance.timeBPM > timeStamp - appearTime + _disappearSpeed)
+                    if (LevelSequencer.instance.timeBPM > timeStamp - appearTime + _appearSpeed)
                         _appearStates = AppearStates.Stay;
                     break;
                 
@@ -68,7 +68,7 @@ namespace MoveSync
                     break;
                     
                 case AppearStates.Disappear:
-                    dTime = (LevelSequencer.instance.timeBPM - (timeStamp + _disappearAfterTimeBPM)) / _disappearSpeed;
+                    dTime = (LevelSequencer.instance.timeBPM - (timeStamp + _disappearAfterTimeBPM)) / _appearSpeed;
                     dTime = 1 - dTime;
                     transform.localScale = Vector3.one * (scale * dTime);
                     break;
