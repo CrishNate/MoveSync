@@ -73,6 +73,12 @@ namespace MoveSync
 
             return modelInputs.ContainsKey(typeof(T));
         }
+        public bool hasModel(Type type)
+        {
+            FixModelInputs();
+
+            return modelInputs.ContainsKey(type);
+        }
         public T getModel<T>() where T : ModelInput
         {
             FixModelInputs();
@@ -86,6 +92,12 @@ namespace MoveSync
             bool result = modelInputs.TryGetValue(typeof(T), out var tempModelInput);
             modelInput = (T)tempModelInput;
             return result;
+        }
+        public bool tryGetModel(Type type, out ModelInput modelInput)
+        {
+            FixModelInputs();
+            
+            return modelInputs.TryGetValue(type, out modelInput);
         }
         
         public float spawnTime

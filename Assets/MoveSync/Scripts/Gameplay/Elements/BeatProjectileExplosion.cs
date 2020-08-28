@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using MoveSync;
-using MoveSync.ModelData;
+﻿using MoveSync.ModelData;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace MoveSync
 {
@@ -11,9 +7,7 @@ namespace MoveSync
     {
         [SerializeField] private GameObject _projectileObject;
 
-        [Header("Beat Projectile Explosion")] 
-        [SerializeField] private int _divisions = 10;
-
+        [Header("Beat Projectile Explosion")]
         [SerializeField] private float _maxAppearTime = 0.5f;
         [SerializeField] private float _projectileReachTimeBPM = 1f;
 
@@ -58,14 +52,14 @@ namespace MoveSync
         {
             transform.position = _positionEnd;
 
-            MathEx.ExecuteInIsometricSphere(SpawnProjectile, _divisions);
+            MathEx.ExecuteInIsometricSphere(SpawnProjectile, beatObjectData.getModel<COUNT>().value);
         }
 
         void SpawnProjectile(Vector3 direction)
         {
             Instantiate(_projectileObject, transform.position, Quaternion.LookRotation(direction))
                 .GetComponent<BaseProjectile>()
-                .Init(gameObject, beatObjectData.time, 0, _projectileReachTimeBPM, _size);
+                .Init(gameObject, beatObjectData.time, 0, _projectileReachTimeBPM, _size, beatObjectData.getModel<SPEED>().value);
         }
 
         protected override void Update()

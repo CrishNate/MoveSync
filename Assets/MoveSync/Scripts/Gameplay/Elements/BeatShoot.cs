@@ -13,22 +13,21 @@ namespace MoveSync
         [SerializeField] protected BaseProjectile projectile;
         protected float appear;
         protected float duration;
-        
-        private float _size;
-        private Vector3 _position;
+        protected Vector3 position;
+        protected float size;
 
 
         public override void Init(BeatObjectData beatObjectData)
         {
             base.Init(beatObjectData);
 
-            _position = beatObjectData.getModel<POSITION>().value;
+            position = beatObjectData.getModel<POSITION>().value;
 
             appear = beatObjectData.getModel<APPEAR>().value;
             duration = beatObjectData.getModel<DURATION>().value;
-            _size = beatObjectData.getModel<SIZE>().value;
+            size = beatObjectData.getModel<SIZE>().value;
             
-            transform.position = _position;
+            transform.position = GetSpawnPosition();
             transform.rotation = GetRotationByTargetState();
 
             Shoot();
@@ -37,6 +36,10 @@ namespace MoveSync
                 Destroy(gameObject);
         }
         
+        protected virtual Vector3 GetSpawnPosition()
+        {
+            return position;
+        }
         protected virtual Quaternion GetRotationByTargetState()
         {
             return Quaternion.LookRotation(PlayerBehaviour.instance.transform.position - transform.position);
@@ -57,12 +60,11 @@ namespace MoveSync
 
         void Shoot()
         {
+            float speed = beatObjectData.tryGetModel<SPEED>(out var speedModel) ? speedModel.value : 0.0f;
+            
             Instantiate(projectile.gameObject, transform.position, transform.rotation)
                 .GetComponent<BaseProjectile>()
-                .Init(gameObject, beatObjectData.time, duration, appear, size);
+                .Init(gameObject, beatObjectData.time, duration, appear, size, speed);
         }
-
-        
-        public float size => _size;
     }
 }

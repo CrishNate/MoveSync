@@ -7,39 +7,33 @@ namespace MoveSync
 {
     public class BulletProjectile : BaseProjectile
     {
-        enum AppearStates
+        enum FadeState
         {
             Appear,
             Stay,
             Disappear
         }
-
         
-        private float _distance;
-        private float _speed;
-        private AppearStates _appearStates = AppearStates.Appear;
+        private FadeState _fadeState = FadeState.Appear;
 
-        private static float _distanceOffset = 1.0f;
         private static float _appearSpeed = 1.0f;
         private static float _disappearAfterTimeBPM = 10.0f;
         
         
-        public override void Init(GameObject instigator, float invokeTimeStamp, float duration, float appearTime,
-            float scale)
+        public override void Init(GameObject instigator, float invokeTimeStamp, float duration, float appearTime, float scale, float speed)
         {
-            base.Init(instigator, invokeTimeStamp, duration, appearTime, scale);
+            base.Init(instigator, invokeTimeStamp, duration, appearTime, scale, speed);
             
             transform.localScale = Vector3.zero;
-            _distance = (PlayerBehaviour.instance.transform.position - transform.position).magnitude - _distanceOffset;
-            _speed = _distance / (appearTime * LevelSequencer.instance.toTime);
         }
 
         protected virtual void Update()
         {
-            transform.position +=
-                transform.forward * (_speed * Time.deltaTime * LevelSequencer.instance.audioSource.pitch);
+            transform.position += transform.forward * (speed * Time.deltaTime *
+                                                       LevelSequencer.instance.audioSource.pitch *
+                                                       LevelSequencer.instance.toBPM);
 
-            AppearUpdate();
+            FadeUpdate();
             
             if (LevelSequencer.instance.timeBPM < (timeStamp - appearTime)
                 || LevelSequencer.instance.timeBPM > (timeStamp + _disappearAfterTimeBPM + _appearSpeed))
@@ -48,26 +42,26 @@ namespace MoveSync
             }
         }
 
-        void AppearUpdate()
+        void FadeUpdate()
         {
             float dTime;
-            switch (_appearStates)
+            switch (_fadeState)
             {
-                case AppearStates.Appear:
+                case FadeState.Appear:
                     dTime = (LevelSequencer.instance.timeBPM - (timeStamp - appearTime)) / _appearSpeed;
                     dTime = Mathf.Min(dTime, 1f);
                     transform.localScale = Vector3.one * (scale * dTime);
 
                     if (LevelSequencer.instance.timeBPM > timeStamp - appearTime + _appearSpeed)
-                        _appearStates = AppearStates.Stay;
+                        _fadeState = FadeState.Stay;
                     break;
                 
-                case AppearStates.Stay:
+                case FadeState.Stay:
                     if (LevelSequencer.instance.timeBPM > timeStamp + _disappearAfterTimeBPM)
-                        _appearStates = AppearStates.Disappear;
+                        _fadeState = FadeState.Disappear;
                     break;
                     
-                case AppearStates.Disappear:
+                case FadeState.Disappear:
                     dTime = (LevelSequencer.instance.timeBPM - (timeStamp + _disappearAfterTimeBPM)) / _appearSpeed;
                     dTime = 1 - dTime;
                     transform.localScale = Vector3.one * (scale * dTime);

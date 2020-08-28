@@ -48,9 +48,6 @@ namespace MoveSync
             transform.localScale = new Vector3(appearRadius, appearRadius, distance);
             transform.transform.parent = parent;
 
-            if (LevelSequencer.instance.timeBPM < _startTimeStamp)
-                Destroy(gameObject);
-
             UpdateDistanceColor();
         }
 

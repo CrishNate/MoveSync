@@ -43,6 +43,7 @@ namespace MoveSync.ModelData
             if (origin.type == ModelData.DURATION.TYPE) return DURATION.CopyValues(origin);
             if (origin.type == ModelData.APPEAR.TYPE) return APPEAR.CopyValues(origin);
             if (origin.type == ModelData.SIZE.TYPE) return SIZE.CopyValues(origin);
+            if (origin.type == ModelData.SPEED.TYPE) return SPEED.CopyValues(origin);
             if (origin.type == ModelData.POSITION.TYPE) return POSITION.CopyValues(origin);
             if (origin.type == ModelData.ROTATION.TYPE) return ROTATION.CopyValues(origin);
             if (origin.type == ModelData.EVENT.TYPE) return EVENT.CopyValues(origin);
@@ -58,6 +59,7 @@ namespace MoveSync.ModelData
         public static ModelInput ROTATION => new ROTATION();
         public static ModelInput EVENT => new EVENT();
         public static ModelInput COUNT => new COUNT();
+        public static ModelInput SPEED => new SPEED();
     }
 
     public abstract class FloatModelInput : ModelInput
@@ -109,6 +111,11 @@ namespace MoveSync.ModelData
     {
         public static PropertyName TYPE = "SIZE";
         public SIZE() { type = TYPE; }
+    }
+    public class SPEED : FloatModelInput
+    {
+        public static PropertyName TYPE = "SPEED";
+        public SPEED() { type = TYPE; }
     }
     public class POSITION : Vector3ModelInput
     {

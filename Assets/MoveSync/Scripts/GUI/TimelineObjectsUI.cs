@@ -143,8 +143,6 @@ namespace MoveSync
 
             _selectionUi = Instantiate(_selectionUiInstance, _rectObjectsList).GetComponent<SelectionUI>();
             _selectionUi.Init(eventData);
-
-            ObjectProperties.instance.WipeSelections();
         }
 
         public void OnDrag(PointerEventData data)
@@ -177,7 +175,8 @@ namespace MoveSync
 
             objectUi.OnSelect();
             _selectedObjects.Add(objectUi.beatObjectData.id, newSelectedObject);
-
+            ObjectProperties.instance.SelectedObjects = _selectedObjects;
+                
             return true;
         }
 

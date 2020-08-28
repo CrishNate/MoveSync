@@ -64,7 +64,7 @@ namespace MoveSync
             GameObject projectileObj = Instantiate(_projectileObject.gameObject, transform.position + direction * _size, 
                 Quaternion.LookRotation(direction));
             
-            projectileObj.GetComponent<BaseProjectile>().Init(gameObject, beatObjectData.time, _duration, _appearDuration, _size);
+            projectileObj.GetComponent<BaseProjectile>().Init(gameObject, beatObjectData.time, _duration, _appearDuration, _size, 0.0f);
             projectileObj.transform.parent = transform;
         }
 

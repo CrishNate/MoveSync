@@ -21,9 +21,9 @@ namespace MoveSync
             return Vector3.zero;
         }
         
-        public override void Init(GameObject instigator, float invokeTimeStamp, float _duration, float _appearTime, float _scale)
+        public override void Init(GameObject instigator, float invokeTimeStamp, float _duration, float _appearTime, float _scale, float _speed)
         {
-            base.Init(instigator, invokeTimeStamp, _duration, _appearTime, _scale);
+            base.Init(instigator, invokeTimeStamp, _duration, _appearTime, _scale, _speed);
 
             for (int i = 0; i < count; i++)
             {

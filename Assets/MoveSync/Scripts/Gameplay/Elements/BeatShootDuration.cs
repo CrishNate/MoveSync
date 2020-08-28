@@ -4,7 +4,7 @@ namespace MoveSync
     {
         protected override float GetDestroyTime()
         {
-            return beatObjectData.time + projectile.Duration + projectile.GetDisappearTime();
+            return beatObjectData.time + duration + projectile.GetDisappearTime();
         }
     }
 }

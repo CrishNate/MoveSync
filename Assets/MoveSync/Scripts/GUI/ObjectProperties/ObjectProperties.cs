@@ -8,6 +8,7 @@ namespace MoveSync.UI
 {
     public class ObjectProperties : Singleton<ObjectProperties>
     {
+        public Dictionary<int, SelectedObjectData> SelectedObjects;
         public UnityEventBeatObjectData onSelected = new UnityEventBeatObjectData();
         public UnityEventBeatObjectData onDeselected = new UnityEventBeatObjectData();
 

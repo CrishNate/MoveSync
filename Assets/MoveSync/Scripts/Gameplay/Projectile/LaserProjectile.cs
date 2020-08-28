@@ -24,10 +24,9 @@ namespace MoveSync
         private float _endTimeStamp;
         
 
-        public override void Init(GameObject instigator, float invokeTimeStamp, float duration, float appearTime,
-            float scale)
+        public override void Init(GameObject instigator, float invokeTimeStamp, float duration, float appearTime, float scale, float speed)
         {
-            base.Init(instigator, invokeTimeStamp, duration, appearTime, scale);
+            base.Init(instigator, invokeTimeStamp, duration, appearTime, scale, speed);
             
             _savedScale = _laserGameObject.transform.localScale;
             _savedColor = _meshRenderer.material.color;
@@ -90,6 +89,9 @@ namespace MoveSync
             tempScale.x = tempScale.y = scale * deltaScale;
             tempScale.z = deltaScaleForward * _scaleMultiplier;
             _laserGameObject.transform.localScale = tempScale;
+            
+            if (LevelSequencer.instance.timeBPM < timeStamp - appearTime)
+                Destroy(gameObject);
         }
     }
 }
