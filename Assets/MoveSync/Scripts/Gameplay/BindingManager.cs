@@ -82,15 +82,15 @@ namespace MoveSync.UI
                 onStartAwaitConfirm.Invoke(layer);
                 return;
             };
-            _awaitConfirmOnLayer = -1;
             
             ObjectBind(layer, new BeatObjectData
             {
                 objectTag = ObjectManager.instance.currentObjectModel.objectTag,
                 id = SerializableGuid.NewGuid(),
-                editorLayer = _currentLayer,
+                editorLayer = _awaitConfirmOnLayer,
                 modelInputsData = ModelInput.CloneInputs(ObjectManager.instance.currentObjectModel.modelInput),
             });
+            _awaitConfirmOnLayer = -1;
             onFinishAwaitConfirm.Invoke(layer);
         }
 
