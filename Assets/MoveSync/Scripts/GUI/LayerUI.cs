@@ -10,8 +10,10 @@ namespace MoveSync.UI
         [HideInInspector] public int layer = -1;
         public ButtonEx bindButton;
         
+        [SerializeField] private Button _bindKeyButton;
         [SerializeField] private Button _clearLayerButton;
         [SerializeField] private GameObject _bindButtonSelected;
+        [SerializeField] private GameObject _objectButtonSelected;
         [SerializeField] private Outline _layerOuntline;
         [SerializeField] private Text _text;
         [SerializeField] private Text _objectTagText;
@@ -19,21 +21,37 @@ namespace MoveSync.UI
 
         public void OnStartListening()
         {
-            Clear();
+            _text.text = "";
             _bindButtonSelected.SetActive(true);
         }
-
+        
         public void OnFinishListening()
         {
             if (BindingManager.instance.bind.ContainsKey(layer))
                 UpdateUI(BindingManager.instance.bind[layer]);
             else
-                Clear();
+                _text.text = "";
             
             _bindButtonSelected.SetActive(false);
         }
+        
+        public void OnStartObjectBind()
+        {
+            _objectTagText.text = "";
+            _objectButtonSelected.SetActive(true);
+        }
+        
+        public void OnFinishObjectBind()
+        {
+            if (BindingManager.instance.bind.ContainsKey(layer))
+                UpdateUI(BindingManager.instance.bind[layer]);
+            else
+                _objectTagText.text = "";
+            
+            _objectButtonSelected.SetActive(false);
+        }
 
-        void Clear()
+        public void Clear()
         {
             _text.text = "";
             _objectTagText.text = "";
@@ -56,9 +74,14 @@ namespace MoveSync.UI
 
         void UpdateUI(BindKey bindKey)
         {
-            string str = bindKey.beatObjectData.objectTag.ToString();
-            _objectTagText.text = LevelDataManager.PropertyNameToString(bindKey.beatObjectData.objectTag);
-            _text.text = bindKey.key.ToString();
+            if (bindKey.beatObjectData != null)
+            {
+                string str = bindKey.beatObjectData.objectTag.ToString();
+                _objectTagText.text = LevelDataManager.PropertyNameToString(bindKey.beatObjectData.objectTag);
+            }
+            
+            if (bindKey.key != KeyCode.None)
+                _text.text = bindKey.key.ToString();
         }
 
         void SelectProperties()
@@ -69,7 +92,8 @@ namespace MoveSync.UI
 
         void Start()
         {
-            bindButton.onLeftClick.AddListener(() => BindingManager.instance.StartListening(layer));
+            _bindKeyButton.onClick.AddListener(() => BindingManager.instance.StartListening(layer));
+            bindButton.onLeftClick.AddListener(() => BindingManager.instance.ObjectBind(layer));
             bindButton.onMiddleClick.AddListener(() => BindingManager.instance.RemoveKeyBind(layer));
             bindButton.onRightClick.AddListener(SelectProperties);
             

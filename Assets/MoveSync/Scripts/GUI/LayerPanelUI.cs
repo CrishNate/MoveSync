@@ -69,6 +69,9 @@ namespace MoveSync.UI
 
             BindingManager.instance.onStartListening.AddListener(x => _layers[x].OnStartListening());
             BindingManager.instance.onFinishListening.AddListener(x => _layers[x].OnFinishListening());
+            BindingManager.instance.onStartAwaitConfirm.AddListener(x => _layers[x].OnStartObjectBind());
+            BindingManager.instance.onFinishAwaitConfirm.AddListener(x => _layers[x].OnFinishObjectBind());
+            BindingManager.instance.onClearBind.AddListener(x => _layers[x].Clear());
             
             ObjectProperties.instance.onSelected.AddListener(OnSelectedLayer);
             ObjectProperties.instance.onDeselected.AddListener(OnDeselectedLayer);
