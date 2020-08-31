@@ -21,13 +21,13 @@ namespace MoveSync.UI
         {
             base.UpdateUI();
 
-            _inputTextField.SetTextWithoutNotify(_modelInput.stringValue);
+            _inputTextField.SetTextWithoutNotify(modelInput.stringValue);
         }
 
         protected override void OnUpdateValue()
         {
             if (_inputTextField.text != string.Empty)
-                _modelInput.stringValue = _inputTextField.text;
+                modelInput.stringValue = _inputTextField.text;
 
             base.OnUpdateValue();
         }

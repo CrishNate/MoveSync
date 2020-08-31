@@ -10,9 +10,10 @@ namespace MoveSync
         [SerializeField] private MeshRenderer _meshRenderer;
 
         private Vector3 _scale;
-        private Color _savedColor;
+        private Color[] _savedColor;
         private float _radius;
         private float _startTimeStamp;
+        private float _appearTime;
 
         private static float _distance = 100.0f;
         private static Vector3 _direction = Vector3.forward * _distance;
@@ -21,9 +22,10 @@ namespace MoveSync
         private static float _invWarningAppearTime = 1f / 0.25f;
 
         
-        public void Init(float startTimeStamp, float radius)
+        public void Init(float startTimeStamp, float appearTime, float radius)
         {
             _startTimeStamp = startTimeStamp;
+            _appearTime = appearTime;
             _radius = radius;
         }
 
@@ -31,7 +33,10 @@ namespace MoveSync
         {
             _distance = _direction.magnitude;
             transform.localScale = Vector3.zero;
-            _savedColor = _meshRenderer.material.color;
+
+            _savedColor = new Color[_meshRenderer.materials.Length];
+            for (int i = 0; i < _savedColor.Length; i++)
+                _savedColor[i] = _meshRenderer.materials[i].color;
         }
         
         void Update()
@@ -53,13 +58,17 @@ namespace MoveSync
 
         void UpdateDistanceColor()
         {
+            float appearDelta = (LevelSequencer.instance.timeBPM - _startTimeStamp) / _appearTime;
             float distanceToLine = MathEx.DistanceToLine(transform.position, transform.rotation * _direction, PlayerBehaviour.instance.transform.position);
             float deltaColor = 1 - Mathf.Clamp((distanceToLine - _radius * 0.5f) / _distanceOfApproach, 0, 1);
             deltaColor *= deltaColor;
             
-            Color color = _meshRenderer.material.color;
-            color.a = Mathf.Lerp(0.05f, _savedColor.a, deltaColor);
-            _meshRenderer.material.color = color;
+            for (int i = 0; i < _savedColor.Length; i++)
+            {
+                Color color = _meshRenderer.materials[i].color;
+                color.a = Mathf.Lerp(0f, _savedColor[i].a, deltaColor) * appearDelta;
+                _meshRenderer.materials[i].color = color;
+            }
         }
     }
 }

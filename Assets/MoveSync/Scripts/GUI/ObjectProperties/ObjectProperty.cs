@@ -10,14 +10,15 @@ namespace MoveSync.UI
     {
         [HideInInspector] public ObjectProperties ParentObjectProperties;
 
-        protected ModelInput _modelInput;
+        protected ModelInput modelInput;
+        protected bool requireUpdateSort = true;
 
         [SerializeField] private Text _title;
         
 
         public virtual void Init(ModelInput modelInput, ObjectProperties parentObjectProperties)
         {
-            _modelInput = modelInput;
+            this.modelInput = modelInput;
             ParentObjectProperties = parentObjectProperties;
 
             string title = LevelDataManager.PropertyNameToString(modelInput.type).ToLower();
@@ -29,15 +30,17 @@ namespace MoveSync.UI
 
         public void CopyPropertyToSelected()
         {
-            ModelInput modelInput;
             foreach (var selectedObject in ObjectProperties.instance.SelectedObjects)
             {
-                if (selectedObject.Value.beatObjectData.tryGetModel(_modelInput.GetType(), out modelInput))
+                if (selectedObject.Value.beatObjectData.tryGetModel(modelInput.GetType(), out var oModelInput))
                 {
-                    modelInput.stringValue = _modelInput.stringValue;
+                    oModelInput.stringValue = modelInput.stringValue;
                     LevelDataManager.instance.UpdateBeatObject(selectedObject.Value.beatObjectData.id);
                 }
             }
+            
+            if (requireUpdateSort)
+                LevelDataManager.instance.SortBeatObjects();
         }
         
         public virtual void UpdateUI() { }
@@ -45,6 +48,9 @@ namespace MoveSync.UI
         protected virtual void OnUpdateValue()
         {
             LevelDataManager.instance.UpdateBeatObject(ParentObjectProperties.selectedObject.id);
+            
+            if (requireUpdateSort)
+                LevelDataManager.instance.SortBeatObjects();
         }
     }
 }

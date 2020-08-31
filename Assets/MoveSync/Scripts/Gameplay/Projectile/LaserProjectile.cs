@@ -38,7 +38,7 @@ namespace MoveSync
             _warningGameObject.SetActive(true);
 
             _endTimeStamp = timeStamp + duration;
-            _laserWarning.Init(timeStamp - appearTime, scale);
+            _laserWarning.Init(timeStamp - appearTime, appearTime, scale);
         }
 
         public override float GetDisappearTime()

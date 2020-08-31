@@ -30,8 +30,8 @@ namespace MoveSync.UI
         {
             base.UpdateUI();
 
-            var modelInput = _modelInput as POSITION;
-            switch (modelInput.randomSpawnType)
+            var positionModelInput = modelInput as POSITION;
+            switch (positionModelInput.randomSpawnType)
             {
                 case RandomSpawnType.None:
                     noRandomToggle.isOn = true;
@@ -57,8 +57,8 @@ namespace MoveSync.UI
         {
             if (!on) return;
             
-            var modelInput = _modelInput as POSITION;
-            modelInput.randomSpawnType = type;
+            var positionModelInput = modelInput as POSITION;
+            positionModelInput.randomSpawnType = type;
             
             OnUpdateValue();
         }

@@ -15,6 +15,7 @@ namespace MoveSync.UI
         public override void Init(ModelInput modelInput, ObjectProperties parentObjectProperties)
         {
             base.Init(modelInput, parentObjectProperties);
+            requireUpdateSort = false;
             
             _xInputTextField.onValueChanged.AddListener(x=> OnUpdateValue());
             _yInputTextField.onValueChanged.AddListener(x=> OnUpdateValue());
@@ -25,7 +26,7 @@ namespace MoveSync.UI
         {
             base.UpdateUI();
 
-            Vector3 value = ((Vector3ModelInput) _modelInput).value;
+            Vector3 value = ((Vector3ModelInput) modelInput).value;
             _xInputTextField.SetTextWithoutNotify(value.x.ToString());
             _yInputTextField.SetTextWithoutNotify(value.y.ToString());
             _zInputTextField.SetTextWithoutNotify(value.z.ToString());
@@ -33,12 +34,12 @@ namespace MoveSync.UI
         
         protected override void OnUpdateValue()
         {
-            var modelInput = _modelInput as Vector3ModelInput;
+            var vector3ModelInput = modelInput as Vector3ModelInput;
             if (_xInputTextField.text != string.Empty &&
                 _yInputTextField.text != string.Empty &&
                 _zInputTextField.text != string.Empty)
             {
-                modelInput.value = new Vector3(
+                vector3ModelInput.value = new Vector3(
                     float.Parse(_xInputTextField.text),
                     float.Parse(_yInputTextField.text),
                     float.Parse(_zInputTextField.text));
