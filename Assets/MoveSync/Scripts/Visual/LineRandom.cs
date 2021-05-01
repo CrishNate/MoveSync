@@ -18,7 +18,9 @@ public class LineRandom : MonoBehaviour
     {
         float random = Random.value;
         float randomRad = random * 2.0f * Mathf.PI;
-        
+        if (random > 0.5f)
+            _frequency *= -1;
+            
         var lineRenderers = GetComponentsInChildren<LineRenderer>();
 
         float softCoef = 1.0f / _softness;
@@ -31,9 +33,8 @@ public class LineRandom : MonoBehaviour
             {
                 float itter = i * softCoef;
                 
-                float r = (1 + Mathf.Cos(itter * length * _frequency * 1.5f + randomRad)) * radius * 0.5f;
-                float x = Mathf.Cos(itter * length * _frequency + randomRad) * r;
-                float y = Mathf.Sin(itter * length * _frequency + randomRad) * r;
+                float x = Mathf.Cos(itter * length * _frequency + randomRad) * radius;
+                float y = Mathf.Sin(itter * length * _frequency + randomRad) * radius;
                 lineRenderer.SetPosition(i, new Vector3(x, itter * length, y));
             }
         }
