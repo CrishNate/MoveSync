@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   count: 13
-  dRotation: 1
+  dRotation: 0.25
   dRadius: 0
   radius: 7
   _bulletInstanceModel: {fileID: 6637416293251459964, guid: 5b09dbcffd9489c41af92436b8d43f57,

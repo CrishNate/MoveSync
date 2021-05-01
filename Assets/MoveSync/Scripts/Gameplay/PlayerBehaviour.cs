@@ -58,6 +58,11 @@ namespace MoveSync
             _onHit.Invoke();
         }
 
+        public Vector3 GetRandomPointNearPlayer()
+        {
+            return transform.position + Random.insideUnitSphere * 0.35f;
+        }
+
         void Death()
         {
             LevelSequencer.instance.Restart();

@@ -9,6 +9,7 @@ namespace MoveSync
     public class LevelEditor : Singleton<LevelEditor>
     {
         [SerializeField] private GameObject _vrPlayer;
+        [SerializeField] private GameObject _nonVrPlayer;
         private static float _scrollSpeed;
         private bool _isSimulation;
         private bool _block;
@@ -26,6 +27,7 @@ namespace MoveSync
             }
             
             _vrPlayer.SetActive(_isSimulation);
+            _nonVrPlayer.SetActive(!_isSimulation);
         }
         
         private void Update()

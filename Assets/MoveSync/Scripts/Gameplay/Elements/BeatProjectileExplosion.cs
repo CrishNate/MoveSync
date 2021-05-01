@@ -10,12 +10,12 @@ namespace MoveSync
         [Header("Beat Projectile Explosion")]
         [SerializeField] private float _maxAppearTime = 0.5f;
         [SerializeField] private float _projectileReachTimeBPM = 1f;
+        [SerializeField] private Animator _animator;
 
         private Vector3 _positionOrigin;
         private Vector3 _positionEnd;
         private float _appearDuration;
         private float _size;
-        private Vector3 _savedScale;
 
         private bool _finishMove;
 
@@ -29,10 +29,11 @@ namespace MoveSync
             
             _appearDuration = beatObjectData.getModel<APPEAR>().value;
             _size = beatObjectData.getModel<SIZE>().value;
-
-            _savedScale = transform.localScale;
-            transform.localScale = _savedScale * _size;
+            
+            transform.localScale *= _size;
             transform.position = _positionOrigin;
+
+            _animator.speed = LevelSequencer.instance.toBPM;
         }
 
         void UpdateMovement()
@@ -40,12 +41,13 @@ namespace MoveSync
             if (_finishMove) return;
             
             float dTimeMove = (LevelSequencer.instance.timeBPM - spawnTimeBPM) / Mathf.Max(_maxAppearTime, _appearDuration);
-            if (dTimeMove > 1.0f) _finishMove = true;
+            if (dTimeMove > 1.0f) 
+                _finishMove = true;
             
             dTimeMove = Mathf.Min(1.0f, dTimeMove);
-            dTimeMove = Mathf.Max(0, 1 - Mathf.Pow(1 - dTimeMove, 2.0f));
+            dTimeMove = Mathf.Max(0, 1 - Mathf.Pow(1 - dTimeMove, 4.0f));
 
-            transform.position = _positionOrigin + (_positionEnd - _positionOrigin) * dTimeMove;
+            transform.position = Vector3.Lerp(_positionOrigin, _positionEnd, dTimeMove);
         }
 
         void SpawnExplosion()
@@ -65,7 +67,6 @@ namespace MoveSync
         protected override void Update()
         {
             base.Update();
-            transform.localScale = _savedScale * (_size + _size * 0.3f * Mathf.Cos(LevelSequencer.instance.timeBPM * Mathf.PI * 2f + Mathf.PI));
             
             UpdateMovement();
         }

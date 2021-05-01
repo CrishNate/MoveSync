@@ -42,7 +42,7 @@ namespace MoveSync
         }
         protected virtual Quaternion GetRotationByTargetState()
         {
-            return Quaternion.LookRotation(PlayerBehaviour.instance.transform.position - transform.position);
+            return Quaternion.LookRotation(PlayerBehaviour.instance.GetRandomPointNearPlayer() - transform.position);
         }
 
         protected virtual float GetDestroyTime()

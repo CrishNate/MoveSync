@@ -11,14 +11,16 @@ namespace MoveSync
 
         private Vector3 _scale;
         private Color[] _savedColor;
+        private float _savedWidth;
+        
         private float _radius;
         private float _startTimeStamp;
         private float _appearTime;
 
-        private static float _distance = 100.0f;
+        private static float _distance = 10000.0f;
         private static Vector3 _direction = Vector3.forward * _distance;
-        private static float _distanceFromHit = 1.0f;
-        private static float _distanceOfApproach = 1.0f;
+        private static float _marginHit = 0.5f;
+        private static float _marginHitMove = 1.5f;
         private static float _invWarningAppearTime = 1f / 0.25f;
 
         
@@ -31,7 +33,6 @@ namespace MoveSync
 
         void Start()
         {
-            _distance = _direction.magnitude;
             transform.localScale = Vector3.zero;
 
             _savedColor = new Color[_meshRenderer.materials.Length];
@@ -41,32 +42,28 @@ namespace MoveSync
         
         void Update()
         {
+            float appearDelta = (LevelSequencer.instance.timeBPM - _startTimeStamp) / _appearTime;
             float dRadius = Mathf.Min(1f, (LevelSequencer.instance.timeBPM - _startTimeStamp) * _invWarningAppearTime);
             float appearRadius = _radius * dRadius;
             
             RaycastHit hitResult;
             bool hit = Physics.SphereCast(transform.position, appearRadius * 0.5f, transform.rotation * _direction, out hitResult, _distance, 1 << LayerMask.NameToLayer("Player"));
-            float distance = (hit ? hitResult.distance : _distance) - _distanceFromHit;
-
+            float distance = (hit ? hitResult.distance : _distance) - _marginHit - _marginHitMove * (1 - appearDelta);
+            
             var parent = transform.parent;
             transform.transform.parent = null;
             transform.localScale = new Vector3(appearRadius, appearRadius, distance);
             transform.transform.parent = parent;
 
-            UpdateDistanceColor();
+            UpdateColor(appearDelta);
         }
 
-        void UpdateDistanceColor()
+        void UpdateColor(float appearDelta)
         {
-            float appearDelta = (LevelSequencer.instance.timeBPM - _startTimeStamp) / _appearTime;
-            float distanceToLine = MathEx.DistanceToLine(transform.position, transform.rotation * _direction, PlayerBehaviour.instance.transform.position);
-            float deltaColor = 1 - Mathf.Clamp((distanceToLine - _radius * 0.5f) / _distanceOfApproach, 0, 1);
-            deltaColor *= deltaColor;
-            
             for (int i = 0; i < _savedColor.Length; i++)
             {
                 Color color = _meshRenderer.materials[i].color;
-                color.a = Mathf.Lerp(0f, _savedColor[i].a, deltaColor) * appearDelta;
+                color.a = appearDelta;
                 _meshRenderer.materials[i].color = color;
             }
         }
