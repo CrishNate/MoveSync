@@ -5,12 +5,19 @@ using UnityEngine;
 public class SpinObject : MonoBehaviour
 {
     [SerializeField] private Vector3 _dRotation;
+    [SerializeField] private bool _random;
+    [SerializeField] private float _randomAmplitude = 1;
     private float timeStamp;
 
 
     void Start()
     {
         timeStamp = Time.time;
+
+        if (_random)
+        {
+            _dRotation = Random.insideUnitSphere.normalized * _randomAmplitude;
+        }
     }
 
     void Update()

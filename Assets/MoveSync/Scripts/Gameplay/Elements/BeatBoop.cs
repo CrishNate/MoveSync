@@ -10,7 +10,6 @@ namespace MoveSync
         private float _size;
 
         private bool _finishMove;
-        public SerializableDictionary<int, int> aa;
 
         public override void Init(BeatObjectData beatObjectData)
         {
@@ -19,8 +18,9 @@ namespace MoveSync
             _appear = beatObjectData.getModel<APPEAR>().value;
             _duration = beatObjectData.getModel<DURATION>().value;
             _size = beatObjectData.getModel<SIZE>().value;
-            
-            //beatObjectData.getModel<SHAPE>().value;
+
+            if (MoveSyncData.instance.shapeData.shapes.TryGetValue(beatObjectData.getModel<SHAPE>().value, out Mesh mesh))
+                GetComponentInChildren<MeshFilter>().sharedMesh = mesh;
 
             transform.localScale = Vector3.zero;
             transform.position = beatObjectData.getModel<POSITION>().value;
@@ -35,10 +35,10 @@ namespace MoveSync
             float dTimeDuration = (LevelSequencer.instance.timeBPM - (spawnTimeBPM + _appear)) / _duration;
 
             if (dTimeDuration <= 0)
-                transform.localScale = Vector3.one * _size * Mathf.Pow(dTimeAppear, 0.5f);
+                transform.localScale = Vector3.one * _size * Mathf.Clamp(Mathf.Pow(dTimeAppear, 0.5f), 0, 1);
             else
             {
-                transform.localScale = Vector3.one * _size * (1 - Mathf.Pow(dTimeDuration, 2));
+                transform.localScale = Vector3.one * _size * Mathf.Clamp((1 - Mathf.Pow(dTimeDuration, 2)), 0, 1);
 
                 if (dTimeDuration > 1)
                     Destroy(gameObject);

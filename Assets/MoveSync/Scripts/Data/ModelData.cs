@@ -159,7 +159,7 @@ namespace MoveSync.ModelData
         public SHAPE() 
         { 
             type = TYPE;
-            value = MoveSyncData.instance.shapeData.shapesNameList[0];
+            value = MoveSyncData.instance.shapeData.shapesNameList.First();
         }
     }
     public class EVENT : StringModelInput
