@@ -8,14 +8,17 @@ namespace MoveSync
 {
     public class LevelEditor : Singleton<LevelEditor>
     {
+        public UnityEventBoolParam onSimulationMode;
+            
         [SerializeField] private GameObject _vrPlayer;
         [SerializeField] private GameObject _nonVrPlayer;
+        [SerializeField] private GameObject _centerGizmo;
         private static float _scrollSpeed;
         private bool _isSimulation;
         private bool _block;
 
 
-            public void SimulationMode(bool simulation)
+        public void SimulationMode(bool simulation)
         {
             _isSimulation = simulation;
             if (_isSimulation)
@@ -26,8 +29,11 @@ namespace MoveSync
             {
             }
             
+            onSimulationMode.Invoke(_isSimulation);
+            
             _vrPlayer.SetActive(_isSimulation);
             _nonVrPlayer.SetActive(!_isSimulation);
+            _centerGizmo.SetActive(!_isSimulation);
         }
         
         private void Update()

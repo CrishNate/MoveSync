@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
 
 namespace MoveSync.ModelData
 {
@@ -48,10 +48,12 @@ namespace MoveSync.ModelData
             if (origin.type == ModelData.ROTATION.TYPE) return ROTATION.CopyValues(origin);
             if (origin.type == ModelData.EVENT.TYPE) return EVENT.CopyValues(origin);
             if (origin.type == ModelData.COUNT.TYPE) return COUNT.CopyValues(origin);
+            if (origin.type == ModelData.SHAPE.TYPE) return SHAPE.CopyValues(origin);
 
             return null;
         }
         
+        // Inputs short
         public static ModelInput DURATION => new DURATION();
         public static ModelInput APPEAR => new APPEAR();
         public static ModelInput SIZE => new SIZE();
@@ -60,8 +62,10 @@ namespace MoveSync.ModelData
         public static ModelInput EVENT => new EVENT();
         public static ModelInput COUNT => new COUNT();
         public static ModelInput SPEED => new SPEED();
+        public static ModelInput SHAPE => new SHAPE();
     }
 
+    // Inputs types
     public abstract class FloatModelInput : ModelInput
     {
         public float value
@@ -96,7 +100,16 @@ namespace MoveSync.ModelData
             set => stringValue = value;
         }
     }
+    public abstract class ShapeModelInput : ModelInput
+    {
+        public string value
+        {
+            get => stringValue;
+            set => stringValue = value;
+        }
+    }
     
+    // Inputs
     public class DURATION : FloatModelInput
     {
         public static PropertyName TYPE = "DURATION";
@@ -140,9 +153,22 @@ namespace MoveSync.ModelData
         public static PropertyName TYPE = "COUNT";
         public COUNT() { type = TYPE; }
     }
+    public class SHAPE : ShapeModelInput
+    {
+        public static PropertyName TYPE = "SHAPE";
+        public SHAPE() 
+        { 
+            type = TYPE;
+            value = MoveSyncData.instance.shapeData.shapesNameList[0];
+        }
+    }
     public class EVENT : StringModelInput
     {
         public static PropertyName TYPE = "EVENT";
-        public EVENT() { type = TYPE; }
+
+        public EVENT()
+        {
+            type = TYPE;
+        }
     }
 }

@@ -1,6 +1,6 @@
 namespace MoveSync
 {
-    public class BeatShootDuration : BeatShoot
+    public class BeatShootDuration : BeatShootPlayer
     {
         protected override float GetDestroyTime()
         {

@@ -11,7 +11,7 @@ public class EditorGrid : MonoBehaviour
     [SerializeField] private RectTransform _timeline;
     [SerializeField] private GameObject _UIGrid;
 
-    private float _minDistDiv = 40.0f;
+    private float _minDistDiv = 5.0f;
     private int _div = 1;
     
     private float _offset;

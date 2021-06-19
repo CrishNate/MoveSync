@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MoveSync
 {
-    public class BeatShootBullet : BeatShootPlayer
+    public class BeatShootBullet : BeatShoot
     {
         private static float _distanceFromTarget = 1.0f;
         

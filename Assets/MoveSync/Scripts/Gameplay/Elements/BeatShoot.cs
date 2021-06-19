@@ -26,7 +26,7 @@ namespace MoveSync
             appear = beatObjectData.getModel<APPEAR>().value;
             duration = beatObjectData.getModel<DURATION>().value;
             size = beatObjectData.getModel<SIZE>().value;
-            
+
             transform.position = GetSpawnPosition();
             transform.rotation = GetRotationByTargetState();
 
@@ -42,7 +42,7 @@ namespace MoveSync
         }
         protected virtual Quaternion GetRotationByTargetState()
         {
-            return Quaternion.LookRotation(PlayerBehaviour.instance.GetRandomPointNearPlayer() - transform.position);
+            return beatObjectData.getModel<ROTATION>().value;
         }
 
         protected virtual float GetDestroyTime()

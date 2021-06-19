@@ -68,6 +68,11 @@ namespace MoveSync
             // ERROR: Error executing result (An invalid seek position was passed to this function. )
             _audioSource.time = Mathf.Clamp(songTime + songOffset, 0, _audioSource.clip.length - epsilon);
         }
+                
+        public void SetSongOffset(float inSongOffset)
+        {
+            _songInfo.offset = inSongOffset;
+        }
         
         void RestartFinish()
         {
@@ -77,7 +82,6 @@ namespace MoveSync
             PlayerBehaviour.instance.Restart();
             _onRestartFinished.Invoke();
         }
-
 
         public SongInfo songInfo
         {
