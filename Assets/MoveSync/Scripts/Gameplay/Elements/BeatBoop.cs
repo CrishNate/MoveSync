@@ -3,80 +3,51 @@ using UnityEngine;
 
 namespace MoveSync
 {
-    public class BeatProjectileExplosion : BeatObject
+    public class BeatBoop : BeatObject
     {
-        [SerializeField] private GameObject _projectileObject;
-
-        [Header("Beat Projectile Explosion")]
-        [SerializeField] private float _maxAppearTime = 0.5f;
-        [SerializeField] private float _projectileReachTimeBPM = 1f;
-        [SerializeField] private Animator _animator;
-
-        private Vector3 _positionOrigin;
-        private Vector3 _positionEnd;
-        private float _appearDuration;
+        private float _appear;
+        private float _duration;
         private float _size;
 
         private bool _finishMove;
-
+        public SerializableDictionary<int, int> aa;
 
         public override void Init(BeatObjectData beatObjectData)
         {
             base.Init(beatObjectData);
-
-            _positionEnd = beatObjectData.getModel<POSITION>().value;
-            _positionOrigin = _positionEnd + new Vector3(0, -10.0f, 0);
             
-            _appearDuration = beatObjectData.getModel<APPEAR>().value;
+            _appear = beatObjectData.getModel<APPEAR>().value;
+            _duration = beatObjectData.getModel<DURATION>().value;
             _size = beatObjectData.getModel<SIZE>().value;
             
-            transform.localScale *= _size;
-            transform.position = _positionOrigin;
+            //beatObjectData.getModel<SHAPE>().value;
 
-            _animator.speed = LevelSequencer.instance.toBPM;
+            transform.localScale = Vector3.zero;
+            transform.position = beatObjectData.getModel<POSITION>().value;
         }
-
-        void UpdateMovement()
-        {
-            if (_finishMove) return;
-            
-            float dTimeMove = (LevelSequencer.instance.timeBPM - spawnTimeBPM) / Mathf.Max(_maxAppearTime, _appearDuration);
-            if (dTimeMove > 1.0f) 
-                _finishMove = true;
-            
-            dTimeMove = Mathf.Min(1.0f, dTimeMove);
-            dTimeMove = Mathf.Max(0, 1 - Mathf.Pow(1 - dTimeMove, 4.0f));
-
-            transform.position = Vector3.Lerp(_positionOrigin, _positionEnd, dTimeMove);
-        }
-
-        void SpawnExplosion()
-        {
-            transform.position = _positionEnd;
-
-            MathEx.ExecuteInIsometricSphere(SpawnProjectile, beatObjectData.getModel<COUNT>().value);
-        }
-
-        void SpawnProjectile(Vector3 direction)
-        {
-            Instantiate(_projectileObject, transform.position, Quaternion.LookRotation(direction))
-                .GetComponent<BaseProjectile>()
-                .Init(gameObject, beatObjectData.time, 0, _projectileReachTimeBPM, _size, beatObjectData.getModel<SPEED>().value);
-        }
-
+        
         protected override void Update()
         {
             base.Update();
             
-            UpdateMovement();
+            if (!(spawnTimeBPM > 0)) return;
+            float dTimeAppear = (LevelSequencer.instance.timeBPM - spawnTimeBPM) / _appear;
+            float dTimeDuration = (LevelSequencer.instance.timeBPM - (spawnTimeBPM + _appear)) / _duration;
+
+            if (dTimeDuration <= 0)
+                transform.localScale = Vector3.one * _size * Mathf.Pow(dTimeAppear, 0.5f);
+            else
+            {
+                transform.localScale = Vector3.one * _size * (1 - Mathf.Pow(dTimeDuration, 2));
+
+                if (dTimeDuration > 1)
+                    Destroy(gameObject);
+            }
         }
 
         protected override void OnTriggered()
         {
             base.OnTriggered();
-
-            SpawnExplosion();
-            Destroy(gameObject);
         }
     }
 }
