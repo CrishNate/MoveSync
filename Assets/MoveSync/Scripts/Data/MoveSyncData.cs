@@ -7,5 +7,6 @@ namespace MoveSync
     {
         public ColorData colorData;
         public ShapeData shapeData;
+        public ProjectileData projectileData;
     }
 }

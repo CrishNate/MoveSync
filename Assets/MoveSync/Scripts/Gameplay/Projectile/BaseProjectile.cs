@@ -10,15 +10,25 @@ public abstract class BaseProjectile : MonoBehaviour
     protected float speed;
     protected float timeStamp = -1;
 
-    
-    public virtual void Init(GameObject instigator, float invokeTimeStamp, float _duration, float _appearTime, float _scale, float _speed)
+    public struct ProjectileParam
     {
-        duration = _duration;
-        appearTime = _appearTime;
-        scale = _scale;
-        speed = _speed;
+        public GameObject instigator;
+        public float invokeTimeStamp;
+        public float duration;
+        public float appearTime;
+        public float scale;
+        public float speed;
+        public Mesh shape;
+    }
+    
+    public virtual void Init(ProjectileParam initParam)
+    {
+        duration = initParam.duration;
+        appearTime = initParam.appearTime;
+        scale = initParam.scale;
+        speed = initParam.speed;
         
-        timeStamp = invokeTimeStamp;
+        timeStamp = initParam.invokeTimeStamp;
     }
 
     public virtual float GetDisappearTime()

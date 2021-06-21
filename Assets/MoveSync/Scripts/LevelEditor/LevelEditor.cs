@@ -13,9 +13,11 @@ namespace MoveSync
         [SerializeField] private GameObject _vrPlayer;
         [SerializeField] private GameObject _nonVrPlayer;
         [SerializeField] private GameObject _centerGizmo;
+        
         private static float _scrollSpeed;
         private bool _isSimulation;
         private bool _block;
+        private bool _centerGizmoActive;
 
 
         public void SimulationMode(bool simulation)
@@ -33,7 +35,13 @@ namespace MoveSync
             
             _vrPlayer.SetActive(_isSimulation);
             _nonVrPlayer.SetActive(!_isSimulation);
-            _centerGizmo.SetActive(!_isSimulation);
+            _centerGizmo.SetActive(!_isSimulation && _centerGizmoActive);
+        }
+
+        public void ActivateCenterGizmo(bool active)
+        {
+            _centerGizmoActive = active;
+            _centerGizmo.SetActive(!_isSimulation && _centerGizmoActive);
         }
         
         private void Update()

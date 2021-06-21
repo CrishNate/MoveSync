@@ -21,14 +21,15 @@ namespace MoveSync
             return Vector3.zero;
         }
         
-        public override void Init(GameObject instigator, float invokeTimeStamp, float _duration, float _appearTime, float _scale, float _speed)
+        public override void Init(ProjectileParam initParam)
         {
-            base.Init(instigator, invokeTimeStamp, _duration, _appearTime, _scale, _speed);
+            base.Init(initParam);
 
             for (int i = 0; i < count; i++)
             {
                 GameObject bulletModel = Instantiate(_bulletInstanceModel, transform);
                 bulletModel.transform.localPosition = GetShapePoint(i);
+                bulletModel.GetComponent<MeshFilter>().sharedMesh = initParam.shape;
                 
                 _directions.Add(bulletModel, bulletModel.transform.localPosition);
             }

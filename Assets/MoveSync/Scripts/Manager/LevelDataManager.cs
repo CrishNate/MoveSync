@@ -249,6 +249,7 @@ namespace MoveSync
 
         public void SaveFile(string filePath)
         {
+            levelInfo.songInfo = LevelSequencer.instance.songInfo;
             string levelJson = JsonUtility.ToJson(levelInfo);
             System.IO.File.WriteAllText(filePath, levelJson);
         }

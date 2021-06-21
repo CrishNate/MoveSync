@@ -5,8 +5,6 @@ namespace MoveSync
 {
     public class BeatProjectileExplosion : BeatObject
     {
-        [SerializeField] private GameObject _projectileObject;
-
         [Header("Beat Projectile Explosion")]
         [SerializeField] private float _maxAppearTime = 0.5f;
         [SerializeField] private float _projectileReachTimeBPM = 1f;
@@ -59,9 +57,19 @@ namespace MoveSync
 
         void SpawnProjectile(Vector3 direction)
         {
-            Instantiate(_projectileObject, transform.position, Quaternion.LookRotation(direction))
+            BaseProjectile.ProjectileParam initParam = new BaseProjectile.ProjectileParam
+            {
+                instigator = gameObject,
+                invokeTimeStamp = beatObjectData.time,
+                duration = _projectileReachTimeBPM,
+                scale = _size,
+                speed = beatObjectData.getModel<SPEED>().value,
+                shape = beatObjectData.getModel<SHAPE>().mesh
+            };
+            
+            Instantiate(beatObjectData.getModel<PROJECTILE>().projectile.gameObject, transform.position, Quaternion.LookRotation(direction))
                 .GetComponent<BaseProjectile>()
-                .Init(gameObject, beatObjectData.time, 0, _projectileReachTimeBPM, _size, beatObjectData.getModel<SPEED>().value);
+                .Init(initParam);
         }
 
         protected override void Update()

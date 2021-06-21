@@ -10,11 +10,11 @@ namespace MoveSync
 {
     public class BeatShoot : BeatObject
     {
-        [SerializeField] protected BaseProjectile projectile;
         protected float appear;
         protected float duration;
         protected Vector3 position;
         protected float size;
+        protected BaseProjectile projectile;
 
 
         public override void Init(BeatObjectData beatObjectData)
@@ -26,6 +26,7 @@ namespace MoveSync
             appear = beatObjectData.getModel<APPEAR>().value;
             duration = beatObjectData.getModel<DURATION>().value;
             size = beatObjectData.getModel<SIZE>().value;
+            projectile = beatObjectData.getModel<PROJECTILE>().projectile;
 
             transform.position = GetSpawnPosition();
             transform.rotation = GetRotationByTargetState();
@@ -61,10 +62,22 @@ namespace MoveSync
         void Shoot()
         {
             float speed = beatObjectData.tryGetModel<SPEED>(out var speedModel) ? speedModel.value : 0.0f;
-            
+            Mesh shape = beatObjectData.tryGetModel<SHAPE>(out var shapeModel) ? shapeModel.mesh : null;
+
+            BaseProjectile.ProjectileParam initParam = new BaseProjectile.ProjectileParam
+            {
+                instigator = gameObject,
+                invokeTimeStamp = beatObjectData.time,
+                duration = duration,
+                appearTime = appear,
+                scale = size,
+                speed = speed,
+                shape = shape
+            };
+
             Instantiate(projectile.gameObject, transform.position, transform.rotation)
                 .GetComponent<BaseProjectile>()
-                .Init(gameObject, beatObjectData.time, duration, appear, size, speed);
+                .Init(initParam);
         }
     }
 }

@@ -14038,6 +14038,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dRotation: {x: 0, y: 20, z: 0}
+  _random: 0
+  _randomAmplitude: 1
 --- !u!1 &1485806649
 GameObject:
   m_ObjectHideFlags: 0
@@ -15422,6 +15424,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorData: {fileID: 11400000, guid: cf2b3a62811d88841af0f87d92ee1638, type: 2}
   shapeData: {fileID: 11400000, guid: 2db482bb29653f04ab744101ae62e85d, type: 2}
+  projectileData: {fileID: 11400000, guid: 2c728c4f4437d5e4ba45dcfa20bd6914, type: 2}
 --- !u!4 &1786224231
 Transform:
   m_ObjectHideFlags: 0
@@ -17338,8 +17341,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0, g: 0, b: 1, a: 1}
-      key1: {r: 0, g: 0, b: 1, a: 1}
+      key0: {r: 0, g: 0, b: 1, a: 0.39215687}
+      key1: {r: 0, g: 0, b: 1, a: 0.39215687}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -17436,8 +17439,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0, g: 1, b: 0, a: 1}
-      key1: {r: 0, g: 1, b: 0, a: 1}
+      key0: {r: 0, g: 1, b: 0, a: 0.39215687}
+      key1: {r: 0, g: 1, b: 0, a: 0.39215687}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -17546,6 +17549,26 @@ PrefabInstance:
     - target: {fileID: 322677814448231414, guid: 93371b31615c8e044a2223b393c45237,
         type: 3}
       propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 362830564856376299, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 362830564856376299, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 362830564856376299, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 362830564856376299, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 364689029567642519, guid: 93371b31615c8e044a2223b393c45237,
@@ -17732,6 +17755,11 @@ PrefabInstance:
         type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 1043822372368941493, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MoveSync.LevelEditor, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1043822372368941493, guid: 93371b31615c8e044a2223b393c45237,
         type: 3}
@@ -18270,6 +18298,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4349335675026913180, guid: 93371b31615c8e044a2223b393c45237,
         type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MoveSync.Metronome, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4349335675026913180, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
@@ -18428,6 +18461,11 @@ PrefabInstance:
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1122060324}
+    - target: {fileID: 4489132423416113809, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.AudioSource, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4489132423439057378, guid: 93371b31615c8e044a2223b393c45237,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -18993,6 +19031,41 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5495669646556625595, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5495669646556625595, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5495669646556625595, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1808945324}
+    - target: {fileID: 5495669646556625595, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5495669646556625595, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ActivateCenterGizmo
+      objectReference: {fileID: 0}
+    - target: {fileID: 5495669646556625595, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: MoveSync.LevelEditor, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5495669646556625595, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5538682207097126991, guid: 93371b31615c8e044a2223b393c45237,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -19052,6 +19125,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5991008631547033863, guid: 93371b31615c8e044a2223b393c45237,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.7615013
       objectReference: {fileID: 0}
     - target: {fileID: 6047549348242915408, guid: 93371b31615c8e044a2223b393c45237,
         type: 3}
@@ -20233,8 +20311,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0, b: 0, a: 1}
-      key1: {r: 1, g: 0, b: 0, a: 1}
+      key0: {r: 1, g: 0, b: 0, a: 0.39215687}
+      key1: {r: 1, g: 0, b: 0, a: 0.39215687}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}

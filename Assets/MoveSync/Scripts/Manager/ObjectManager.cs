@@ -61,14 +61,11 @@ namespace MoveSync
 
         void Start()
         {
-            AddSpawnTable(new ObjectModel("laser", new[] { ModelInput.APPEAR.defaultValue("3"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.POSITION }, "Laser"));
+            AddSpawnTable(new ObjectModel("laser", new[] { ModelInput.APPEAR.defaultValue("3"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.PROJECTILE.defaultValue("laser"), ModelInput.POSITION }, "Laser"));
             AddSpawnTable(new ObjectModel("disco_ball", new[] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.COUNT.defaultValue("5"), ModelInput.POSITION }, "DiscoBall"));
-            AddSpawnTable(new ObjectModel("bullet", new [] { ModelInput.APPEAR.defaultValue("6"), ModelInput.DURATION.defaultValue("0"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.POSITION }, "Bullet"));
-            AddSpawnTable(new ObjectModel("bullet_circle", new [] { ModelInput.APPEAR.defaultValue("6"), ModelInput.DURATION.defaultValue("0"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.POSITION }, "BulletCircle"));
-            AddSpawnTable(new ObjectModel("bullet_prism", new [] { ModelInput.APPEAR.defaultValue("6"), ModelInput.DURATION.defaultValue("0"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.POSITION }, "BulletPrism"));
-            AddSpawnTable(new ObjectModel("bullet_x", new [] { ModelInput.APPEAR.defaultValue("6"), ModelInput.DURATION.defaultValue("0"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.POSITION }, "BulletX"));
+            AddSpawnTable(new ObjectModel("shooter", new [] { ModelInput.APPEAR.defaultValue("6"), ModelInput.DURATION.defaultValue("0"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.SHAPE, ModelInput.PROJECTILE, ModelInput.POSITION, ModelInput.ROTATION }, "Shooter"));
+            AddSpawnTable(new ObjectModel("bullet", new [] { ModelInput.APPEAR.defaultValue("6"), ModelInput.DURATION.defaultValue("0"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.SHAPE, ModelInput.PROJECTILE, ModelInput.POSITION }, "Bullet"));
             AddSpawnTable(new ObjectModel("explosion", new [] { ModelInput.APPEAR.defaultValue("2"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.COUNT.defaultValue("10"), ModelInput.POSITION }, "ProjectileSphereExplosion"));
-            AddSpawnTable(new ObjectModel("bone_wall", new [] { ModelInput.APPEAR.defaultValue("6"), ModelInput.DURATION.defaultValue("0"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.POSITION }, "BoneWall"));
             AddSpawnTable(new ObjectModel("follow", new [] { ModelInput.APPEAR.defaultValue("6"), ModelInput.DURATION.defaultValue("6"), ModelInput.SIZE.defaultValue("0.5"), ModelInput.SPEED.defaultValue("1"), ModelInput.POSITION }, "FollowLine"));
             AddSpawnTable(new ObjectModel("boop", new [] { ModelInput.APPEAR.defaultValue("0.25"), ModelInput.DURATION.defaultValue("0.25"), ModelInput.SIZE.defaultValue("1"), ModelInput.SHAPE, ModelInput.POSITION }, "Boop"));
             

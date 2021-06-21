@@ -17,8 +17,8 @@ MonoBehaviour:
     - sphere
     - icosphere
     - cube
-    - cube_spike
-    - sphere_spike
+    - cubeSpike
+    - sphereSpike
     - cone
     - prism
     - tetrahedron

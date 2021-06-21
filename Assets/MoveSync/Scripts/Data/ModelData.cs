@@ -49,6 +49,7 @@ namespace MoveSync.ModelData
             if (origin.type == ModelData.EVENT.TYPE) return EVENT.CopyValues(origin);
             if (origin.type == ModelData.COUNT.TYPE) return COUNT.CopyValues(origin);
             if (origin.type == ModelData.SHAPE.TYPE) return SHAPE.CopyValues(origin);
+            if (origin.type == ModelData.PROJECTILE.TYPE) return PROJECTILE.CopyValues(origin);
 
             return null;
         }
@@ -63,6 +64,7 @@ namespace MoveSync.ModelData
         public static ModelInput COUNT => new COUNT();
         public static ModelInput SPEED => new SPEED();
         public static ModelInput SHAPE => new SHAPE();
+        public static ModelInput PROJECTILE => new PROJECTILE();
     }
 
     // Inputs types
@@ -93,14 +95,6 @@ namespace MoveSync.ModelData
         }
     }
     public abstract class StringModelInput : ModelInput
-    {
-        public string value
-        {
-            get => stringValue;
-            set => stringValue = value;
-        }
-    }
-    public abstract class ShapeModelInput : ModelInput
     {
         public string value
         {
@@ -153,7 +147,7 @@ namespace MoveSync.ModelData
         public static PropertyName TYPE = "COUNT";
         public COUNT() { type = TYPE; }
     }
-    public class SHAPE : ShapeModelInput
+    public class SHAPE : StringModelInput
     {
         public static PropertyName TYPE = "SHAPE";
         public SHAPE() 
@@ -161,6 +155,17 @@ namespace MoveSync.ModelData
             type = TYPE;
             value = MoveSyncData.instance.shapeData.shapesNameList.First();
         }
+        public Mesh mesh => MoveSyncData.instance.shapeData.shapes[value];
+    }
+    public class PROJECTILE : StringModelInput
+    {
+        public static PropertyName TYPE = "PROJECTILE";
+        public PROJECTILE() 
+        { 
+            type = TYPE;
+            value = MoveSyncData.instance.projectileData.projectilesNameList.First();
+        }
+        public BaseProjectile projectile => MoveSyncData.instance.projectileData.projectiles[value];
     }
     public class EVENT : StringModelInput
     {

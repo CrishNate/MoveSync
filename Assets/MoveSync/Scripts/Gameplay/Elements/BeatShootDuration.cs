@@ -1,3 +1,5 @@
+using MoveSync.ModelData;
+
 namespace MoveSync
 {
     public class BeatShootDuration : BeatShootPlayer

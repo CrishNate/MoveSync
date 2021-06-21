@@ -20,10 +20,17 @@ namespace MoveSync
         private static float _disappearAfterTimeBPM = 10.0f;
         
         
-        public override void Init(GameObject instigator, float invokeTimeStamp, float duration, float appearTime, float scale, float speed)
+        public override void Init(ProjectileParam initParam)
         {
-            base.Init(instigator, invokeTimeStamp, duration, appearTime, scale, speed);
-            
+            base.Init(initParam);
+
+            if (initParam.shape)
+            {
+                MeshFilter meshFilter = GetComponent<MeshFilter>();
+                if (meshFilter)
+                    meshFilter.sharedMesh = initParam.shape;
+            }
+
             transform.localScale = Vector3.zero;
         }
 

@@ -200,12 +200,20 @@ namespace MoveSync.UI
         public void ValueChanged(string value)
         {
             _rootText.text = value;
-            _onValueChanged.Invoke(value);
             _value = value;
+            _onValueChanged.Invoke(value);
 
             HideList();
         }
 
+        public void SetValueWithoutNotify(string value)
+        {
+            _rootText.text = value;
+            _value = value;
+
+            HideList();
+        }
+        
         private DropdownItem AddItem(string name)
         {
             GameObject item = Instantiate(_itemTemplate.gameObject, _itemTemplate.parent);
@@ -240,8 +248,8 @@ namespace MoveSync.UI
             // }
         }
         
-        
         public string currentValue => _value;
+        public UnityEventString onValueChanged => _onValueChanged;
         
         public List<string> options
         {

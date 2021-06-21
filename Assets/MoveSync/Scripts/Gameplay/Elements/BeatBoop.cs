@@ -1,4 +1,5 @@
-﻿using MoveSync.ModelData;
+﻿using System;
+using MoveSync.ModelData;
 using UnityEngine;
 
 namespace MoveSync
@@ -10,10 +11,13 @@ namespace MoveSync
         private float _size;
 
         private bool _finishMove;
-
+        private MeshRenderer _meshRenderer;
+        
         public override void Init(BeatObjectData beatObjectData)
         {
             base.Init(beatObjectData);
+
+            _meshRenderer = GetComponentInChildren<MeshRenderer>();
             
             _appear = beatObjectData.getModel<APPEAR>().value;
             _duration = beatObjectData.getModel<DURATION>().value;
@@ -31,23 +35,39 @@ namespace MoveSync
             base.Update();
             
             if (!(spawnTimeBPM > 0)) return;
-            float dTimeAppear = (LevelSequencer.instance.timeBPM - spawnTimeBPM) / _appear;
-            float dTimeDuration = (LevelSequencer.instance.timeBPM - (spawnTimeBPM + _appear)) / _duration;
+            
+            float dTimeAppear = _appear > 0 ? Mathf.Max(0, LevelSequencer.instance.timeBPM - spawnTimeBPM) / _appear : 0.0f;
+            float dTimeDuration = _duration > 0 ? Mathf.Max(0, LevelSequencer.instance.timeBPM - (spawnTimeBPM + _appear)) / _duration : 0.0f;
 
             if (dTimeDuration <= 0)
-                transform.localScale = Vector3.one * _size * Mathf.Clamp(Mathf.Pow(dTimeAppear, 0.5f), 0, 1);
+            {
+                float delta = Mathf.Clamp(Mathf.Pow(dTimeAppear, 0.5f), 0, 1);
+                    
+                transform.localScale = Vector3.one * _size * delta;
+                UpdateColor(Mathf.Pow(delta, 8f));
+            }
             else
             {
-                transform.localScale = Vector3.one * _size * Mathf.Clamp((1 - Mathf.Pow(dTimeDuration, 2)), 0, 1);
+                float delta = Mathf.Clamp((1 - Mathf.Pow(dTimeDuration, 2)), 0, 1);
+                transform.localScale = Vector3.one * _size * delta;
+                UpdateColor(Mathf.Pow(delta, 8f));
 
                 if (dTimeDuration > 1)
                     Destroy(gameObject);
             }
         }
-
-        protected override void OnTriggered()
+        
+        void UpdateColor(float delta)
         {
-            base.OnTriggered();
+            float alpha = _meshRenderer.material.color.a;
+            _meshRenderer.material.color = Color.Lerp(
+                MoveSyncData.instance.colorData.NearBeatObjectColor,
+                Color.white,
+                delta);
+            _meshRenderer.material.color = new Color(_meshRenderer.material.color.r,
+                _meshRenderer.material.color.g,
+                _meshRenderer.material.color.b,
+                alpha);
         }
     }
 }

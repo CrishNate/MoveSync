@@ -24,9 +24,9 @@ namespace MoveSync
         private float _endTimeStamp;
         
 
-        public override void Init(GameObject instigator, float invokeTimeStamp, float duration, float appearTime, float scale, float speed)
+        public override void Init(ProjectileParam initParam)
         {
-            base.Init(instigator, invokeTimeStamp, duration, appearTime, scale, speed);
+            base.Init(initParam);
             
             _savedScale = _laserGameObject.transform.localScale;
             _savedColor = _meshRenderer.material.color;

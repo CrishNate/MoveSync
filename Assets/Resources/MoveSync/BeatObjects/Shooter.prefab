@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8156985080443624255}
-  - component: {fileID: -7439363605854873471}
+  - component: {fileID: 2034756532969085693}
   m_Layer: 0
-  m_Name: BulletX
+  m_Name: Shooter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-7439363605854873471
+--- !u!114 &2034756532969085693
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,11 +40,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5145423521493952812}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adecd7208b5441fbadc3d175654e3163, type: 3}
+  m_Script: {fileID: 11500000, guid: 2363d088a7527624b8032c14923c1ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _onTriggeredEvent:
     m_PersistentCalls:
       m_Calls: []
-  projectile: {fileID: 5390824764915981596, guid: 7b43cf28f7a529c41bea1c0de1a2816a,
-    type: 3}
