@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
  
 public class Spectator : MonoBehaviour {
@@ -7,12 +8,20 @@ public class Spectator : MonoBehaviour {
     //initial speed
     [SerializeField] private int _speed = 10;
     [SerializeField] private int _sensitivity = 2;
-
+    private bool IsPointerOverUIObject() 
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+    }
+    
     // Update is called once per frame
     void Update ()
     {
         if (EventSystem.current.currentSelectedGameObject != null) return;
-        if (EventSystem.current.IsPointerOverGameObject()) return;
+        if (IsPointerOverUIObject()) return;
 
         
         if (Input.GetMouseButtonDown(1))

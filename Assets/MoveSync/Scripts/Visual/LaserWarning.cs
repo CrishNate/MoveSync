@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Oculus.Platform.Samples.VrHoops;
 using UnityEngine;
 
 namespace MoveSync
