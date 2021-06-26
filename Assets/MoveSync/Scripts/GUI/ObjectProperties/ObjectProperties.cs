@@ -8,7 +8,7 @@ namespace MoveSync.UI
 {
     public class ObjectProperties : Singleton<ObjectProperties>
     {
-        public Dictionary<int, SelectedObjectData> SelectedObjects;
+        public Dictionary<int, SelectedObjectData> SelectedObjects = new Dictionary<int, SelectedObjectData>();
         public UnityEventBeatObjectData onSelected = new UnityEventBeatObjectData();
         public UnityEventBeatObjectData onDeselected = new UnityEventBeatObjectData();
 
@@ -127,5 +127,6 @@ namespace MoveSync.UI
         
         
         public BeatObjectData selectedObject => _selectedObject;
+        public bool selectedObjectInLevel => _selectedObject.time >= 0;
     }
 }

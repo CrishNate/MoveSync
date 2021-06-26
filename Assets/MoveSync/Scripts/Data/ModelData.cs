@@ -136,7 +136,7 @@ namespace MoveSync.ModelData
         public static PropertyName TYPE = "ROTATION";
         public ROTATION() { type = TYPE; }
         
-        public Quaternion value
+        public new Quaternion value
         {
             get => Quaternion.Euler(JsonUtility.FromJson<Vector3>(stringValue));
             set => stringValue = JsonUtility.ToJson(value.eulerAngles);

@@ -42,7 +42,7 @@ namespace MoveSync
             _time += Time.deltaTime * LevelSequencer.instance.toBPM;
             if (Math.Abs(dRotation) > 0)
             {
-                transform.RotateAround(transform.forward,
+                transform.Rotate(transform.forward,
                     dRotation * Time.deltaTime * LevelSequencer.instance.toBPM *
                     LevelSequencer.instance.audioSource.pitch);
             }

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="fd5c285c-3430-41ff-a6d0-6af1af4eed2f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Gameplay/Elements/BeatShootAround.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Gameplay/Elements/BeatShootAround.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Explosion.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Explosion.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Follow.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Follow.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/boop.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/boop.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/bullet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/bullet.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/discoBall.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/discoBall.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/event.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/event.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/explosion.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/explosion.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/follow.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/follow.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/laser.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/laser.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/shooter.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Icons/shooter.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.MoveSync/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.MoveSync/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MoveSync/.idea/indexLayout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.MoveSync/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Assets.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Assets.zip.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Animation/Visual/beatAnimation.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Animation/Visual/beatAnimation.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Data/ColorData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Data/ColorData.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Data/ProjectileData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Data/ProjectileData.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Data/ShapeData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Data/ShapeData.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Prefab/Editor/UI/ObjectProperties.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Prefab/Editor/UI/ObjectProperties.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Prefab/Editor/UI/ObjectUI.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Prefab/Editor/UI/ObjectUI.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Prefab/Projectiles/FollowLineProjectile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Prefab/Projectiles/FollowLineProjectile.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Data/ColorData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Data/ColorData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Data/InputData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Data/InputData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Data/ModelData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Data/ModelData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/GUI/ObjectDurationUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/GUI/ObjectDurationUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/GUI/ObjectProperties/ObjectProperties.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/GUI/ObjectProperties/ObjectProperties.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/GUI/ObjectProperties/ObjectPropertyPosition.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/GUI/ObjectProperties/ObjectPropertyPosition.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/GUI/ObjectUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/GUI/ObjectUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/GUI/TimelineObjectsUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/GUI/TimelineObjectsUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Gameplay/BindingManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Gameplay/BindingManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Gameplay/Elements/BeatProjectileExplosion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Gameplay/Elements/BeatProjectileExplosion.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Gameplay/Projectile/BulletShapeProjectile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Gameplay/Projectile/BulletShapeProjectile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/LevelEditor/LevelEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/LevelEditor/LevelEditor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Manager/LevelDataManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Manager/LevelDataManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Manager/ObjectManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Scripts/Manager/ObjectManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MoveSync/Sprites/UI/EditorUI/Icons/random/random_dice.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MoveSync/Sprites/UI/EditorUI/Icons/random/random_dice.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/BoneWall.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/BoneWall.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Boop.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Boop.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Bullet.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Bullet.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/DiscoBall.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/DiscoBall.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/FollowLine.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/FollowLine.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Laser.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Laser.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/ProjectileSphereExplosion.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/ProjectileSphereExplosion.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Shooter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/BeatObjects/Shooter.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/Songs/Quite-Parties-Death-120.69.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/MoveSync/Songs/Quite-Parties-Death-120.69.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/sans_environment.fbx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/MoveSync/sans_environment.fbx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions/.sample.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions/XRI Default Continuous Move.preset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions/XRI Default Continuous Move.preset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions/XRI Default Continuous Turn.preset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions/XRI Default Continuous Turn.preset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions/XRI Default Input Actions.inputactions" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions/XRI Default Input Actions.inputactions.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions/XRI Default Left Controller.preset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions/XRI Default Left Controller.preset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions/XRI Default Right Controller.preset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions/XRI Default Right Controller.preset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions/XRI Default Snap Turn.preset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Samples/XR Interaction Toolkit/1.0.0-pre.4/Default Input Actions/XRI Default Snap Turn.preset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Songs/TestLevel.mslevel" beforeDir="false" afterPath="$PROJECT_DIR$/Songs/TestLevel.mslevel" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Songs/TestLevel2.mslevel" beforeDir="false" afterPath="$PROJECT_DIR$/Songs/TestLevel2.mslevel" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.timeline@1.4.8/Editor/Manipulators/Move/IMoveItemMode.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.collab-proxy@1.5.7/Tests/Editor/Collaborate/Scenario/BasicTests.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.timeline@1.4.8/Editor/treeview/ManipulationsTimeline.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.timeline@1.4.8/Editor/treeview/TimelineDataSource.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.timeline@1.4.8/Editor/Actions/ActionContext.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.test-framework@1.1.24/UnityEngine.TestRunner/NUnitExtensions/Runner/UnityLogCheckDelegatingCommand.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://C:/Program Files/Unity/Hub/Editor/2020.3.12f1/Editor/Data/Resources/PackageManager/BuiltInPackages/com.unity.ugui/Editor/EventSystem/EventTriggerEditor.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <changedPaths>
+      <option value="$PROJECT_DIR$/Assets/MoveSync/Scripts/Gameplay/Elements/BeatShootArount.cs" />
+      <option value="$PROJECT_DIR$/Assets/MoveSync/Scripts/Gameplay/Elements/BeatProjectileExplosion.cs" />
+      <option value="$PROJECT_DIR$/Assets/MoveSync/Scripts/Data/ModelData.cs" />
+      <option value="$PROJECT_DIR$/Assets/MoveSync/Scripts/Gameplay/Projectile/BulletShapeProjectile.cs" />
+      <option value="$PROJECT_DIR$/Assets/MoveSync/Scripts/GUI/DropDownWithSearth.cs" />
+      <option value="$PROJECT_DIR$/Assets/MoveSync/Scripts/GUI/ObjectProperties/ObjectProperties.cs" />
+      <option value="$PROJECT_DIR$/Assets/MoveSync/Scripts/Manager/LevelDataManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/MoveSync/Scripts/Gameplay/BindingManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/MoveSync/Scripts/Manager/ObjectManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/MoveSync/Scripts/GUI/ObjectProperties/ObjectPropertyPosition.cs" />
+      <option value="$PROJECT_DIR$/Assets/MoveSync/Scripts/Gameplay/Elements/BeatShootAround.cs" />
+    </changedPaths>
+  </component>
+  <component name="ProjectId" id="1uTwk0m3QNMoKiOWTDWwonOQzkq" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.34994584" />
+    <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.0" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.C#" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <method v="2" />
+    </configuration>
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="17992">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" value="17992" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fd5c285c-3430-41ff-a6d0-6af1af4eed2f" name="Default Changelist" comment="" />
+      <created>1624703029007</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1624703029007</updated>
+      <workItem from="1624703035151" duration="39000" />
+      <workItem from="1624703110228" duration="129000" />
+      <workItem from="1624704632305" duration="10398000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="Type#MoveSync.ModelData.POSITION" memberName="randomSpawnType" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+</project>

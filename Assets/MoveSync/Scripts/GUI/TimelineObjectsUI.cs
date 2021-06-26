@@ -138,8 +138,8 @@ namespace MoveSync
         {
             if (eventData.button != PointerEventData.InputButton.Left) return;
 
-            // select in rectangle
-            ClearSelection();
+            if (!InputData.shouldAddSelection)
+                ClearSelection();
 
             _selectionUi = Instantiate(_selectionUiInstance, _rectObjectsList).GetComponent<SelectionUI>();
             _selectionUi.Init(eventData);
@@ -272,7 +272,7 @@ namespace MoveSync
         void OnDeselect(BeatObjectData beatObjectData)
         {
             if (_objectsUi.TryGetValue(beatObjectData.id, out var objectUi))
-                objectUi.OnDeselectProperties();
+                objectUi.OnDeselectProperties(_selectedObjects.ContainsKey(objectUi.beatObjectData.id));
         }
 
         void Start()

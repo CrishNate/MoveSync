@@ -14,11 +14,13 @@ namespace MoveSync
         [SerializeField] private GameObject _nonVrPlayer;
         [SerializeField] private GameObject _centerGizmo;
         
+        private Dictionary<PropertyName, Sprite> _objectIcons = new Dictionary<PropertyName, Sprite>();
         private static float _scrollSpeed;
         private bool _isSimulation;
         private bool _block;
         private bool _centerGizmoActive;
-
+        
+        private static string beatObjectIconsPath = "MoveSync/BeatObjects/Icons/";
 
         public void SimulationMode(bool simulation)
         {
@@ -26,9 +28,6 @@ namespace MoveSync
             if (_isSimulation)
             {
                 ObjectProperties.instance.WipeSelections();
-            }
-            else
-            {
             }
             
             onSimulationMode.Invoke(_isSimulation);
@@ -43,9 +42,26 @@ namespace MoveSync
             _centerGizmoActive = active;
             _centerGizmo.SetActive(!_isSimulation && _centerGizmoActive);
         }
- 
+
+        void LoadIcons()
+        {
+            // loading editors sprites
+            foreach (var objectModel in ObjectManager.instance.objectModels)
+            {
+                string objectTag = LevelDataManager.PropertyNameToString(objectModel.Key);
+                var sprite = Resources.Load<Sprite>(beatObjectIconsPath + objectTag);
+                if (sprite)
+                    _objectIcons.Add(objectModel.Key, sprite);
+            }
+        }
         
-        
+        void Start()
+        {
+            ObjectManager.instance.onObjectsLoaded.AddListener(LoadIcons);
+            
+            LoadIcons();
+        }
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -83,5 +99,7 @@ namespace MoveSync
                     
             */
         }
+        
+        public Dictionary<PropertyName, Sprite> objectIcons => _objectIcons;
     }
 }

@@ -7,6 +7,7 @@ namespace MoveSync
     public class InputData : MonoBehaviour
     {
         public static bool shouldSnap => Input.GetKey(KeyCode.LeftShift) ^ _snapOn;
+        public static bool shouldAddSelection => Input.GetKey(KeyCode.LeftShift);
 
         public static bool shouldOnlyLayer => Input.GetKey(KeyCode.LeftControl);
         public static bool shouldCopy => Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C);

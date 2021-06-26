@@ -56,6 +56,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -80,6 +81,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!95 &432726097193791469
 Animator:
   serializedVersion: 3
@@ -108,9 +110,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8599156809930397199}
-  - component: {fileID: 8599156809930397195}
+  - component: {fileID: -4319761900136806530}
+  - component: {fileID: 4069889242997564710}
   m_Layer: 0
-  m_Name: ProjectileSphereExplosion
+  m_Name: shooterAround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,7 +134,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8599156809930397195
+--- !u!114 &-4319761900136806530
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,14 +143,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 8599156809930397194}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efa2c88b352a3f4408e97101131ce51b, type: 3}
+  m_Script: {fileID: 11500000, guid: a7b927cc0d9641988d088d40817bfa94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _onTriggeredEvent:
     m_PersistentCalls:
       m_Calls: []
-  _projectileObject: {fileID: 2341723290652221099, guid: 96cb4ff6ae247544c91c4399b884dfb8,
-    type: 3}
-  _maxAppearTime: 0.5
-  _projectileReachTimeBPM: 4
+  _projectileReachTimeBPM: 1
   _animator: {fileID: 432726097193791469}
+--- !u!114 &4069889242997564710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8599156809930397194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f50bee1880ac3304bb5854031de47834, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dRotation: {x: 20, y: 15, z: 17}
+  _random: 1
+  _randomAmplitude: 30

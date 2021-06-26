@@ -21,7 +21,7 @@ MonoBehaviour:
     - prism
     - laser
     - laserNoMuzzle
-    - followLine
+    - follow
     m_values:
     - {fileID: 832716710370975365, guid: 96cb4ff6ae247544c91c4399b884dfb8, type: 3}
     - {fileID: 5390824764915981596, guid: 7b43cf28f7a529c41bea1c0de1a2816a, type: 3}

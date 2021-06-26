@@ -22,6 +22,7 @@ public class ObjectDurationUI : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             _dragOffset = eventData.position.x - transform.position.x;
+
             _draggingUpdate = StartCoroutine(Dragging());
         }
     }

@@ -13,23 +13,39 @@ namespace MoveSync.UI
         [SerializeField] private Toggle boxToggle;
         [SerializeField] private Toggle circleToggle;
         [SerializeField] private Toggle sphereToggle;
+        [SerializeField] private Button randomize;
         
         
         public override void Init(ModelInput modelInput, ObjectProperties parentObjectProperties)
         {
             base.Init(modelInput, parentObjectProperties);
-            
-            noRandomToggle.onValueChanged.AddListener(x=> OnSwitchRandom(x, RandomSpawnType.None));
-            lineToggle.onValueChanged.AddListener(x=> OnSwitchRandom(x, RandomSpawnType.Line));
-            boxToggle.onValueChanged.AddListener(x=> OnSwitchRandom(x, RandomSpawnType.Rect));
-            circleToggle.onValueChanged.AddListener(x=> OnSwitchRandom(x, RandomSpawnType.Circle));
-            sphereToggle.onValueChanged.AddListener(x=> OnSwitchRandom(x, RandomSpawnType.Sphere));
+
+            if (!parentObjectProperties.selectedObjectInLevel)
+            {
+                noRandomToggle.onValueChanged.AddListener(x => OnSwitchRandom(x, RandomSpawnType.None));
+                lineToggle.onValueChanged.AddListener(x => OnSwitchRandom(x, RandomSpawnType.Line));
+                boxToggle.onValueChanged.AddListener(x => OnSwitchRandom(x, RandomSpawnType.Rect));
+                circleToggle.onValueChanged.AddListener(x => OnSwitchRandom(x, RandomSpawnType.Circle));
+                sphereToggle.onValueChanged.AddListener(x => OnSwitchRandom(x, RandomSpawnType.Sphere));
+                
+                randomize.gameObject.SetActive(false);
+            }
+            else
+            {
+                randomize.onClick.AddListener(OnRandomize);
+
+                noRandomToggle.gameObject.SetActive(false);
+                lineToggle.gameObject.SetActive(false);
+                boxToggle.gameObject.SetActive(false);
+                circleToggle.gameObject.SetActive(false);
+                sphereToggle.gameObject.SetActive(false);
+            }
         }
 
         public override void UpdateUI()
         {
             base.UpdateUI();
-
+            
             var positionModelInput = modelInput as POSITION;
             switch (positionModelInput.randomSpawnType)
             {
@@ -61,6 +77,35 @@ namespace MoveSync.UI
             positionModelInput.randomSpawnType = type;
             
             OnUpdateValue();
+        }
+
+        // Randomizing positions based on beat object that is placed on the same level as the selected beat object
+        void OnRandomize()
+        {
+            if (BindingManager.instance.bind.TryGetValue(ParentObjectProperties.selectedObject.editorLayer,
+                out BindKey bindKey))
+            {
+                if (bindKey.beatObjectData.tryGetModel<POSITION>(out var positionModel))
+                {
+                    if (positionModel.randomSpawnType == RandomSpawnType.None) return;
+                    
+                    var positionModelInput = modelInput as POSITION;
+                    
+                    // update current
+                    positionModelInput.value = RandomManager.instance.GetRandomPoint(positionModel);
+                    LevelDataManager.instance.UpdateBeatObject(ParentObjectProperties.selectedObject.id);
+                    
+                    // update all selected
+                    foreach (var selectedObject in ObjectProperties.instance.SelectedObjects)
+                    {
+                        if (selectedObject.Value.beatObjectData.tryGetModel(out POSITION selectedPositionModels))
+                        {
+                            selectedPositionModels.value = RandomManager.instance.GetRandomPoint(positionModel);
+                            LevelDataManager.instance.UpdateBeatObject(selectedObject.Value.beatObjectData.id);
+                        }
+                    }
+                }
+            }
         }
     }
 }

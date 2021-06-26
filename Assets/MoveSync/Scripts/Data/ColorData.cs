@@ -7,5 +7,8 @@ namespace MoveSync.Data
     {
         [SerializeField] public Color FarBeatObjectColor;
         [SerializeField] public Color NearBeatObjectColor;
+        [SerializeField] public Color DefaultUIBeatObject;
+        [SerializeField] public Color SelectedUIBeatObject;
+        [SerializeField] public Color SelectedPropertiesUIBeatObject;
     }
 }

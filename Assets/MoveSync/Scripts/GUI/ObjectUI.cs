@@ -5,6 +5,7 @@ using MoveSync.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace MoveSync
 {
@@ -15,9 +16,7 @@ namespace MoveSync
         [HideInInspector] public UnityEventObjectUI onStopDrag = new UnityEventObjectUI();
         [HideInInspector] public BeatObjectData beatObjectData;
 
-        [SerializeField] private RectTransform _middleHandler;
-        [SerializeField] private GameObject _selection;
-        [SerializeField] private GameObject _selectionProperties;
+        [SerializeField] private Image _image;
         [SerializeField] private ObjectDurationUI _appearUI;
         [SerializeField] private ObjectDurationUI _durationUI;
 
@@ -38,6 +37,12 @@ namespace MoveSync
                 _durationUI.onValueChanged.AddListener(OnSetDuration);
             else
                 _durationUI.IsShown(false);
+
+            if (LevelEditor.instance.objectIcons.TryGetValue(data.objectTag, out Sprite sprite))
+            {
+                _image.sprite = sprite;
+            }
+            _image.color = MoveSyncData.instance.colorData.DefaultUIBeatObject;
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -91,20 +96,22 @@ namespace MoveSync
         
         public void OnSelect()
         {
-            _selection.SetActive(true);
+            _image.color = MoveSyncData.instance.colorData.SelectedUIBeatObject;
         }
         public void OnDeselect()
         {
-            _selection.SetActive(false);
+            _image.color = MoveSyncData.instance.colorData.DefaultUIBeatObject;
         }
         
         public void OnSelectProperties()
         {
-            _selectionProperties.SetActive(true);
+            _image.color = MoveSyncData.instance.colorData.SelectedPropertiesUIBeatObject;
         }
-        public void OnDeselectProperties()
+        public void OnDeselectProperties(bool stillSelected)
         {
-            _selectionProperties.SetActive(false);
+            _image.color = stillSelected
+                ? MoveSyncData.instance.colorData.SelectedUIBeatObject
+                : MoveSyncData.instance.colorData.DefaultUIBeatObject;
         }
 
         public void ShowOnlyKey(bool show)

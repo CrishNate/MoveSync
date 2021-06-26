@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 752801631730827681}
   - component: {fileID: 1984967062557155247}
   m_Layer: 0
-  m_Name: DiscoBall
+  m_Name: discoBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -82,14 +82,19 @@ namespace MoveSync.UI
                 onStartAwaitConfirm.Invoke(layer);
                 return;
             };
-            
-            ObjectBind(layer, new BeatObjectData
+
+            if (!_bind.ContainsKey(layer))
             {
-                objectTag = ObjectManager.instance.currentObjectModel.objectTag,
-                id = SerializableGuid.NewGuid(),
-                editorLayer = _awaitConfirmOnLayer,
-                modelInputsData = ModelInput.CloneInputs(ObjectManager.instance.currentObjectModel.modelInput),
-            });
+                StartListening(layer);
+            }
+
+            var newBeatObject = new BeatObjectData(ObjectManager.instance.currentObjectModel.objectTag,
+                SerializableGuid.NewGuid(),
+                _awaitConfirmOnLayer,
+                ModelInput.CloneInputs(ObjectManager.instance.currentObjectModel.modelInput));
+            
+            ObjectBind(layer, newBeatObject);
+            
             _awaitConfirmOnLayer = -1;
             onFinishAwaitConfirm.Invoke(layer);
         }

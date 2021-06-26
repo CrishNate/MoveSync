@@ -28,14 +28,29 @@ namespace MoveSync
     {
         public PropertyName objectTag;
         public SerializableGuid id;
-        public float time;
+        public float time = -1;
         // editor
         public int editorLayer;
         // custom data
         public ModelInput[] modelInputsData;
         private Dictionary<Type, ModelInput> modelInputs;
 
-
+        public BeatObjectData()
+        { }
+        
+        public BeatObjectData(PropertyName objectTag, SerializableGuid id, int editorLayer, ModelInput[] modelInputsData)
+        {
+            this.objectTag = objectTag;
+            this.id = id;
+            this.editorLayer = editorLayer;
+            this.modelInputsData = modelInputsData;
+            
+            modelInputs = new Dictionary<Type, ModelInput>();
+            foreach (var m in modelInputsData)
+            {
+                modelInputs.Add(m.GetType(), m);
+            }
+        }
         public BeatObjectData Clone()
         {
             BeatObjectData other = new BeatObjectData
