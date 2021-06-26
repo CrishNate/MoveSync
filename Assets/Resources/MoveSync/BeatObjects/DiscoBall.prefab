@@ -101,8 +101,8 @@ MonoBehaviour:
       m_Calls: []
   _projectileObject: {fileID: 7183579001196472452, guid: 635dd9602542f104facacbed927cbfd0,
     type: 3}
-  _maxAppearTime: 0.5
   _dRotation: {x: 0, y: 0, z: 0}
+  _meshRenderer: {fileID: 890472425662846147}
 --- !u!114 &1984967062557155247
 MonoBehaviour:
   m_ObjectHideFlags: 0

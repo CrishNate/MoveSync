@@ -14,7 +14,6 @@ namespace MoveSync
         private bool _triggered;
         private float _spawnTimeBPM;
 
-
         public virtual void Init(BeatObjectData beatObjectData)
         {
             _beatObjectData = beatObjectData;

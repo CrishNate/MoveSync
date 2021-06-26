@@ -59,9 +59,20 @@ namespace MoveSync
         {
             ObjectManager.instance.onObjectsLoaded.AddListener(LoadIcons);
             
+            StartCoroutine(AutoSave());
+            
             LoadIcons();
         }
 
+        IEnumerator AutoSave()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(60.0f);
+                LevelDataManager.instance.SaveFile(LevelDataManager.songPath + "autosave." + LevelDataManager.levelFileType);
+            }
+        }
+        
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))

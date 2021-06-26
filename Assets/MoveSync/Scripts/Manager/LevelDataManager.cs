@@ -143,6 +143,7 @@ namespace MoveSync
     public class LevelDataManager : Singleton<LevelDataManager>
     {
         public static string resourcePath => Application.dataPath + "/Resources/";
+        public static string songPath => resourcePath + "Songs/";
         public static string levelFileType = "mslevel";
 
         public UnityEventBeatObjectData onNewObject = new UnityEventBeatObjectData();
@@ -232,13 +233,13 @@ namespace MoveSync
          */
         public void ExploreLevelFile()
         {
-            string path = EditorUtility.OpenFilePanel("Load Level", Application.persistentDataPath, levelFileType);
+            string path = EditorUtility.OpenFilePanel("Load Level", songPath, levelFileType);
             if (path.Length != 0) LoadFile(path);
         }
         
         public void ExploreSaveLevelFile()
         {
-            string path = EditorUtility.SaveFilePanel("Save Level", Application.persistentDataPath, "MoveSyncLevel", levelFileType);
+            string path = EditorUtility.SaveFilePanel("Save Level", songPath, "MoveSyncLevel", levelFileType);
             if (path.Length != 0) SaveFile(path);
         }
                 

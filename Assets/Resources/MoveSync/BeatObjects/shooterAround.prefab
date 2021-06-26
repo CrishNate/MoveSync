@@ -151,6 +151,7 @@ MonoBehaviour:
       m_Calls: []
   _projectileReachTimeBPM: 1
   _animator: {fileID: 432726097193791469}
+  _meshRenderer: {fileID: 8615662571536583628}
 --- !u!114 &4069889242997564710
 MonoBehaviour:
   m_ObjectHideFlags: 0

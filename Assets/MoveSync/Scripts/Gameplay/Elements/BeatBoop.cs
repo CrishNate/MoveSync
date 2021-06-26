@@ -41,16 +41,16 @@ namespace MoveSync
 
             if (dTimeDuration <= 0)
             {
-                float delta = Mathf.Clamp(Mathf.Pow(dTimeAppear, 0.5f), 0, 1);
+                float delta = Mathf.Clamp(dTimeAppear, 0, 1);
                     
                 transform.localScale = Vector3.one * _size * delta;
-                UpdateColor(Mathf.Pow(delta, 8f));
+                UpdateColor(delta);
             }
             else
             {
-                float delta = Mathf.Clamp((1 - Mathf.Pow(dTimeDuration, 2)), 0, 1);
+                float delta = Mathf.Clamp((1 - dTimeDuration), 0, 1);
                 transform.localScale = Vector3.one * _size * delta;
-                UpdateColor(Mathf.Pow(delta, 8f));
+                UpdateColor(delta);
 
                 if (dTimeDuration > 1)
                     Destroy(gameObject);

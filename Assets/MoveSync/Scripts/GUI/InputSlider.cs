@@ -26,7 +26,7 @@ public class InputSlider : MonoBehaviour
     
     void Start()
     {
-        LevelDataManager.instance.onLoadedSong.AddListener(() => UpdateValueBySlider(-LevelSequencer.instance.songOffset));
+        LevelDataManager.instance.onLoadedSong.AddListener(() => UpdateValueBySlider(LevelSequencer.instance.songOffset));
         
         _slider.onValueChanged.AddListener(UpdateValueBySlider);
         _slider.onValueChanged.Invoke(_slider.value);

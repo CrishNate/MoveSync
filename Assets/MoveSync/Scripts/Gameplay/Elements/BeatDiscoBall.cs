@@ -11,17 +11,16 @@ namespace MoveSync
     {
         [Header("Beat Disco Ball")] 
         [SerializeField] private BaseProjectile _projectileObject;
-        [SerializeField] private float _maxAppearTime = 0.5f;
-        [SerializeField] private Vector3 _dRotation;
+        [SerializeField] private MeshRenderer _meshRenderer;
 
         private Vector3 _positionOrigin;
         private Vector3 _positionEnd;
-        private float _appearDuration;
+        private float _appear;
         private float _duration;
         private float _size;
         private bool _finishMove;
         private int _count;
-
+        private Color _savedColor;
 
         public override void Init(BeatObjectData beatObjectData)
         {
@@ -30,13 +29,14 @@ namespace MoveSync
             _positionEnd = beatObjectData.getModel<POSITION>().value;
             _positionOrigin = _positionEnd + new Vector3(0, -10.0f, 0);
             
-            _appearDuration = beatObjectData.getModel<APPEAR>().value;
+            _appear = beatObjectData.getModel<APPEAR>().value;
             _duration = beatObjectData.getModel<DURATION>().value;
             _size = beatObjectData.getModel<SIZE>().value;
             _count = beatObjectData.getModel<COUNT>().value;
 
             transform.localScale *= _size;
             transform.position = _positionOrigin;
+            _savedColor = _meshRenderer.material.color;
             
             SpawnDisco();
         }
@@ -45,7 +45,7 @@ namespace MoveSync
         {
             if (_finishMove) return;
             
-            float dTimeMove = (LevelSequencer.instance.timeBPM - spawnTimeBPM) / Mathf.Max(_maxAppearTime, _appearDuration);
+            float dTimeMove = (LevelSequencer.instance.timeBPM - spawnTimeBPM) / _appear;
             if (dTimeMove > 1.0f) _finishMove = true;
             
             dTimeMove = Mathf.Min(1.0f, dTimeMove);
@@ -69,7 +69,7 @@ namespace MoveSync
                 instigator = gameObject,
                 invokeTimeStamp = beatObjectData.time,
                 duration = _duration,
-                appearTime = _appearDuration,
+                appearTime = _appear,
                 scale = _size,
             };
             
@@ -83,7 +83,13 @@ namespace MoveSync
             
             UpdateMovement();
 
-            if (LevelSequencer.instance.timeBPM > beatObjectData.time + _duration + _projectileObject.GetDisappearTime())
+            float dTime = LevelSequencer.instance.timeBPM - beatObjectData.time + _projectileObject.GetDisappearTime();
+            if (dTime > 0)
+            {
+                _meshRenderer.material.color = dTime > 1 ? Color.white : _savedColor + (Color.white - _savedColor) * dTime * (1 / _projectileObject.GetDisappearTime());
+            }
+            
+            if (dTime > _duration + _projectileObject.GetDisappearTime() * 3)
                 Destroy(gameObject);
         }
     }

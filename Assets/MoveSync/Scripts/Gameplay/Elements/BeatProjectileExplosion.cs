@@ -21,6 +21,9 @@ namespace MoveSync
         {
             base.Init(beatObjectData);
 
+            AnimatorStateInfo current = _animator.GetCurrentAnimatorStateInfo(0);
+            _animator.Play(current.fullPathHash, 0, LevelSequencer.instance.timeBPM % 1.0f);
+
             _positionEnd = beatObjectData.getModel<POSITION>().value;
             _positionOrigin = _positionEnd + new Vector3(0, -10.0f, 0);
             
@@ -83,7 +86,7 @@ namespace MoveSync
             base.OnTriggered();
 
             SpawnExplosion();
-            Destroy(gameObject);
+            Destroy(gameObject, LevelSequencer.instance.toTime * 0.2f);
         }
     }
 }

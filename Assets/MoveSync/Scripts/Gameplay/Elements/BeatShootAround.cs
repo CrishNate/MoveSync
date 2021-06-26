@@ -9,6 +9,7 @@ namespace MoveSync
         [Header("Beat Projectile Around")]
         [SerializeField] private float _projectileReachTimeBPM = 1f;
         [SerializeField] private Animator _animator;
+        [SerializeField] private MeshRenderer _meshRenderer;
 
         private Vector3 _positionOrigin;
         private Vector3 _positionEnd;
@@ -17,6 +18,7 @@ namespace MoveSync
         private float _size;
         private float _speed;
         private Mesh _shape;
+        private Color _savedColor;
 
         private bool _finishMove;
 
@@ -35,6 +37,7 @@ namespace MoveSync
             
             transform.localScale *= _size;
             transform.position = _positionOrigin;
+            _savedColor = _meshRenderer.material.color;
 
             if (beatObjectData.tryGetModel<SHAPE>(out var shape))
             {
@@ -104,6 +107,13 @@ namespace MoveSync
         protected override void Update()
         {
             base.Update();
+
+            float dTime = LevelSequencer.instance.timeBPM - beatObjectData.time;
+            
+            if (dTime > 0)
+            {
+                _meshRenderer.material.color = dTime > 1 ? Color.white : _savedColor + (Color.white - _savedColor) * dTime * 4.0f;
+            }
             
             UpdateMovement();
         }
