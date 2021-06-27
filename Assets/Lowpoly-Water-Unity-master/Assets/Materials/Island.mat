@@ -124,7 +124,7 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0.099, g: 0.099, b: 0.099, a: 1}
+    - _Color: {r: 0, g: 0, b: 0, a: 1}
     - _Color1: {r: 0.67910445, g: 0.67910445, b: 0.67910445, a: 1}
     - _Color2: {r: 0.14179105, g: 0.14179105, b: 0.14179105, a: 1}
     - _ColorAddSubDiff: {r: 1, g: 0, b: 0, a: 0}
@@ -136,3 +136,4 @@ Material:
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     - _SpecularColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     - _TintColor: {r: 0.06, g: 0.06, b: 0.06, a: 1}
+  m_BuildTextureStacks: []

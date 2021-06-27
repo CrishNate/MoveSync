@@ -8,11 +8,13 @@ namespace MoveSync
         [Header("Beat Projectile Explosion")]
         [SerializeField] private float _projectileReachTimeBPM = 1f;
         [SerializeField] private Animator _animator;
+        [SerializeField] private MeshFilter _meshFilter;
 
         private Vector3 _positionOrigin;
         private Vector3 _positionEnd;
         private float _appearDuration;
         private float _size;
+        private Mesh _shape;
 
         private bool _finishMove;
 
@@ -29,6 +31,7 @@ namespace MoveSync
             
             _appearDuration = beatObjectData.getModel<APPEAR>().value;
             _size = beatObjectData.getModel<SIZE>().value;
+            _shape = beatObjectData.getModel<SHAPE>().mesh;
             
             transform.localScale *= _size;
             transform.position = _positionOrigin;
@@ -66,7 +69,7 @@ namespace MoveSync
                 duration = _projectileReachTimeBPM,
                 scale = _size,
                 speed = beatObjectData.getModel<SPEED>().value,
-                shape = beatObjectData.getModel<SHAPE>().mesh
+                shape = _shape
             };
             
             Instantiate(beatObjectData.getModel<PROJECTILE>().projectile.gameObject, transform.position, Quaternion.LookRotation(direction))
@@ -86,6 +89,7 @@ namespace MoveSync
             base.OnTriggered();
 
             SpawnExplosion();
+            
             Destroy(gameObject, LevelSequencer.instance.toTime * 0.2f);
         }
     }

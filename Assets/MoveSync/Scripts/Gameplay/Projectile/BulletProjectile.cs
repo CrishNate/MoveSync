@@ -14,6 +14,7 @@ namespace MoveSync
             Disappear
         }
         
+        [SerializeField] private MeshFilter _meshFilter;
         private FadeState _fadeState = FadeState.Appear;
 
         private static float _appearSpeed = 1.0f;
@@ -26,9 +27,8 @@ namespace MoveSync
 
             if (initParam.shape)
             {
-                MeshFilter meshFilter = GetComponent<MeshFilter>();
-                if (meshFilter)
-                    meshFilter.sharedMesh = initParam.shape;
+                if (_meshFilter)
+                    _meshFilter.sharedMesh = initParam.shape;
             }
 
             transform.localScale = Vector3.zero;

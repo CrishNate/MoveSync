@@ -56,6 +56,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -80,6 +81,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!95 &432726097193791469
 Animator:
   serializedVersion: 3
@@ -146,8 +148,6 @@ MonoBehaviour:
   _onTriggeredEvent:
     m_PersistentCalls:
       m_Calls: []
-  _projectileObject: {fileID: 2341723290652221099, guid: 96cb4ff6ae247544c91c4399b884dfb8,
-    type: 3}
-  _maxAppearTime: 0.5
   _projectileReachTimeBPM: 4
   _animator: {fileID: 432726097193791469}
+  _meshFilter: {fileID: 4451104477021852641}
