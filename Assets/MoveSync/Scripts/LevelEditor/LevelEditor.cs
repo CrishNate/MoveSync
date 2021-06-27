@@ -34,6 +34,8 @@ namespace MoveSync
             
             _vrPlayer.SetActive(_isSimulation);
             _nonVrPlayer.SetActive(!_isSimulation);
+
+            _nonVrPlayer.SetActive(!_isSimulation);
             _centerGizmo.SetActive(!_isSimulation && _centerGizmoActive);
         }
 
