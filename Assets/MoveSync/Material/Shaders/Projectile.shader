@@ -1,4 +1,4 @@
-Shader "MoveSync/Projectile" 
+Shader "MoveSync/BeatObject" 
 {
     Properties 
     {
@@ -6,7 +6,6 @@ Shader "MoveSync/Projectile"
         _Color ("Color", Color) = (1,1,1,1) 
         _ColorOverride ("ColorOverride", Color) = (1,1,1,1) 
         _Override ("Override", Range (0, 1)) = 1
-        _Factor ("Factor", Range (0, 100)) = 1
     }
     
     SubShader 
@@ -22,7 +21,6 @@ Shader "MoveSync/Projectile"
         fixed4 _Color2; 
         fixed4 _Color;
         float _Override;
-        float _Factor;
 
         struct Input
         {
@@ -34,7 +32,7 @@ Shader "MoveSync/Projectile"
 
         void surf (Input IN, inout SurfaceOutput o)
         {
-            half factor = dot(normalize(IN.viewDir),o.Normal);
+            half factor = pow(dot(normalize(IN.viewDir),o.Normal), 0.5f);
             
             o.Emission.rgb = _Color + (_Color2 - _Color) * factor;
             

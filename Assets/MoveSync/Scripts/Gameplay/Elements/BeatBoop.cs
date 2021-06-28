@@ -8,11 +8,16 @@ namespace MoveSync
     {
         private float _appear;
         private float _duration;
-        private float _size;
+
+        [Header("Beat Boop")]
+        [SerializeField] private Animator _animator;
 
         private bool _finishMove;
         private MeshRenderer _meshRenderer;
         
+        private static readonly int Appear = Animator.StringToHash("appear");
+        private static readonly int Duration = Animator.StringToHash("duration");
+
         public override void Init(BeatObjectData beatObjectData)
         {
             base.Init(beatObjectData);
@@ -21,13 +26,20 @@ namespace MoveSync
             
             _appear = beatObjectData.getModel<APPEAR>().value;
             _duration = beatObjectData.getModel<DURATION>().value;
-            _size = beatObjectData.getModel<SIZE>().value;
 
             if (MoveSyncData.instance.shapeData.shapes.TryGetValue(beatObjectData.getModel<SHAPE>().value, out Mesh mesh))
                 GetComponentInChildren<MeshFilter>().sharedMesh = mesh;
 
-            transform.localScale = Vector3.zero;
+            transform.localScale *= beatObjectData.getModel<SIZE>().value;
             transform.position = beatObjectData.getModel<POSITION>().value;
+            
+            // perfect sync
+            AnimatorStateInfo current = _animator.GetCurrentAnimatorStateInfo(0);
+            _animator.Play(current.fullPathHash, 0, (LevelSequencer.instance.timeBPM - spawnTimeBPM) % 1.0f);
+            
+            _animator.SetFloat(Appear, 1.0f / _appear);
+            _animator.SetFloat(Duration, 1.0f / _duration);
+            _animator.speed = LevelSequencer.instance.toBPM;
         }
         
         protected override void Update()
@@ -36,38 +48,10 @@ namespace MoveSync
             
             if (!(spawnTimeBPM > 0)) return;
             
-            float dTimeAppear = _appear > 0 ? Mathf.Max(0, LevelSequencer.instance.timeBPM - spawnTimeBPM) / _appear : 0.0f;
             float dTimeDuration = _duration > 0 ? Mathf.Max(0, LevelSequencer.instance.timeBPM - (spawnTimeBPM + _appear)) / _duration : 0.0f;
-
-            if (dTimeDuration <= 0)
-            {
-                float delta = Mathf.Clamp(dTimeAppear, 0, 1);
-                    
-                transform.localScale = Vector3.one * _size * delta;
-                UpdateColor(delta);
-            }
-            else
-            {
-                float delta = Mathf.Clamp((1 - dTimeDuration), 0, 1);
-                transform.localScale = Vector3.one * _size * delta;
-                UpdateColor(delta);
 
                 if (dTimeDuration > 1)
                     Destroy(gameObject);
-            }
-        }
-        
-        void UpdateColor(float delta)
-        {
-            float alpha = _meshRenderer.material.color.a;
-            _meshRenderer.material.color = Color.Lerp(
-                MoveSyncData.instance.colorData.NearBeatObjectColor,
-                Color.white,
-                delta);
-            _meshRenderer.material.color = new Color(_meshRenderer.material.color.r,
-                _meshRenderer.material.color.g,
-                _meshRenderer.material.color.b,
-                alpha);
         }
     }
 }
