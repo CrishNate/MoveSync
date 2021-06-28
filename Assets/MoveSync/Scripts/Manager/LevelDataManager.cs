@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using MoveSync.ModelData;
+using MoveSync.UI;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -24,7 +26,7 @@ namespace MoveSync
     }
 
     [Serializable]
-    public class BeatObjectData
+    public class BeatObjectData : ISerializationCallbackReceiver
     {
         public PropertyName objectTag;
         public SerializableGuid id;
@@ -37,6 +39,14 @@ namespace MoveSync
 
         public BeatObjectData()
         { }
+        
+        public void OnBeforeSerialize()
+        { }
+
+        public void OnAfterDeserialize()
+        {
+            FixModelInputs();
+        }
         
         public BeatObjectData(PropertyName objectTag, SerializableGuid id, int editorLayer, ModelInput[] modelInputsData)
         {
@@ -84,34 +94,24 @@ namespace MoveSync
         
         public bool hasModel<T>() where T : ModelInput
         {
-            FixModelInputs();
-
             return modelInputs.ContainsKey(typeof(T));
         }
         public bool hasModel(Type type)
         {
-            FixModelInputs();
-
             return modelInputs.ContainsKey(type);
         }
         public T getModel<T>() where T : ModelInput
         {
-            FixModelInputs();
-
             return (T)modelInputs[typeof(T)];
         }
         public bool tryGetModel<T>(out T modelInput) where T : ModelInput
         {
-            FixModelInputs();
-
             bool result = modelInputs.TryGetValue(typeof(T), out var tempModelInput);
             modelInput = (T)tempModelInput;
             return result;
         }
         public bool tryGetModel(Type type, out ModelInput modelInput)
         {
-            FixModelInputs();
-            
             return modelInputs.TryGetValue(type, out modelInput);
         }
         
@@ -128,7 +128,9 @@ namespace MoveSync
 
     [Serializable]
     public class LevelEditorInfo
-    { }
+    {
+        public List<BindKey> bindKeys;
+    }
     
     public class LevelInfo
     {
@@ -171,13 +173,10 @@ namespace MoveSync
         
         public BeatObjectData NewBeatObject(ObjectModel objectModel, float time = 0.0f, int layer = 0, bool history = true)
         {
-            BeatObjectData data = new BeatObjectData
+            BeatObjectData data = new BeatObjectData(objectModel.objectTag, SerializableGuid.NewGuid(), layer,
+                ModelInput.CloneInputs(objectModel.modelInput))
             {
-                objectTag = objectModel.objectTag, 
-                id = SerializableGuid.NewGuid(), 
-                time = time,
-                editorLayer = layer,
-                modelInputsData = ModelInput.CloneInputs(objectModel.modelInput),
+                time = time
             };
 
             if (history) 
@@ -259,15 +258,17 @@ namespace MoveSync
         
         public void LoadFile(string filePath)
         {
-            string levelJson = System.IO.File.ReadAllText(filePath);
+            string levelJson = File.ReadAllText(filePath);
             LoadInfo(JsonUtility.FromJson<LevelInfo>(levelJson));
         }
 
         public void SaveFile(string filePath)
         {
             levelInfo.songInfo = LevelSequencer.instance.songInfo;
+            levelInfo.levelEditorInfo.bindKeys = BindingManager.instance.bind.Values.ToList();
+            
             string levelJson = JsonUtility.ToJson(levelInfo);
-            System.IO.File.WriteAllText(filePath, levelJson);
+            File.WriteAllText(filePath, levelJson);
         }
 
         public void LoadSong(string filePath)
@@ -275,7 +276,7 @@ namespace MoveSync
             levelInfo.songFile = Path.GetFileNameWithoutExtension(filePath.Replace(resourcePath, ""));
             LevelSequencer.instance.songInfo = levelInfo.songInfo;
             LevelSequencer.instance.audioSource.clip = Resources.Load<AudioClip>(levelInfo.songFile);
-            
+
             onLoadedSong.Invoke();
         }
         
@@ -308,9 +309,10 @@ namespace MoveSync
         {
             this.levelInfo = levelInfo;
             LevelSequencer.instance.audioSource.clip = Resources.Load<AudioClip>(levelInfo.songFile);
-            if (levelInfo.levelEditorInfo == null) 
-                levelInfo.levelEditorInfo = new LevelEditorInfo();
             LevelSequencer.instance.songInfo = levelInfo.songInfo;
+
+            if (levelInfo.levelEditorInfo == null)
+                levelInfo.levelEditorInfo = new LevelEditorInfo();
             
             onLoadedSong.Invoke();
         }

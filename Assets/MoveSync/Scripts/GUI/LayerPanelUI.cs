@@ -63,6 +63,17 @@ namespace MoveSync.UI
                 layerUi.OnDeselect();
         }
 
+        void UpdateLayers()
+        {
+            foreach (LayerUI layerUI in _layers)
+            {
+                if (BindingManager.instance.bind.TryGetValue(layerUI.layer, out BindKey bindKey))
+                    layerUI.UpdateUI(bindKey);
+                else
+                    layerUI.Clear();
+            }
+        }
+
         void Start()
         {
             _instance.SetActive(false);
@@ -73,6 +84,8 @@ namespace MoveSync.UI
             BindingManager.instance.onFinishAwaitConfirm.AddListener(x => _layers[x].OnFinishObjectBind());
             BindingManager.instance.onClearBind.AddListener(x => _layers[x].Clear());
             
+            BindingManager.instance.onUpdate.AddListener(UpdateLayers);
+
             ObjectProperties.instance.onSelected.AddListener(OnSelectedLayer);
             ObjectProperties.instance.onDeselected.AddListener(OnDeselectedLayer);
         }

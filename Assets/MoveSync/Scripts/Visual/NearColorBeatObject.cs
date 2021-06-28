@@ -7,6 +7,8 @@ namespace MoveSync
     {
         [SerializeField] private MeshRenderer _meshRenderer;
         private static float _invNearDistance = 1f / 6.0f;
+        private static float _nearFull = 1f / 6.0f;
+        private static readonly int Override = Shader.PropertyToID("Override");
 
 
         private void Start()
@@ -21,21 +23,12 @@ namespace MoveSync
 
         void UpdateColor(bool initial = false)
         {
-            float dColor = (PlayerBehaviour.instance.transform.position - transform.position).magnitude;
+            float dColor = (PlayerBehaviour.instance.transform.position - transform.position).magnitude - _nearFull;
             dColor = Mathf.Clamp(dColor * _invNearDistance, 0, 1);
 
             if (initial || dColor < 1.0f)
             {
-                float alpha = _meshRenderer.material.color.a;
-                _meshRenderer.material.color = Color.Lerp(
-                    MoveSyncData.instance.colorData.NearBeatObjectColor,
-                    MoveSyncData.instance.colorData.FarBeatObjectColor,
-                    dColor);
-                _meshRenderer.material.color = new Color(_meshRenderer.material.color.r,
-                    _meshRenderer.material.color.g,
-                    _meshRenderer.material.color.b,
-                    alpha);
-                
+                _meshRenderer.material.SetFloat(Override, dColor);
             }
         }
     }

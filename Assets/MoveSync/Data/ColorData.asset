@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FarBeatObjectColor: {r: 0, g: 0.14372969, b: 1, a: 1}
   NearBeatObjectColor: {r: 1, g: 0, b: 0.8489032, a: 1}
+  DangerBeatObjectColor: {r: 1, g: 0.68235296, b: 0, a: 1}
   DefaultUIBeatObject: {r: 1, g: 1, b: 1, a: 1}
   SelectedUIBeatObject: {r: 1, g: 0.62840426, b: 0, a: 1}
   SelectedPropertiesUIBeatObject: {r: 0, g: 0.7666669, b: 1, a: 1}

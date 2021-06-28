@@ -33,7 +33,7 @@ namespace MoveSync
             _duration = beatObjectData.getModel<DURATION>().value;
             _size = beatObjectData.getModel<SIZE>().value;
             
-            transform.localScale *= _size;
+            transform.localScale *= _size * 2.0f;
             transform.position = _positionOrigin;
 
             if (beatObjectData.tryGetModel<SHAPE>(out var shape))
@@ -46,7 +46,7 @@ namespace MoveSync
             
             _animator.speed = LevelSequencer.instance.toBPM;
         }
-
+        
         void UpdateMovement()
         {
             if (_finishMove) return;
@@ -61,6 +61,13 @@ namespace MoveSync
             transform.position = Vector3.Lerp(_positionOrigin, _positionEnd, dTimeMove);
         }
 
+        void UpdateSize()
+        {
+            if (dTimeDuration < 0) return;
+            
+            transform.localScale = Vector3.one * _size * 2.0f * (1 - dTimeDuration);
+        }
+
         void SpawnAround()
         {
             transform.position = _positionEnd;
@@ -70,15 +77,11 @@ namespace MoveSync
 
         IEnumerator ShootSequence()
         {
-            float dTime;
-
             do
             {
-                dTime = (LevelSequencer.instance.timeBPM - beatObjectData.time) / _duration;
-
                 SpawnAround();
                 yield return new WaitForSeconds(0.2f);
-            } while (dTime < 1.0f);
+            } while (dTimeDuration < 1.0f);
             
             Destroy(gameObject);
         }
@@ -106,6 +109,7 @@ namespace MoveSync
             base.Update();
 
             UpdateMovement();
+            UpdateSize();
         }
 
         protected override void OnTriggered()
@@ -114,5 +118,7 @@ namespace MoveSync
 
             StartCoroutine(ShootSequence());
         }
+
+        private float dTimeDuration => (LevelSequencer.instance.timeBPM - beatObjectData.time) / _duration;
     }
 }

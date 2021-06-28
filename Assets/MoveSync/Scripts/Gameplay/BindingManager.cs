@@ -8,6 +8,7 @@ using UnityEngine.Events;
 
 namespace MoveSync.UI
 {
+    [Serializable]
     public struct BindKey
     {
         public KeyCode key;
@@ -21,6 +22,7 @@ namespace MoveSync.UI
         [HideInInspector] public UnityEventIntParam onFinishAwaitConfirm = new UnityEventIntParam();
         [HideInInspector] public UnityEventIntParam onFinishListening = new UnityEventIntParam();
         [HideInInspector] public UnityEventIntParam onClearBind = new UnityEventIntParam();
+        [HideInInspector] public UnityEvent onUpdate = new UnityEvent();
             
         private Dictionary<int, BindKey> _bind = new Dictionary<int, BindKey>();
         private static int _currentLayer = -1;
@@ -38,6 +40,12 @@ namespace MoveSync.UI
             onStartListening.Invoke(_currentLayer);
         }
 
+        public void ClearAllBinds()
+        {
+            _bind.Clear();
+            onUpdate.Invoke();
+        }
+        
         public void KeyBind(int layer, KeyCode key)
         {
             if (_bind.ContainsKey(layer))
@@ -167,6 +175,22 @@ namespace MoveSync.UI
             onFinishListening.Invoke(_currentLayer);
             _currentLayer = -1;
             _awaitButton = false;
+        }
+
+        void Start()
+        {
+            LevelDataManager.instance.onLoadedSong.AddListener(OnSongLoaded);
+        }
+
+        void OnSongLoaded()
+        {
+            ClearAllBinds();
+            foreach (BindKey bindKey in LevelDataManager.instance.levelInfo.levelEditorInfo.bindKeys)
+            {
+                ObjectBind(bindKey.beatObjectData.editorLayer, bindKey.beatObjectData);
+                KeyBind(bindKey.beatObjectData.editorLayer, bindKey.key);
+                onUpdate.Invoke();
+            }
         }
 
 

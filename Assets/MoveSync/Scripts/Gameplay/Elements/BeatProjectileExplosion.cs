@@ -33,7 +33,7 @@ namespace MoveSync
             _size = beatObjectData.getModel<SIZE>().value;
             _shape = beatObjectData.getModel<SHAPE>().mesh;
             
-            transform.localScale *= _size;
+            transform.localScale *= _size * 2.0f;
             transform.position = _positionOrigin;
 
             _animator.speed = LevelSequencer.instance.toBPM;

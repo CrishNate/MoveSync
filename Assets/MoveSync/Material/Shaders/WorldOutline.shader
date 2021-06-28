@@ -1,7 +1,7 @@
 Shader "MoveSync/WorldOutline" {
     Properties {
-        _ColorOut ("ColorOut", Color) = (1,1,1,1) 
-        _ColorIn ("ColorIn", Color) = (1,1,1,1) 
+        _Color2 ("Color2", Color) = (1,1,1,1) 
+        _Color ("Color", Color) = (1,1,1,1) 
         _Offset ("Offset", Range (0, 1)) = 1
         _Factor ("Factor", Range (0, 100)) = 1
     }
@@ -15,8 +15,8 @@ Shader "MoveSync/WorldOutline" {
 
         sampler2D _MainTex;
         float _Shininess;
-        fixed4 _ColorOut; 
-        fixed4 _ColorIn;
+        fixed4 _Color2; 
+        fixed4 _Color;
         float _Offset;
         float _Factor;
 
@@ -28,15 +28,15 @@ Shader "MoveSync/WorldOutline" {
         };
 
         void surf (Input IN, inout SurfaceOutput o) {
-            half factor1 = dot(normalize(IN.viewDir), normalize(IN.worldNormal));
+            half factor1 = dot(normalize(IN.viewDir),o.Normal);
             half factor2 = dot(normalize(IN.worldRefl), normalize(IN.viewDir));
             half factor = (factor1 * (1 - factor2));
             factor *= 2;
             factor -= 1;
             factor = 1 / (1 + exp(-factor * _Factor * abs(_Offset - 0.5)));
             
-            fixed4 color1 = _ColorOut + (_ColorIn - _ColorOut) * _Offset;
-            fixed4 color2 = _ColorIn + (_ColorOut - _ColorIn) * _Offset;
+            fixed4 color1 = _Color2 + (_Color - _Color2) * _Offset;
+            fixed4 color2 = _Color + (_Color2 - _Color) * _Offset;
             
             o.Emission.rgb = color1 + (color2 - color1) * factor;
         }

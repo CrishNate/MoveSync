@@ -72,7 +72,7 @@ namespace MoveSync.UI
             LevelDataManager.instance.ClearLayer(layer);
         }
 
-        void UpdateUI(BindKey bindKey)
+        public void UpdateUI(BindKey bindKey)
         {
             if (bindKey.beatObjectData != null)
             {
