@@ -18,6 +18,7 @@ public abstract class BaseProjectile : MonoBehaviour
         public float appearTime;
         public float scale;
         public float speed;
+        public int count;
         public Mesh shape;
     }
     

@@ -18,7 +18,7 @@ namespace MoveSync
         private FadeState _fadeState = FadeState.Appear;
 
         private static float _appearSpeed = 1.0f;
-        private static float _disappearAfterTimeBPM = 10.0f;
+        private static float _disappearAfterTimeBPM = 0.0f;
         
         
         public override void Init(ProjectileParam initParam)
@@ -43,7 +43,7 @@ namespace MoveSync
             FadeUpdate();
             
             if (LevelSequencer.instance.timeBPM < (timeStamp - appearTime)
-                || LevelSequencer.instance.timeBPM > (timeStamp + _disappearAfterTimeBPM + _appearSpeed))
+                || LevelSequencer.instance.timeBPM > (timeStamp + _appearSpeed + duration))
             {
                 Destroy(gameObject);
             }
@@ -64,12 +64,12 @@ namespace MoveSync
                     break;
                 
                 case FadeState.Stay:
-                    if (LevelSequencer.instance.timeBPM > timeStamp + _disappearAfterTimeBPM)
+                    if (LevelSequencer.instance.timeBPM > timeStamp + duration)
                         _fadeState = FadeState.Disappear;
                     break;
                     
                 case FadeState.Disappear:
-                    dTime = (LevelSequencer.instance.timeBPM - (timeStamp + _disappearAfterTimeBPM)) / _appearSpeed;
+                    dTime = (LevelSequencer.instance.timeBPM - (timeStamp + duration)) / _appearSpeed;
                     dTime = 1 - dTime;
                     transform.localScale = Vector3.one * (scale * dTime);
                     break;

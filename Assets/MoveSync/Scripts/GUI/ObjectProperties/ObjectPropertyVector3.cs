@@ -17,9 +17,9 @@ namespace MoveSync.UI
             base.Init(modelInput, parentObjectProperties);
             requireUpdateSort = false;
             
-            _xInputTextField.onValueChanged.AddListener(x=> OnUpdateValue());
-            _yInputTextField.onValueChanged.AddListener(x=> OnUpdateValue());
-            _zInputTextField.onValueChanged.AddListener(x=> OnUpdateValue());
+            _xInputTextField.onEndEdit.AddListener(x=> OnUpdateValue());
+            _yInputTextField.onEndEdit.AddListener(x=> OnUpdateValue());
+            _zInputTextField.onEndEdit.AddListener(x=> OnUpdateValue());
         }
 
         public override void UpdateUI()

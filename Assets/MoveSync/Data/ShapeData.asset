@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shapes:
     m_keys:
-    - sphere
     - icosphere
+    - sphere
     - cube
     - cubeSpike
     - sphereSpike
     - prism
     - tetrahedron
     m_values:
-    - {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
     - {fileID: 289301614986012343, guid: c703c17fd493c1643b64d9e032d1d5d7, type: 3}
+    - {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
     - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
     - {fileID: -5495902117074765545, guid: d9ab2024044273647845462486acd2fc, type: 3}
     - {fileID: 289301614986012343, guid: 13d3d770fd798d04db04d4f820d260e9, type: 3}

@@ -92,6 +92,8 @@ namespace MoveSync.UI
 
         void Start()
         {
+            print(123123);
+
             _bindKeyButton.onClick.AddListener(() => BindingManager.instance.StartListening(layer));
             bindButton.onLeftClick.AddListener(() => BindingManager.instance.ObjectBind(layer));
             bindButton.onMiddleClick.AddListener(() => BindingManager.instance.RemoveKeyBind(layer));

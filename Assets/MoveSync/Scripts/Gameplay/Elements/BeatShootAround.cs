@@ -7,9 +7,9 @@ namespace MoveSync
     public class BeatShootAround : BeatObject
     {
         [Header("Beat Projectile Around")]
-        [SerializeField] private float _projectileReachTimeBPM = 1f;
         [SerializeField] private Animator _animator;
 
+        private static readonly float ProjectileDurationBPM = 10f;
         private Vector3 _positionOrigin;
         private Vector3 _positionEnd;
         private float _appear;
@@ -65,7 +65,7 @@ namespace MoveSync
         {
             if (dTimeDuration < 0) return;
             
-            transform.localScale = Vector3.one * _size * 2.0f * (1 - dTimeDuration);
+            transform.localScale = Vector3.one * _size * 2.0f * Mathf.Max(0, 1 - dTimeDuration);
         }
 
         void SpawnAround()
@@ -93,7 +93,7 @@ namespace MoveSync
             {
                 instigator = gameObject,
                 invokeTimeStamp = LevelSequencer.instance.timeBPM,
-                duration = _projectileReachTimeBPM,
+                duration = ProjectileDurationBPM,
                 scale = _size,
                 speed = _speed,
                 shape = _shape
