@@ -114,13 +114,19 @@ namespace MoveSync
                     if (Input.GetKey(bind.Value.key))
                     {
                         LevelDataManager.instance.CopyBeatObject(bind.Value.beatObjectData, time, mouseLayer);
+                        LevelDataManager.instance.SortBeatObjects();
                         usedBind = true;
                         break;
                     }
                 }
-                
+
                 if (!usedBind && ObjectManager.instance.currentObjectModel != null)
-                    LevelDataManager.instance.NewBeatObject(ObjectManager.instance.currentObjectModel, time, mouseLayer);
+                {
+                    LevelDataManager.instance.NewBeatObject(ObjectManager.instance.currentObjectModel, time,
+                        mouseLayer);
+                    
+                    LevelDataManager.instance.SortBeatObjects();
+                }
             }
 
             // wipe click

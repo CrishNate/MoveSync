@@ -21,11 +21,17 @@ MonoBehaviour:
     - sphereSpike
     - prism
     - tetrahedron
+    - gum
+    - hull
+    - spinCircle
     m_values:
-    - {fileID: 289301614986012343, guid: c703c17fd493c1643b64d9e032d1d5d7, type: 3}
+    - {fileID: 289301614986012343, guid: 2fb0569f16f2f124eb4a5750266c8779, type: 3}
     - {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
     - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
     - {fileID: -5495902117074765545, guid: d9ab2024044273647845462486acd2fc, type: 3}
     - {fileID: 289301614986012343, guid: 13d3d770fd798d04db04d4f820d260e9, type: 3}
     - {fileID: -6875603191141184912, guid: b7055c575c77e494fbd555bcee74e8e4, type: 3}
     - {fileID: 3613567641014311022, guid: caad8da2139412f47ad7f23b0f8aad85, type: 3}
+    - {fileID: -8324885887730815642, guid: 1d7069a2bf8ed8d49ab0b7769c857ff5, type: 3}
+    - {fileID: -4976696533269558607, guid: 8e1c3c4439b16c647840a062893bc714, type: 3}
+    - {fileID: 130447659206988710, guid: 24c8e142a3f8066418bef1cfbf180a2a, type: 3}

@@ -179,7 +179,6 @@ namespace MoveSync.UI
 
         void Start()
         {
-            print(12312321);
             LevelDataManager.instance.onLoadedSong.AddListener(OnSongLoaded);
         }
 

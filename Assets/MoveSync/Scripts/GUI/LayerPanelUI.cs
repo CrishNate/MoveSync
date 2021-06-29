@@ -24,17 +24,17 @@ namespace MoveSync.UI
             _layers.Add(layerUi);
         }
 
-        private void Update()
-        {
-            int requireCount = Mathf.CeilToInt(_content.rect.height / ((RectTransform) _instance.transform).rect.height);
-            if (requireCount > _layers.Count)
-            {
-                for (int i = 0; i < requireCount - _layers.Count; i++)
-                {
-                    AddLayer(layersCount++);
-                }
-            }
-        }
+        // private void Update()
+        // {
+        //     int requireCount = Mathf.CeilToInt(_content.rect.height / ((RectTransform) _instance.transform).rect.height);
+        //     if (requireCount > _layers.Count)
+        //     {
+        //         for (int i = 0; i < requireCount - _layers.Count; i++)
+        //         {
+        //             AddLayer(layersCount++);
+        //         }
+        //     }
+        // }
 
         bool TryGetLayerByData(BeatObjectData beatObjectData, out LayerUI layerUi)
         {
@@ -78,6 +78,9 @@ namespace MoveSync.UI
         {
             _instance.SetActive(false);
 
+            for (int i = 0; i < 15; i++)
+                AddLayer(layersCount++);
+            
             BindingManager.instance.onStartListening.AddListener(x => _layers[x].OnStartListening());
             BindingManager.instance.onFinishListening.AddListener(x => _layers[x].OnFinishListening());
             BindingManager.instance.onStartAwaitConfirm.AddListener(x => _layers[x].OnStartObjectBind());

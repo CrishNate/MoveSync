@@ -12,8 +12,7 @@ namespace MoveSync
     public class RandomManager : Singleton<RandomManager>
     {
         private static Vector3 _lastSpawnPosition;
-        
-        
+
         public Vector3 GetRandomPoint(POSITION position)
         {
             Vector3 point1 = position.value;

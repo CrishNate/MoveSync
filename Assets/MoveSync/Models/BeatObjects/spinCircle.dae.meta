@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: b7055c575c77e494fbd555bcee74e8e4
+guid: 24c8e142a3f8066418bef1cfbf180a2a
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
   externalObjects: {}
   materials:
-    materialImportMode: 0
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -43,7 +43,7 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
-    fileIdsGeneration: 1
+    fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -95,7 +95,7 @@ ModelImporter:
   animationType: 2
   humanoidOversampling: 1
   avatarSetup: 0
-  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
