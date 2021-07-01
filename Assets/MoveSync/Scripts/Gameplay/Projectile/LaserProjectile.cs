@@ -33,7 +33,7 @@ namespace MoveSync
 
             _laserGameObject.transform.localScale = Vector3.zero;
             if (_lineRenderer) 
-                _savedWidth = _lineRenderer.startWidth;
+                _savedWidth = _lineRenderer.startWidth * initParam.scale;
 
             _warningGameObject.SetActive(true);
 
