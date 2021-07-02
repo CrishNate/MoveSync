@@ -67,7 +67,7 @@ Shader "MoveSync/UnlitTransparentColorFog" {
                 fixed4 colGlow = tex2D(_MainTex, i.uv);
 
             	// 0.3 is somehow a magic coef for this
-                i.color.a = (colGlow.a + colFog.a * colGlow.a) * clamp(_ProjectionParams.z * 0.3f - i.scrPos.z * _ProjectionParams.z, 0, 1);
+                i.color.a *= (colGlow.a + colFog.a * colGlow.a) * clamp(_ProjectionParams.z * 0.3f - i.scrPos.z * _ProjectionParams.z, 0, 1);
             	return i.color;
             }
             ENDCG

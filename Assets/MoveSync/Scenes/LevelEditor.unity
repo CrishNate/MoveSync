@@ -13550,7 +13550,7 @@ GameObject:
   - component: {fileID: 1438616921}
   - component: {fileID: 1438616924}
   - component: {fileID: 1438616923}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15309,7 +15309,8 @@ GameObject:
   - component: {fileID: 1769237688}
   - component: {fileID: 1769237690}
   - component: {fileID: 1769237689}
-  m_Layer: 0
+  - component: {fileID: 1769237691}
+  m_Layer: 8
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15380,6 +15381,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1769237687}
   m_Mesh: {fileID: 289301614986012343, guid: 2fb0569f16f2f124eb4a5750266c8779, type: 3}
+--- !u!135 &1769237691
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769237687}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5000001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1770734476
 GameObject:
   m_ObjectHideFlags: 0

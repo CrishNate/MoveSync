@@ -41,6 +41,8 @@ namespace MoveSync
         
         void Update()
         {
+            if (_appearTime <= 0) return;
+            
             float appearDelta = (LevelSequencer.instance.timeBPM - _startTimeStamp) / _appearTime;
             float dRadius = Mathf.Min(1f, (LevelSequencer.instance.timeBPM - _startTimeStamp) * _invWarningAppearTime);
             float appearRadius = _radius * dRadius;
