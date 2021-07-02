@@ -71,7 +71,7 @@ namespace MoveSync
             while (true)
             {
                 yield return new WaitForSeconds(60.0f);
-                LevelDataManager.instance.SaveFile(LevelDataManager.songPath + "autosave." + LevelDataManager.levelFileType);
+                LevelDataManager.instance.SaveFile(LevelDataManager.songPath + LevelDataManager.autosaveFileName + "." + LevelDataManager.levelFileType);
             }
         }
         

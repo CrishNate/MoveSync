@@ -2,6 +2,8 @@
 
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "MoveSync/UnlitTransparentColorFog" {
     Properties {
 		_Color ("Tint", Color) = (1,1,1,1)
@@ -25,7 +27,9 @@ Shader "MoveSync/UnlitTransparentColorFog" {
             #pragma vertex vert
             #include "UnityCG.cginc"
 		    
-            // vertex shader inputs
+			fixed4 _Color;
+
+		    // vertex shader inputs
             struct appdata
             {
                 float4 vertex   : POSITION; // vertex position
@@ -39,14 +43,14 @@ Shader "MoveSync/UnlitTransparentColorFog" {
                 float4 scrPos   : TEXCOORD1;
 				fixed4 color    : COLOR;
             };
-                
-			fixed4 _Color;
+
             v2f vert(appdata v) {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.scrPos = ComputeScreenPos(o.vertex);
 				o.color = v.color * _Color;
                 o.uv = v.uv;
+
                 return o;
             }
 
@@ -56,11 +60,12 @@ Shader "MoveSync/UnlitTransparentColorFog" {
 		    
             float4 frag(v2f i):COLOR {
                 const float ratio = _ScreenParams.x / _ScreenParams.y;
-                fixed4 colFog = tex2D(_FogNoise, float4(i.scrPos.x / i.scrPos.w, i.scrPos.y / ratio / i.scrPos.w, 0, 0));
+                fixed4 colFog = tex2D(_FogNoise, float4(i.scrPos.x / i.scrPos.w, i.scrPos.y / ratio / i.scrPos.w, 0, 0) + _Time.x * 0.5f);
                 fixed4 colGlow = tex2D(_MainTex, i.uv);
 
-                i.color.a = (colGlow.a + colFog.a * colGlow.a);
-                return i.color;
+            	// 0.3 is somehow a magic coef for this
+                i.color.a = (colGlow.a + colFog.a * colGlow.a) * clamp(_ProjectionParams.z * 0.3f - i.scrPos.z * _ProjectionParams.z, 0, 1);
+            	return i.color;
             }
             ENDCG
         }

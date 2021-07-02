@@ -14,6 +14,16 @@ namespace MoveSync
     [Serializable]
     public struct SongInfo
     {
+        public string songName;
+        public string songAuthor;
+        public string songFile;
+        public string coverFile;
+        public SongParams songParams;
+    }
+    
+    [Serializable]
+    public struct SongParams
+    {
         public float bpm;
         public float offset;
     }
@@ -134,19 +144,24 @@ namespace MoveSync
     
     public class LevelInfo
     {
-        public string songName;
-        public string songFile;
         public SongInfo songInfo;
         public LevelEditorInfo levelEditorInfo;
 
         public List<BeatObjectData> beatObjectDatas;
     }
-
+    
+    class LevelInfoOnlySongInfo
+    {
+        public SongInfo songInfo;
+    }
+    
     public class LevelDataManager : Singleton<LevelDataManager>
     {
         public static string resourcePath => Application.dataPath + "/Resources/";
         public static string songPath => resourcePath + "Songs/";
+        public static string coverPath => songPath + "Cover/";
         public static string levelFileType = "mslevel";
+        public static string autosaveFileName = "autosave";
 
         public UnityEventBeatObjectData onNewObject = new UnityEventBeatObjectData();
         public UnityEventIntParam onUpdateObject = new UnityEventIntParam();
@@ -264,7 +279,7 @@ namespace MoveSync
 
         public void SaveFile(string filePath)
         {
-            levelInfo.songInfo = LevelSequencer.instance.songInfo;
+            levelInfo.songInfo.songParams = LevelSequencer.instance.songParams;
             levelInfo.levelEditorInfo.bindKeys = BindingManager.instance.bind.Values.ToList();
             
             string levelJson = JsonUtility.ToJson(levelInfo);
@@ -273,11 +288,29 @@ namespace MoveSync
 
         public void LoadSong(string filePath)
         {
-            levelInfo.songFile = Path.GetFileNameWithoutExtension(filePath.Replace(resourcePath, ""));
-            LevelSequencer.instance.songInfo = levelInfo.songInfo;
-            LevelSequencer.instance.audioSource.clip = Resources.Load<AudioClip>(levelInfo.songFile);
+            levelInfo.songInfo.songFile = Path.GetFileNameWithoutExtension(filePath.Replace(resourcePath, ""));
+            LevelSequencer.instance.songParams = levelInfo.songInfo.songParams;
+            LevelSequencer.instance.audioSource.clip = Resources.Load<AudioClip>(levelInfo.songInfo.songFile);
 
             onLoadedSong.Invoke();
+        }
+
+        public List<SongInfo> GetLevels()
+        {
+            DirectoryInfo directorySongInfo = new DirectoryInfo(songPath);
+            FileInfo[] fileInfo = directorySongInfo.GetFiles("*." + levelFileType);
+            List<SongInfo> songInfos = new List<SongInfo>();
+
+            foreach (FileInfo file in fileInfo)
+            {
+                if (file.Name == autosaveFileName + "." + levelFileType)
+                    continue;
+
+                SongInfo songInfo = JsonUtility.FromJson<LevelInfoOnlySongInfo>(File.ReadAllText(file.FullName)).songInfo;
+                songInfos.Add(songInfo);
+            }
+
+            return songInfos;
         }
         
         /*
@@ -308,8 +341,8 @@ namespace MoveSync
         void LoadInfo(LevelInfo levelInfo)
         {
             this.levelInfo = levelInfo;
-            LevelSequencer.instance.audioSource.clip = Resources.Load<AudioClip>(levelInfo.songFile);
-            LevelSequencer.instance.songInfo = levelInfo.songInfo;
+            LevelSequencer.instance.audioSource.clip = Resources.Load<AudioClip>(levelInfo.songInfo.songFile);
+            LevelSequencer.instance.songParams = levelInfo.songInfo.songParams;
 
             if (levelInfo.levelEditorInfo == null)
                 levelInfo.levelEditorInfo = new LevelEditorInfo();

@@ -14,7 +14,7 @@ namespace MoveSync
         [SerializeField] private UnityEvent _onRestartFinished;
         [SerializeField] private UnityEvent _onRestart;
 
-        private SongInfo _songInfo;
+        private SongParams _songParams;
         private AudioSource _audioSource;
         private float _restartTime = 1.0f;
         private float _toBPM;
@@ -71,7 +71,7 @@ namespace MoveSync
                 
         public void SetSongOffset(float inSongOffset)
         {
-            _songInfo.offset = inSongOffset;
+            _songParams.offset = inSongOffset;
         }
         
         void RestartFinish()
@@ -83,12 +83,12 @@ namespace MoveSync
             _onRestartFinished.Invoke();
         }
 
-        public SongInfo songInfo
+        public SongParams songParams
         {
-            get => _songInfo;
+            get => _songParams;
             set
             {
-                _songInfo = value;
+                _songParams = value;
                 _toBPM = value.bpm / 60.0f;
                 _toTime = 60.0f / value.bpm;
                 _invFrequency = 1.0f / audioSource.clip.frequency;
@@ -96,11 +96,11 @@ namespace MoveSync
         }
         public AudioSource audioSource => _audioSource;
         public float timeBPM => time * toBPM;
-        public float bpm => songInfo.bpm;
+        public float bpm => songParams.bpm;
         public float toBPM => _toBPM;
         public float toTime => _toTime;
         public float time => audioSource.timeSamples * _invFrequency - songOffset;
-        public float songOffset => songInfo.offset;
+        public float songOffset => songParams.offset;
         public bool songPlaying => _audioSource.isPlaying;
     }
 }
