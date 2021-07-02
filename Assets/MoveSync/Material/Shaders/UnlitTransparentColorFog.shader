@@ -16,10 +16,11 @@ Shader "MoveSync/UnlitTransparentColorFog" {
         
         ZWrite Off
         Lighting Off
+        Cull Off
         Fog { Mode Off }
 
-        Blend SrcAlpha OneMinusSrcAlpha
-        
+        Blend SrcAlpha One
+    	
         // First Pass
         Pass {
 		    CGPROGRAM
@@ -41,12 +42,14 @@ Shader "MoveSync/UnlitTransparentColorFog" {
                 float2 uv       : TEXCOORD0;
                 float4 vertex   : SV_POSITION;
                 float4 scrPos   : TEXCOORD1;
+                float4 worldPos   : TEXCOORD2;
 				fixed4 color    : COLOR;
             };
 
             v2f vert(appdata v) {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
+                o.worldPos = mul (unity_ObjectToWorld, v.vertex);
                 o.scrPos = ComputeScreenPos(o.vertex);
 				o.color = v.color * _Color;
                 o.uv = v.uv;
@@ -60,7 +63,7 @@ Shader "MoveSync/UnlitTransparentColorFog" {
 		    
             float4 frag(v2f i):COLOR {
                 const float ratio = _ScreenParams.x / _ScreenParams.y;
-                fixed4 colFog = tex2D(_FogNoise, float4(i.scrPos.x / i.scrPos.w, i.scrPos.y / ratio / i.scrPos.w, 0, 0) + _Time.x * 0.5f);
+                fixed4 colFog = tex2D(_FogNoise, float2(i.worldPos.x + i.worldPos.z / 2, i.worldPos.y + i.worldPos.z / 2) * 0.02f + _Time.x * 1.0f);
                 fixed4 colGlow = tex2D(_MainTex, i.uv);
 
             	// 0.3 is somehow a magic coef for this
