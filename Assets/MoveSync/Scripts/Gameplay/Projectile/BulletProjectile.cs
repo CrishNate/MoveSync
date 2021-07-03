@@ -18,8 +18,6 @@ namespace MoveSync
         private FadeState _fadeState = FadeState.Appear;
 
         private static float _appearSpeed = 1.0f;
-        private static float _disappearAfterTimeBPM = 0.0f;
-        
         
         public override void Init(ProjectileParam initParam)
         {

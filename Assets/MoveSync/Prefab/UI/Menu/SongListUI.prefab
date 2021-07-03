@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3944439249599311349}
   - component: {fileID: 2196548706752323973}
   - component: {fileID: 4645985404285523959}
+  - component: {fileID: 9162999087815487689}
   m_Layer: 5
   m_Name: List
   m_TagString: Untagged
@@ -76,7 +77,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0346fac3e4060664dbfcbe0f71a81194, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _songInfoParam:
+    m_PersistentCalls:
+      m_Calls: []
   _songElementUI: {fileID: 692521996960825514}
+  _toggleGroup: {fileID: 9162999087815487689}
+--- !u!114 &9162999087815487689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366318378174192259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 1
 --- !u!1 &1327980442742056176
 GameObject:
   m_ObjectHideFlags: 0
@@ -88,6 +106,7 @@ GameObject:
   - component: {fileID: 1327980442742056177}
   - component: {fileID: 1327980442742056191}
   - component: {fileID: 1327980442742056190}
+  - component: {fileID: 15019638690747505}
   m_Layer: 5
   m_Name: SongListUI
   m_TagString: Untagged
@@ -153,6 +172,36 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &15019638690747505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327980442742056176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 3944439249599311349}
+  m_Horizontal: 1
+  m_Vertical: 0
+  m_MovementType: 1
+  m_Elasticity: 0.1
+  m_Inertia: 1
+  m_DecelerationRate: 0.135
+  m_ScrollSensitivity: 100
+  m_Viewport: {fileID: 0}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 0
+  m_VerticalScrollbarVisibility: 0
+  m_HorizontalScrollbarSpacing: 0
+  m_VerticalScrollbarSpacing: 0
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &5038574157730466362
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -195,6 +244,11 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.85
       objectReference: {fileID: 0}
+    - target: {fileID: 2733808105250233223, guid: 6392512bc5b723d47bdca6367201f05c,
+        type: 3}
+      propertyPath: m_Group
+      value: 
+      objectReference: {fileID: 9162999087815487689}
     - target: {fileID: 2888575389165114854, guid: 6392512bc5b723d47bdca6367201f05c,
         type: 3}
       propertyPath: m_FontData.m_MaxSize
@@ -223,7 +277,7 @@ PrefabInstance:
     - target: {fileID: 6838802537674862283, guid: 6392512bc5b723d47bdca6367201f05c,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6838802537674862283, guid: 6392512bc5b723d47bdca6367201f05c,
         type: 3}
@@ -233,17 +287,17 @@ PrefabInstance:
     - target: {fileID: 6838802537674862283, guid: 6392512bc5b723d47bdca6367201f05c,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6838802537674862283, guid: 6392512bc5b723d47bdca6367201f05c,
-        type: 3}
-      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6838802537674862283, guid: 6392512bc5b723d47bdca6367201f05c,
         type: 3}
-      propertyPath: m_SizeDelta.y
+      propertyPath: m_SizeDelta.x
       value: 280
+      objectReference: {fileID: 0}
+    - target: {fileID: 6838802537674862283, guid: 6392512bc5b723d47bdca6367201f05c,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6838802537674862283, guid: 6392512bc5b723d47bdca6367201f05c,
         type: 3}
@@ -283,12 +337,12 @@ PrefabInstance:
     - target: {fileID: 6838802537674862283, guid: 6392512bc5b723d47bdca6367201f05c,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 990
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6838802537674862283, guid: 6392512bc5b723d47bdca6367201f05c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -140
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6838802537674862283, guid: 6392512bc5b723d47bdca6367201f05c,
         type: 3}

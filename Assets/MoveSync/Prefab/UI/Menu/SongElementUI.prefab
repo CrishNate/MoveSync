@@ -322,7 +322,7 @@ GameObject:
   - component: {fileID: 6719783872160933568}
   - component: {fileID: 6897038250617703427}
   - component: {fileID: 5508123992336255632}
-  - component: {fileID: 1030051656507296430}
+  - component: {fileID: 2733808105250233223}
   m_Layer: 5
   m_Name: SongElementUI
   m_TagString: Untagged
@@ -431,9 +431,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 965ecae138349e6478e91e1d2b927b9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  songName: {fileID: 2888575389165114854}
-  songAuthor: {fileID: 2013521777142018120}
---- !u!114 &1030051656507296430
+  _cover: {fileID: 4041128223508933277}
+  _nameText: {fileID: 2888575389165114854}
+  _authorText: {fileID: 2013521777142018120}
+  _toggle: {fileID: 2733808105250233223}
+--- !u!114 &2733808105250233223
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -442,7 +444,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7786681087269570975}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -455,9 +457,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0, g: 0, b: 0, a: 0}
-    m_HighlightedColor: {r: 1, g: 0.9142746, b: 0, a: 1}
-    m_PressedColor: {r: 1, g: 0, b: 0.956861, a: 1}
-    m_SelectedColor: {r: 0, g: 0.7137255, b: 1, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.9315591, b: 0, a: 1}
+    m_PressedColor: {r: 0.85, g: 0.74764407, b: 0, a: 1}
+    m_SelectedColor: {r: 0, g: 0.6568682, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -474,9 +476,13 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 8263264381337935318}
-  m_OnClick:
+  toggleTransition: 1
+  graphic: {fileID: 0}
+  m_Group: {fileID: 0}
+  onValueChanged:
     m_PersistentCalls:
       m_Calls: []
+  m_IsOn: 0
 --- !u!1 &7985199679849182111
 GameObject:
   m_ObjectHideFlags: 0

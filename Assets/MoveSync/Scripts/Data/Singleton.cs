@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
  
 /// <summary>
 /// Inherit from this base class to create a singleton.
@@ -10,7 +11,13 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     private static bool m_ShuttingDown = false;
     private static object m_Lock = new object();
     private static T m_Instance;
- 
+
+    private void OnEnable()
+    {
+        // Make instance persistent.
+        DontDestroyOnLoad(gameObject);
+    }
+
     /// <summary>
     /// Access singleton instance through this propriety.
     /// </summary>
@@ -39,10 +46,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                         var singletonObject = new GameObject();
                         m_Instance = singletonObject.AddComponent<T>();
                         singletonObject.name = typeof(T).ToString() + " (Singleton)";
- 
-                        // Make instance persistent.
-                        DontDestroyOnLoad(singletonObject);
-                    }
+ }
                 }
  
                 return m_Instance;

@@ -19,6 +19,7 @@ namespace MoveSync
         public string songFile;
         public string coverFile;
         public SongParams songParams;
+        [NonSerialized] public string filePath;
     }
     
     [Serializable]
@@ -130,6 +131,15 @@ namespace MoveSync
             get
             {
                 if (tryGetModel<APPEAR>(out var appear)) return time - appear.value;
+
+                return time;
+            }
+        }
+        public float durationTime
+        {
+            get
+            {
+                if (tryGetModel<DURATION>(out var durationModel)) return time + durationModel.value;
 
                 return time;
             }
@@ -295,7 +305,7 @@ namespace MoveSync
             onLoadedSong.Invoke();
         }
 
-        public List<SongInfo> GetLevels()
+        public static List<SongInfo> GetLevels()
         {
             DirectoryInfo directorySongInfo = new DirectoryInfo(songPath);
             FileInfo[] fileInfo = directorySongInfo.GetFiles("*." + levelFileType);
@@ -307,6 +317,7 @@ namespace MoveSync
                     continue;
 
                 SongInfo songInfo = JsonUtility.FromJson<LevelInfoOnlySongInfo>(File.ReadAllText(file.FullName)).songInfo;
+                songInfo.filePath = songPath + file.Name;
                 songInfos.Add(songInfo);
             }
 

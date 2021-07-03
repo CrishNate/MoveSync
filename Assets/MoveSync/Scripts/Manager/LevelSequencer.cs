@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -10,24 +11,50 @@ namespace MoveSync
     [RequireComponent(typeof(AudioSource))]
     public class LevelSequencer : Singleton<LevelSequencer>
     {
-        [Header("Events")] 
-        [SerializeField] private UnityEvent _onRestartFinished;
-        [SerializeField] private UnityEvent _onRestart;
+        public UnityEvent onRestartFinished;
+        public UnityEvent onRestart;
+        public UnityEvent onLevelFinished;
+        
+        private bool _pendingLevelFinished;
 
         private SongParams _songParams;
         private AudioSource _audioSource;
-        private float _restartTime = 1.0f;
+        private static float _restartTime = 1.0f;
+        private static float _volumeTime = 1.0f;
+        
         private float _toBPM;
         private float _toTime;
         // sequencing with song
         private float _invFrequency;
+        private float _songLengthBPM;
         
+        private float _lastBeatObjectTimeBPM;
 
         void Awake()
         {
             _audioSource = GetComponent<AudioSource>();
         }
 
+        private void Start()
+        {
+            LevelDataManager.instance.onLoadedSong.AddListener(RecalculateLastBeatObjectTime);
+        }
+
+        void Update()
+        {
+            if (timeBPM > _lastBeatObjectTimeBPM && !_pendingLevelFinished)
+            {
+                SongFinished();
+            }
+        }
+        
+        public void Restart()
+        {
+            StartCoroutine(RestartCoroutine());
+
+            onRestart.Invoke();
+        }
+        
         IEnumerator RestartCoroutine()
         {
             while (audioSource.pitch > 0)
@@ -43,13 +70,15 @@ namespace MoveSync
             RestartFinish();
         }
 
-        public void Restart()
+        void RestartFinish()
         {
-            StartCoroutine(RestartCoroutine());
+            audioSource.pitch = 1.0f;
+            audioSource.Play();
 
-            _onRestart.Invoke();
+            PlayerBehaviour.instance.Restart();
+            onRestartFinished.Invoke();
         }
-
+        
         public void Play()
         {
             audioSource.Play();
@@ -74,15 +103,54 @@ namespace MoveSync
             _songParams.offset = inSongOffset;
         }
         
-        void RestartFinish()
+        public void StartSong()
         {
-            audioSource.pitch = 1.0f;
-            audioSource.Play();
+            Play();
+            
+            StartCoroutine(FadeInVolume());
+        }
+        
+        void SongFinished()
+        {
+            onLevelFinished.Invoke();
+            _pendingLevelFinished = true;
 
-            PlayerBehaviour.instance.Restart();
-            _onRestartFinished.Invoke();
+            StartCoroutine(FadeOutVolume());
+        }
+        
+        // Volume Coroutine
+        IEnumerator FadeOutVolume()
+        {
+            while (audioSource.volume > 0)
+            {
+                audioSource.volume -= Time.deltaTime / _volumeTime;
+                yield return null;
+            }
+
+            audioSource.volume = 0;
+        }
+        
+        IEnumerator FadeInVolume()
+        {
+            audioSource.volume = 0;
+            
+            while (audioSource.volume < 1)
+            {
+                audioSource.volume += Time.deltaTime / _volumeTime;
+                yield return null;
+            }
+
+            audioSource.volume = 1;
         }
 
+        void RecalculateLastBeatObjectTime()
+        {
+            if (LevelDataManager.instance.levelInfo.beatObjectDatas.Count == 0) 
+                return;
+            
+            _lastBeatObjectTimeBPM = LevelDataManager.instance.levelInfo.beatObjectDatas.Last().durationTime;
+        }
+        
         public SongParams songParams
         {
             get => _songParams;
@@ -94,6 +162,7 @@ namespace MoveSync
                 _invFrequency = 1.0f / audioSource.clip.frequency;
             }
         }
+        
         public AudioSource audioSource => _audioSource;
         public float timeBPM => time * toBPM;
         public float bpm => songParams.bpm;

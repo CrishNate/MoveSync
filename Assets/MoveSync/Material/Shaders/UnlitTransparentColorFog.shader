@@ -63,11 +63,11 @@ Shader "MoveSync/UnlitTransparentColorFog" {
 		    
             float4 frag(v2f i):COLOR {
                 const float ratio = _ScreenParams.x / _ScreenParams.y;
-                fixed4 colFog = tex2D(_FogNoise, float2(i.worldPos.x + i.worldPos.z / 2, i.worldPos.y + i.worldPos.z / 2) * 0.02f + _Time.x * 1.0f);
+                fixed4 colFog = tex2D(_FogNoise, float2(i.worldPos.x + i.worldPos.z / 2, i.worldPos.y + i.worldPos.z / 2) * 0.01f + _Time.x * 1.0f);
                 fixed4 colGlow = tex2D(_MainTex, i.uv);
 
-            	// 0.3 is somehow a magic coef for this
-                i.color.a *= (colGlow.a + colFog.a * colGlow.a) * clamp(_ProjectionParams.z * 0.3f - i.scrPos.z * _ProjectionParams.z, 0, 1);
+            	// 0.3 is somehow a magic coeficient for this depth
+                i.color.a *= (colGlow.a + colFog.r * colGlow.a) * clamp(_ProjectionParams.z * 0.3f - i.scrPos.z * _ProjectionParams.z, 0, 1);
             	return i.color;
             }
             ENDCG
