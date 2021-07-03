@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5551115276321841416}
   - component: {fileID: 557849172226823281}
   - component: {fileID: 3428803396605115870}
-  - component: {fileID: 5992836915441081091}
   m_Layer: 9
   m_Name: LaserFog
   m_TagString: Untagged
@@ -95,19 +94,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ea6bbdf00a4217890a7405ff5cead8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5992836915441081091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 573282201461750094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c177b43dffe645379fea985757c228e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _meshRenderer: {fileID: 557849172226823281}
 --- !u!1 &6637416293251459964
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,7 +105,7 @@ GameObject:
   - component: {fileID: 7658247106988235119}
   - component: {fileID: 2122565597867962216}
   - component: {fileID: 775941484455051412}
-  - component: {fileID: 7701178482550352249}
+  - component: {fileID: 3631195620443842712}
   m_Layer: 9
   m_Name: BulletProjectileVisual
   m_TagString: Untagged
@@ -191,7 +177,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7701178482550352249
+--- !u!114 &3631195620443842712
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -69,7 +69,10 @@ namespace MoveSync
 
         private void OnDestroy()
         {
-            LevelSequencer.instance.onLevelFinished.RemoveListener(ToMenu);
+            if (LevelSequencer.instance)
+            {
+                LevelSequencer.instance.onLevelFinished.RemoveListener(ToMenu);
+            }
         }
     }
 }
