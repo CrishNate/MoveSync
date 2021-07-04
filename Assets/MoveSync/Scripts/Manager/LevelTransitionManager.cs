@@ -41,12 +41,14 @@ namespace MoveSync
         
         public void TransitToLevel()
         {
-            SceneManager.LoadScene($"Level");
+            SceneManager.UnloadSceneAsync($"Menu");
+            SceneManager.LoadSceneAsync($"Level");
         }
 
         public void TransitToMenu()
         {
-            SceneManager.LoadScene($"Menu");
+            SceneManager.UnloadSceneAsync($"Level");
+            SceneManager.LoadSceneAsync($"Menu");
         }
         
         void Start()
