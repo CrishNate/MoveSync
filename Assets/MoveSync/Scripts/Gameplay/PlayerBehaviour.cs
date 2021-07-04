@@ -11,6 +11,8 @@ namespace MoveSync
         [SerializeField] private UnityEvent _onHit;
         [SerializeField] private UnityEvent _onInvincibilityEnd;
 
+        [SerializeField] private GameObject _fullSizeCollider;
+
         [Header("Health")] public int maxHealth;
         [HideInInspector] public int health;
 
@@ -30,6 +32,11 @@ namespace MoveSync
             {
                 _invincibilityTimeStamp = 0.0f;
                 _onInvincibilityEnd.Invoke();
+            }
+
+            if (_fullSizeCollider)
+            {
+                _fullSizeCollider.transform.rotation = Quaternion.identity;
             }
         }
 
