@@ -40,7 +40,7 @@ namespace MoveSync
         {
             if (beatObjectData.hasModel<EVENT>())
             {
-                EventManager.instance.InvokeEvent(beatObjectData.getModel<EVENT>().value, beatObjectData.time);
+                EventManager.instance.InvokeEvent(beatObjectData.getModel<EVENT>().msEvent, beatObjectData.time);
             }
             else
             {

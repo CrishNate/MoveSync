@@ -6,10 +6,10 @@ namespace MoveSync
 {
     public class EventManager : Singleton<EventManager>
     {
-        private Dictionary<PropertyName, UnityEventFloatParam> _events = new Dictionary<PropertyName, UnityEventFloatParam>();
+        private Dictionary<MoveSyncEvent, UnityEventFloatParam> _events = new Dictionary<MoveSyncEvent, UnityEventFloatParam>();
 
 
-        public void InvokeEvent(PropertyName name, float timeBPM)
+        public void InvokeEvent(MoveSyncEvent name, float timeBPM)
         {
             UnityEventFloatParam gotEvent;
             if (_events.TryGetValue(name, out gotEvent))
@@ -22,7 +22,7 @@ namespace MoveSync
             }
         }
         
-        public void BindEvent(PropertyName name, UnityAction<float> action)
+        public void BindEvent(MoveSyncEvent name, UnityAction<float> action)
         {
             UnityEventFloatParam gotEvent;
             if (!_events.TryGetValue(name, out gotEvent))
@@ -31,6 +31,14 @@ namespace MoveSync
             }
             
             gotEvent.AddListener(action);
+        }
+
+        public void UnbindEvent(MoveSyncEvent name, UnityAction<float> action)
+        {
+            if (_events.TryGetValue(name, out UnityEventFloatParam gotEvent))
+            {
+                gotEvent.RemoveListener(action);
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ public class SongInfoUI : MonoBehaviour
     [SerializeField] private UnityEventSongInfoParam _onButtonStart;
 
     private SongInfo _selectedSongInfo;
+    private Coroutine _songPreviewCoroutine;
     
     private static readonly int Appear = Animator.StringToHash("Appear");
 
@@ -43,10 +44,36 @@ public class SongInfoUI : MonoBehaviour
         var audioClip = Resources.Load<AudioClip>(songInfo.songFile);
         if (audioClip)
             _songLength.text = $"{audioClip.length / 60:#0}:{audioClip.length % 60:00}";
+
+        // Preview song
+        LevelSequencer.instance.blockLevelFinishing = true;
+        LevelSequencer.instance.audioSource.clip = audioClip;
+        LevelSequencer.instance.songParams = songInfo.songParams;
+
+        if (_songPreviewCoroutine != null)
+            StopCoroutine(_songPreviewCoroutine);
+        
+        _songPreviewCoroutine = StartCoroutine(SongPreviewTime());
+    }
+
+    IEnumerator SongPreviewTime()
+    {
+        LevelSequencer.instance.StartSong();
+        LevelSequencer.instance.SetSongTime(_selectedSongInfo.songPreviewStart);
+        
+        yield return new WaitForSeconds(10.0f);
+        
+        LevelSequencer.instance.SongFadeOut();
     }
 
     private void Start()
     {
-        _buttonStart.onClick.AddListener(() => _onButtonStart.Invoke(_selectedSongInfo));
+        _buttonStart.onClick.AddListener(() =>
+        {
+            _onButtonStart.Invoke(_selectedSongInfo);
+            StopCoroutine(_songPreviewCoroutine);
+            LevelSequencer.instance.audioSource.Stop();
+            LevelSequencer.instance.blockLevelFinishing = false;
+        });
     }
 }

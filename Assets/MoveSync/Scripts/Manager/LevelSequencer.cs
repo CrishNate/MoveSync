@@ -29,6 +29,9 @@ namespace MoveSync
         private float _songLengthBPM;
         
         private float _lastBeatObjectTimeBPM;
+        
+        // debug stuff
+        public bool blockLevelFinishing;
 
         void Awake()
         {
@@ -42,6 +45,9 @@ namespace MoveSync
 
         void Update()
         {
+            if (!songPlaying || blockLevelFinishing) 
+                return;
+            
             if (timeBPM > _lastBeatObjectTimeBPM && !_pendingLevelFinished)
             {
                 SongFinished();
@@ -105,9 +111,17 @@ namespace MoveSync
         
         public void StartSong()
         {
+            SetSongTime(0);
+
             Play();
-            
+            _pendingLevelFinished = false;
+
             StartCoroutine(FadeInVolume());
+        }
+
+        public void SongFadeOut()
+        {
+            StartCoroutine(FadeOutVolume());
         }
         
         void SongFinished()
@@ -115,7 +129,7 @@ namespace MoveSync
             onLevelFinished.Invoke();
             _pendingLevelFinished = true;
 
-            StartCoroutine(FadeOutVolume());
+            SongFadeOut();
         }
         
         // Volume Coroutine
@@ -128,6 +142,7 @@ namespace MoveSync
             }
 
             audioSource.volume = 0;
+            audioSource.Stop();
         }
         
         IEnumerator FadeInVolume()

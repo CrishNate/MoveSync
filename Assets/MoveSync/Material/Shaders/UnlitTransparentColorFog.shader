@@ -41,8 +41,8 @@ Shader "MoveSync/UnlitTransparentColorFog" {
             struct v2f {
                 float2 uv       : TEXCOORD0;
                 float4 vertex   : SV_POSITION;
-                float4 scrPos   : TEXCOORD1;
-                float4 worldPos   : TEXCOORD2;
+                float depth		: TEXCOORD1;
+                float4 worldPos	: TEXCOORD2;
 				fixed4 color    : COLOR;
             };
 
@@ -50,7 +50,7 @@ Shader "MoveSync/UnlitTransparentColorFog" {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.worldPos = mul (unity_ObjectToWorld, v.vertex);
-                o.scrPos = ComputeScreenPos(o.vertex);
+                o.depth = ComputeScreenPos(o.vertex).z;
 				o.color = v.color * _Color;
                 o.uv = v.uv;
 
@@ -67,7 +67,7 @@ Shader "MoveSync/UnlitTransparentColorFog" {
                 fixed4 colGlow = tex2D(_MainTex, i.uv);
 
             	// 0.3 is somehow a magic coeficient for this depth
-                i.color.a *= (colGlow.a + colFog.r * colGlow.a) * clamp(_ProjectionParams.z * 0.3f - i.scrPos.z * _ProjectionParams.z, 0, 1);
+                i.color.a *= (colGlow.a + colFog.r * colGlow.a) * clamp(_ProjectionParams.z * 0.3f - i.depth * _ProjectionParams.z, 0, 1);
             	return i.color;
             }
             ENDCG

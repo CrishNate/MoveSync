@@ -174,6 +174,8 @@ namespace MoveSync.ModelData
         public EVENT()
         {
             type = TYPE;
+            value = MoveSyncData.MoveSyncEvents.First();
         }
+        public MoveSyncEvent msEvent => (MoveSyncEvent)Enum.Parse(typeof(MoveSyncEvent), value);
     }
 }

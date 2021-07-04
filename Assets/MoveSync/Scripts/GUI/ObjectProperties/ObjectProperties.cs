@@ -21,6 +21,7 @@ namespace MoveSync.UI
         [SerializeField] private GameObject _objectPropertyPositionInstance;
         [SerializeField] private GameObject _objectPropertyShapeInstance;
         [SerializeField] private GameObject _objectPropertyProjectileInstance;
+        [SerializeField] private GameObject _objectPropertyEventInstance;
         
         private List<ObjectProperty> _propertiesObjects = new List<ObjectProperty>();
         private BeatObjectData _selectedObject;
@@ -65,6 +66,7 @@ namespace MoveSync.UI
             if (modelInput is Vector3ModelInput) return _objectPropertyVector3Instance;
             if (modelInput is SHAPE) return _objectPropertyShapeInstance;
             if (modelInput is PROJECTILE) return _objectPropertyProjectileInstance;
+            if (modelInput is EVENT) return _objectPropertyEventInstance;
             if (modelInput is StringModelInput) return _objectPropertyStringInstance;
 
             return null;
@@ -118,6 +120,7 @@ namespace MoveSync.UI
             _objectPropertyPositionInstance.SetActive(false);
             _objectPropertyShapeInstance.SetActive(false);
             _objectPropertyProjectileInstance.SetActive(false);
+            _objectPropertyEventInstance.SetActive(false);
             
             _objectProperty.SetActive(false);
             

@@ -41,14 +41,14 @@ namespace MoveSync
         
         public void TransitToLevel()
         {
-            SceneManager.UnloadSceneAsync($"Menu");
             SceneManager.LoadSceneAsync($"Level");
+            SceneManager.UnloadSceneAsync($"Menu");
         }
 
         public void TransitToMenu()
         {
-            SceneManager.UnloadSceneAsync($"Level");
             SceneManager.LoadSceneAsync($"Menu");
+            SceneManager.UnloadSceneAsync($"Level");
         }
         
         void Start()
@@ -71,7 +71,7 @@ namespace MoveSync
 
         private void OnDestroy()
         {
-            if (LevelSequencer.instance)
+            if (!LevelSequencer.isShutDown)
             {
                 LevelSequencer.instance.onLevelFinished.RemoveListener(ToMenu);
             }

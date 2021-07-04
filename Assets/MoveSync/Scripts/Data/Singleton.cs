@@ -65,4 +65,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         m_ShuttingDown = true;
     }
+
+    public static bool isShutDown => m_ShuttingDown;
 }

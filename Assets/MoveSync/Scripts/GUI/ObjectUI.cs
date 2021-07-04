@@ -38,11 +38,12 @@ namespace MoveSync
             else
                 _durationUI.IsShown(false);
 
-            if (LevelEditor.instance.objectIcons.TryGetValue(data.objectTag, out Sprite sprite))
+            _image.color = MoveSyncData.instance.colorData.DefaultUIBeatObject;
+
+            if (LevelEditor.isEditor && LevelEditor.instance.objectIcons.TryGetValue(data.objectTag, out Sprite sprite))
             {
                 _image.sprite = sprite;
             }
-            _image.color = MoveSyncData.instance.colorData.DefaultUIBeatObject;
         }
 
         public void OnPointerClick(PointerEventData eventData)

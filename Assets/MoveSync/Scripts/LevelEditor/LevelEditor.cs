@@ -9,7 +9,7 @@ namespace MoveSync
     public class LevelEditor : Singleton<LevelEditor>
     {
         public UnityEventBoolParam onSimulationMode;
-            
+        
         [SerializeField] private GameObject _vrPlayer;
         [SerializeField] private GameObject _nonVrPlayer;
         [SerializeField] private GameObject _centerGizmo;
@@ -19,7 +19,8 @@ namespace MoveSync
         private bool _isSimulation;
         private bool _block;
         private bool _centerGizmoActive;
-        
+
+        public static bool isEditor;
         private static string beatObjectIconsPath = "MoveSync/BeatObjects/Icons/";
 
         public void SimulationMode(bool simulation)
@@ -59,7 +60,10 @@ namespace MoveSync
         
         void Start()
         {
+            isEditor = true;
+            
             ObjectManager.instance.onObjectsLoaded.AddListener(LoadIcons);
+            LevelSequencer.instance.blockLevelFinishing = true;
             
             StartCoroutine(AutoSave());
             

@@ -18,6 +18,7 @@ namespace MoveSync
         public string songAuthor;
         public string songFile;
         public string coverFile;
+        public float songPreviewStart;
         public SongParams songParams;
         [NonSerialized] public string filePath;
     }
