@@ -51,9 +51,9 @@ namespace MoveSync
             return -1f;
         }
 
-        protected override void Update()
+        public override void InnerUpdate()
         {
-            base.Update();
+            base.InnerUpdate();
 
             if (LevelSequencer.instance.timeBPM >= GetDestroyTime())
                 Destroy(gameObject);

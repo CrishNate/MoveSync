@@ -77,9 +77,9 @@ namespace MoveSync
                 .Init(initParam);
         }
 
-        protected override void Update()
+        public override void InnerUpdate()
         {
-            base.Update();
+            base.InnerUpdate();
             
             UpdateMovement();
         }

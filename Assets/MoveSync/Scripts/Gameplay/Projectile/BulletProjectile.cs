@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MoveSync
 {
-    public class BulletProjectile : BaseProjectile
+    public class BulletProjectile : BaseProjectile, BeatUpdate
     {
         enum FadeState
         {
@@ -32,8 +32,10 @@ namespace MoveSync
             transform.localScale = Vector3.zero;
         }
 
-        protected virtual void Update()
+        public override void InnerUpdate()
         {
+            base.InnerUpdate();
+            
             transform.position += transform.forward * (speed * Time.deltaTime *
                                                        LevelSequencer.instance.audioSource.pitch *
                                                        LevelSequencer.instance.toBPM);

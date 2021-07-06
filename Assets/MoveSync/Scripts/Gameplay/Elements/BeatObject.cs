@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace MoveSync
 {
-    public abstract class BeatObject : MonoBehaviour
+    public abstract class BeatObject : MonoBehaviour, BeatUpdate
     {
         [SerializeField] private UnityEvent _onTriggeredEvent;
 
@@ -18,9 +18,19 @@ namespace MoveSync
         {
             _beatObjectData = beatObjectData;
             _spawnTimeBPM = beatObjectData.spawnTime;
+            
+            LevelSequencer.instance.beatObjectInstances.Add(this);
         }
+
+        public void OnDestroy()
+        {
+            if (LevelSequencer.isShutDown) 
+                return;
         
-        protected virtual void Update()
+            LevelSequencer.instance.beatObjectInstances.Remove(this);
+        }
+
+        public virtual void InnerUpdate()
         {
             if (LevelSequencer.instance.timeBPM < _spawnTimeBPM)
             {

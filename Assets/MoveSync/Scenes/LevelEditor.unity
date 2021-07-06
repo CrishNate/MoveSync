@@ -16468,6 +16468,7 @@ MonoBehaviour:
   _onInvincibilityEnd:
     m_PersistentCalls:
       m_Calls: []
+  _fullSizeCollider: {fileID: 0}
   maxHealth: 100
   health: 0
   _invincibilityTime: 2

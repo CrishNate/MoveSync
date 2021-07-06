@@ -42,16 +42,15 @@ namespace MoveSync
             _animator.speed = LevelSequencer.instance.toBPM;
         }
         
-        protected override void Update()
+        public override void InnerUpdate()
         {
-            base.Update();
+            base.InnerUpdate();
             
             if (!(spawnTimeBPM > 0)) return;
             
             float dTimeDuration = _duration > 0 ? Mathf.Max(0, LevelSequencer.instance.timeBPM - (spawnTimeBPM + _appear)) / _duration : 0.0f;
-
-                if (dTimeDuration > 1)
-                    Destroy(gameObject);
+            if (dTimeDuration > 1)
+                Destroy(gameObject);
         }
     }
 }

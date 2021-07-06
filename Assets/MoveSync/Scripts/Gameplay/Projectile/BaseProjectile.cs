@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using MoveSync;
 using UnityEngine;
 
-public abstract class BaseProjectile : MonoBehaviour
+public abstract class BaseProjectile : MonoBehaviour, BeatUpdate
 {
     protected float duration;
     protected float appearTime;
@@ -30,7 +32,18 @@ public abstract class BaseProjectile : MonoBehaviour
         speed = initParam.speed;
         
         timeStamp = initParam.invokeTimeStamp;
+        LevelSequencer.instance.beatObjectInstances.Add(this);
     }
+
+    public void OnDestroy()
+    {
+        if (LevelSequencer.isShutDown) 
+            return;
+        
+        LevelSequencer.instance.beatObjectInstances.Remove(this);
+    }
+
+    public virtual void InnerUpdate() {}
 
     public virtual float GetDisappearTime()
     {

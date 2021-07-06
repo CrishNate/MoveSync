@@ -423,6 +423,7 @@ MonoBehaviour:
   onLevelFinished:
     m_PersistentCalls:
       m_Calls: []
+  blockLevelFinishing: 0
 --- !u!4 &2054386792
 Transform:
   m_ObjectHideFlags: 0

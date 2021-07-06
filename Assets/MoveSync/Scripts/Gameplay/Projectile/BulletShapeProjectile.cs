@@ -35,9 +35,9 @@ namespace MoveSync
             }
         }
 
-        protected override void Update()
+        public override void InnerUpdate()
         {
-            base.Update();
+            base.InnerUpdate();
 
             _time += Time.deltaTime * LevelSequencer.instance.toBPM;
             if (Math.Abs(dRotation) > 0)

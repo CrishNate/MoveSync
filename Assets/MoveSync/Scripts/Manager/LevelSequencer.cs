@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using Random = UnityEngine.Random;
 
 namespace MoveSync
 {
@@ -16,6 +15,7 @@ namespace MoveSync
         public UnityEvent onLevelFinished;
         
         private bool _pendingLevelFinished;
+        private List<BeatUpdate> _beatObjectInstances = new List<BeatUpdate>();
 
         private SongParams _songParams;
         private AudioSource _audioSource;
@@ -24,6 +24,7 @@ namespace MoveSync
         
         private float _toBPM;
         private float _toTime;
+        
         // sequencing with song
         private float _invFrequency;
         private float _songLengthBPM;
@@ -45,9 +46,16 @@ namespace MoveSync
 
         void Update()
         {
+            // Loop update all beat objects
+            for (int i = 0; i < beatObjectInstances.Count; i++)
+            {
+                beatObjectInstances[i].InnerUpdate();
+            }
+            
+            // Song End
             if (!songPlaying || blockLevelFinishing) 
                 return;
-            
+
             if (timeBPM > _lastBeatObjectTimeBPM && !_pendingLevelFinished)
             {
                 SongFinished();
@@ -186,5 +194,6 @@ namespace MoveSync
         public float time => audioSource.timeSamples * _invFrequency - songOffset;
         public float songOffset => songParams.offset;
         public bool songPlaying => _audioSource.isPlaying;
+        public List<BeatUpdate> beatObjectInstances => _beatObjectInstances;
     }
 }
