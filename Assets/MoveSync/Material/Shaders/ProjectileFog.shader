@@ -11,7 +11,6 @@ Shader "MoveSync/ProjectileFog" {
         _MainTex ("Base (RGB) Trans (A)", 2D) = "white" {}
         _FogNoise ("FogNoise", 2D) = "white" {}
         _ColorOverride ("ColorOverride", Color) = (1,1,1,1) 
-        _OffsetDanger ("OffsetDanger", Range(0, 10)) = 1
     }
     
     SubShader 
@@ -34,8 +33,9 @@ Shader "MoveSync/ProjectileFog" {
             #include "UnityCG.cginc"
 		    
 			fixed4 _Color;
-			fixed4 _ColorOverride; 
-            float _OffsetDanger;
+			fixed4 _ColorOverride;
+			static float _OffsetDanger = 0.03;
+			static float _DecreaseDistance = 32;
 
 		    // vertex shader inputs
             struct appdata
@@ -68,8 +68,8 @@ Shader "MoveSync/ProjectileFog" {
 				o.vertex = mul(UNITY_MATRIX_P, viewPos);
 				
                 o.depth = ComputeScreenPos(o.vertex).z;
-            	// 0.3 is somehow a magic coeficient for this depth
-            	o.depth = clamp(_ProjectionParams.z * 0.3f - o.depth * _ProjectionParams.z - _OffsetDanger, 0, 1);
+            	o.depth = (_ProjectionParams.z * 0.01f - o.depth * _ProjectionParams.z - _OffsetDanger) * _DecreaseDistance;
+            	o.depth = clamp(o.depth, 0, 1);
             	
                 return o;
             }

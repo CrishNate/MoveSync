@@ -69,11 +69,12 @@ namespace MoveSync
                     break;
                     
                 case FadeState.Disappear:
-                    dTime = (LevelSequencer.instance.timeBPM - (timeStamp + duration)) / _appearSpeed;
-                    dTime = 1 - dTime;
+                    dTime = 1 - dDisappear;
                     transform.localScale = Vector3.one * (scale * dTime);
                     break;
             }
         }
+
+        protected float dDisappear => (LevelSequencer.instance.timeBPM - (timeStamp + duration)) / _appearSpeed;
     }
 }

@@ -5,7 +5,6 @@ Shader "MoveSync/Projectile"
         _Color2 ("Color2", Color) = (1,1,1,1) 
         _Color ("Color", Color) = (1,1,1,1) 
         _ColorOverride ("ColorOverride", Color) = (1,1,1,1) 
-        _OffsetDanger ("OffsetDanger", Range(0, 10)) = 1
     }
     
     SubShader 
@@ -22,7 +21,8 @@ Shader "MoveSync/Projectile"
         fixed4 _ColorOverride; 
         fixed4 _Color2; 
         fixed4 _Color;
-        float _OffsetDanger; 
+        static float _OffsetDanger = 0.03;
+		static float _DecreaseDistance = 32;
 
         struct Input
         {
@@ -44,7 +44,7 @@ Shader "MoveSync/Projectile"
             UNITY_INITIALIZE_OUTPUT(Input, o);
             o.vertex = UnityObjectToClipPos(v.vertex);
             o.depth = ComputeScreenPos(o.vertex).z;
-            o.depth = max(_ProjectionParams.z * 0.3 - o.depth * _ProjectionParams.z - _OffsetDanger, 0);
+            o.depth = max(_ProjectionParams.z * 0.01 - o.depth * _ProjectionParams.z - _OffsetDanger, 0) * _DecreaseDistance;
         }
     
         void surf (Input IN, inout SurfaceOutput o)

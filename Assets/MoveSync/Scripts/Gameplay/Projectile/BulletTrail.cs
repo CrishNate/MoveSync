@@ -12,7 +12,9 @@ namespace MoveSync
         [Header("Bullet Trail")]
         [SerializeField] private Animator _animatorTrail;
 
+        private static readonly int Appear = Animator.StringToHash("appear");
         private static readonly int Duration = Animator.StringToHash("duration");
+        private static readonly float AppearSpeed = 5f;
 
         private static readonly int Count = 4;
         
@@ -32,16 +34,19 @@ namespace MoveSync
         
         IEnumerator AddTrail()
         {
-            while (true)
+            // Sync with rythm
+            yield return new WaitForSeconds((1f - 1f / AppearSpeed) * LevelSequencer.instance.toTime);
+            
+            while (dDisappear < 0)
             {
                 var transformInst = new GameObject("TrailInstance");
                 transformInst.transform.position = transform.position;
                 
-                // Instansing animation
                 Animator animTrailInst = Instantiate<Animator>(_animatorTrail, transformInst.transform);
                 animTrailInst.gameObject.SetActive(true);
                 animTrailInst.speed = LevelSequencer.instance.toBPM;
                 animTrailInst.SetFloat(Duration, 1.0f / Count);
+                animTrailInst.SetFloat(Appear, AppearSpeed);
 
                 animTrailInst.gameObject.transform.parent = transformInst.transform;
                 transformInst.transform.localScale = transform.localScale;

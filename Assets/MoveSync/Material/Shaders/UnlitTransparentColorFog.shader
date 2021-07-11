@@ -29,6 +29,7 @@ Shader "MoveSync/UnlitTransparentColorFog" {
             #include "UnityCG.cginc"
 		    
 			fixed4 _Color;
+			static float _DecreaseDistance = 32;
 
 		    // vertex shader inputs
             struct appdata
@@ -67,7 +68,8 @@ Shader "MoveSync/UnlitTransparentColorFog" {
                 fixed4 colGlow = tex2D(_MainTex, i.uv);
 
             	// 0.3 is somehow a magic coeficient for this depth
-                i.color.a *= (colGlow.a + colFog.r * colGlow.a) * clamp(_ProjectionParams.z * 0.3f - i.depth * _ProjectionParams.z, 0, 1);
+		    	i.depth = (_ProjectionParams.z * 0.01f - i.depth * _ProjectionParams.z) * _DecreaseDistance;
+                i.color.a *= (colGlow.a + colFog.r * colGlow.a) * clamp(i.depth, 0, 1);
             	return i.color;
             }
             ENDCG

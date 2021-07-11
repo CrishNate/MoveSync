@@ -25,6 +25,7 @@ MonoBehaviour:
     - neonLine
     - trail
     - neonCircle
+    - trailBeat
     m_values:
     - {fileID: 832716710370975365, guid: 96cb4ff6ae247544c91c4399b884dfb8, type: 3}
     - {fileID: 5390824764915981596, guid: 7b43cf28f7a529c41bea1c0de1a2816a, type: 3}
@@ -35,5 +36,6 @@ MonoBehaviour:
     - {fileID: 7183579001196472452, guid: 635dd9602542f104facacbed927cbfd0, type: 3}
     - {fileID: 4397705349975966659, guid: f3664826cb4cee2469bd89695bd16aec, type: 3}
     - {fileID: 5720194082745983655, guid: 5474d33351fb8f7428c85b9b79438d9d, type: 3}
-    - {fileID: 795436941837741623, guid: 285b3085700824f45b4a4da1823b390c, type: 3}
+    - {fileID: 795436941837741623, guid: eb6fce3c4e36b9d4fa217714193b0ecf, type: 3}
     - {fileID: 832716710370975365, guid: 72d970f2700d2d447a9e39e6c3509908, type: 3}
+    - {fileID: 795436941837741623, guid: 285b3085700824f45b4a4da1823b390c, type: 3}
