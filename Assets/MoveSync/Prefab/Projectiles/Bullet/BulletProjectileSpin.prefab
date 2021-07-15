@@ -26,9 +26,9 @@ Transform:
   m_GameObject: {fileID: 1533907184147147911}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
-  m_Father: {fileID: 4978967972134587898}
+  m_Father: {fileID: 372864676207042594}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &3587418342327833403
@@ -54,8 +54,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4978967972134587898}
   - component: {fileID: 832716710370975365}
+  - component: {fileID: 8823256022087428226}
   m_Layer: 9
-  m_Name: BulletProjectile
+  m_Name: BulletProjectileSpin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,7 +74,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 372864676207042594}
-  - {fileID: 4560480001769936999}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -90,6 +90,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _meshFilter: {fileID: 8223572318179071525}
+--- !u!114 &8823256022087428226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2341723290652221099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f50bee1880ac3304bb5854031de47834, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dRotation: {x: 0, y: 0, z: 0}
+  _random: 1
+  _randomAmplitude: 1
 --- !u!135 &790575605218597863
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -101,7 +116,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 0.6
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &8028547429549668685
 PrefabInstance:
@@ -133,7 +148,7 @@ PrefabInstance:
     - target: {fileID: 7658247106988235119, guid: 5b09dbcffd9489c41af92436b8d43f57,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7658247106988235119, guid: 5b09dbcffd9489c41af92436b8d43f57,
         type: 3}

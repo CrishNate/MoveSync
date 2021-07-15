@@ -19,6 +19,10 @@ namespace MoveSync
         
         public static SongInfo songInfo;
         private static TransitionType _transitionType;
+        
+        public static readonly string LevelName = $"Level";
+        public static readonly string MenuName = $"Menu";
+        public static readonly string InitialName = $"InitialScene";
 
         public void StartGame(SongInfo inSongInfo)
         {
@@ -41,14 +45,14 @@ namespace MoveSync
         
         public void TransitToLevel()
         {
-            SceneManager.LoadSceneAsync($"Level");
-            SceneManager.UnloadSceneAsync($"Menu");
+            SceneManager.LoadSceneAsync(LevelName);
+            SceneManager.UnloadSceneAsync(MenuName);
         }
 
         public void TransitToMenu()
         {
-            SceneManager.LoadSceneAsync($"Menu");
-            SceneManager.UnloadSceneAsync($"Level");
+            SceneManager.LoadSceneAsync(MenuName);
+            SceneManager.UnloadSceneAsync(LevelName);
         }
         
         void Start()

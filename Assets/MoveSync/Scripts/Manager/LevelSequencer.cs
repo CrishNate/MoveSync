@@ -62,7 +62,7 @@ namespace MoveSync
             }
         }
         
-        public void Restart()
+        public void BeginRestart()
         {
             StartCoroutine(RestartCoroutine());
 

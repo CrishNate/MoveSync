@@ -25,6 +25,7 @@ MonoBehaviour:
     - hull
     - brokenGlass
     - slicedSphere
+    - pixels
     m_values:
     - {fileID: 289301614986012343, guid: 2fb0569f16f2f124eb4a5750266c8779, type: 3}
     - {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
@@ -37,3 +38,4 @@ MonoBehaviour:
     - {fileID: -4976696533269558607, guid: 8e1c3c4439b16c647840a062893bc714, type: 3}
     - {fileID: 7734305724328999999, guid: 61b893653ccd57b4c98518b38589af82, type: 3}
     - {fileID: -4399257017027524914, guid: eb2a0939c81281a4aa83c31b537637ff, type: 3}
+    - {fileID: 5504475663070218476, guid: 8766a8b162903e84985f3a86b1fe5a74, type: 3}

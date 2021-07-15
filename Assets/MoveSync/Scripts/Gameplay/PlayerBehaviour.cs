@@ -1,37 +1,35 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 namespace MoveSync
 {
     public class PlayerBehaviour : Singleton<PlayerBehaviour>
     {
-        [Header("Events")] [SerializeField] private UnityEvent _onDeath;
-        [SerializeField] private UnityEvent _onHit;
-        [SerializeField] private UnityEvent _onInvincibilityEnd;
-
         [SerializeField] private GameObject _fullSizeCollider;
 
-        [Header("Health")] public int maxHealth;
-        [HideInInspector] public int health;
-
-        [SerializeField] private float _invincibilityTime;
-
+        public UnityEvent<int> onHit;
+            
         private float _invincibilityTimeStamp;
+        private static readonly float _invincibilityTime = 2.0f;
+        private static readonly int _maxHealth = 3;
+        private int _health;
 
-        void Start()
+        private void Start()
         {
-            health = maxHealth;
+            Restart();
         }
 
         void Update()
         {
-            if (_invincibilityTimeStamp > 0
-                && _invincibilityTimeStamp < Time.time)
+            if (_invincibilityTimeStamp > 0 && Time.time > _invincibilityTimeStamp)
             {
                 _invincibilityTimeStamp = 0.0f;
-                _onInvincibilityEnd.Invoke();
+                
+                OnRestore();
             }
 
             if (_fullSizeCollider)
@@ -40,29 +38,46 @@ namespace MoveSync
             }
         }
 
+        private void OnRestore()
+        {
+            LowerSound.instance.BeginHigher();
+        }
+
         void OnTriggerEnter(Collider collider)
         {
             if (collider.gameObject.layer == LayerMask.NameToLayer("DamageObjects"))
             {
-                //OnHit(collider.gameObject);
+                OnHit(collider.gameObject);
             }
         }
 
         public void OnHit(GameObject instigator)
         {
-            if (health == 0) return;
-            if (_invincibilityTimeStamp > Time.time) return;
+            if (_invincibilityTimeStamp > Time.time) 
+                return;
+            
+            onHit.Invoke(--_health);
 
-            health--;
-
-            _invincibilityTimeStamp = Time.time + _invincibilityTime;
-
-            if (health == 0)
+            if (_health == 0)
             {
                 Death();
+                return;
             }
 
-            _onHit.Invoke();
+            if (_health == 1)
+            {
+                StartCoroutine(Regen());
+            }
+
+            _invincibilityTimeStamp = Time.time + _invincibilityTime;
+            
+            LowerSound.instance.BeginLower();
+        }
+
+        IEnumerator Regen()
+        {
+            yield return new WaitForSeconds(5f);
+            _health += 1;
         }
 
         public Vector3 GetRandomPointNearPlayer()
@@ -72,16 +87,14 @@ namespace MoveSync
 
         void Death()
         {
-            LevelSequencer.instance.Restart();
-
-            _onDeath.Invoke();
+            LevelSequencer.instance.BeginRestart();
         }
 
         public void Restart()
         {
-            health = maxHealth;
+            _health = _maxHealth;
         }
 
-        public bool isMaxHealth => health == maxHealth;
+        public int health => _health;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MoveSync.ModelData;
@@ -12,6 +13,10 @@ namespace MoveSync
         private bool playing;
         private float lastTimeBPM;
 
+        private void Start()
+        {
+            LevelSequencer.instance.onRestart.AddListener(ClearAll);
+        }
 
         public void ClearAll()
         {

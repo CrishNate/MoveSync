@@ -54,6 +54,14 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
  
+    protected virtual void Awake()
+    {
+        if (m_Instance != null && m_Instance != this)
+        {
+            DestroyImmediate(gameObject);
+            Debug.LogError("[Singleton] Something went really wrong. You have duplicated singleton: " + typeof(T));
+        }
+    }
  
     private void OnApplicationQuit()
     {
