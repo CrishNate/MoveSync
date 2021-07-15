@@ -56,7 +56,7 @@ namespace MoveSync
             {
                 case FadeState.Appear:
                     dTime = (LevelSequencer.instance.timeBPM - (timeStamp - appearTime)) / _appearSpeed;
-                    dTime = Mathf.Min(dTime, 1f);
+                    dTime = Mathf.Clamp(1f - Mathf.Pow(1f - dTime, 2f), 0f, 1f);
                     transform.localScale = Vector3.one * (scale * dTime);
 
                     if (LevelSequencer.instance.timeBPM > timeStamp - appearTime + _appearSpeed)
@@ -69,7 +69,7 @@ namespace MoveSync
                     break;
                     
                 case FadeState.Disappear:
-                    dTime = 1 - dDisappear;
+                    dTime = Mathf.Clamp(Mathf.Pow(1f - dDisappear, 2f), 0f, 1f);
                     transform.localScale = Vector3.one * (scale * dTime);
                     break;
             }

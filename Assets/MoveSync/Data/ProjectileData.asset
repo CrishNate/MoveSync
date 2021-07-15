@@ -27,8 +27,9 @@ MonoBehaviour:
     - neonCircle
     - trailBeat
     - bulletSpin
+    - bulletRotate
     m_values:
-    - {fileID: 832716710370975365, guid: 96cb4ff6ae247544c91c4399b884dfb8, type: 3}
+    - {fileID: 8659526785206908171, guid: 96cb4ff6ae247544c91c4399b884dfb8, type: 3}
     - {fileID: 5390824764915981596, guid: 7b43cf28f7a529c41bea1c0de1a2816a, type: 3}
     - {fileID: 867890515098498087, guid: 292b4a2cb9b8c3e468c8c4ae076ed9d6, type: 3}
     - {fileID: -4260251746924209329, guid: 772f6db6d21a0fa4988a54fad48c7dff, type: 3}
@@ -40,4 +41,5 @@ MonoBehaviour:
     - {fileID: 795436941837741623, guid: eb6fce3c4e36b9d4fa217714193b0ecf, type: 3}
     - {fileID: 832716710370975365, guid: 72d970f2700d2d447a9e39e6c3509908, type: 3}
     - {fileID: 795436941837741623, guid: 285b3085700824f45b4a4da1823b390c, type: 3}
-    - {fileID: 832716710370975365, guid: 32e648e0b2c4bf941920409eaf990896, type: 3}
+    - {fileID: 827054018080735211, guid: 32e648e0b2c4bf941920409eaf990896, type: 3}
+    - {fileID: 262329591767791969, guid: 21bf109f4ac63be48a3724e71759e9b9, type: 3}
