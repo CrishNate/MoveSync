@@ -67,7 +67,7 @@ namespace MoveSync
                 instigator = gameObject,
                 invokeTimeStamp = beatObjectData.time,
                 duration = _projectileReachTimeBPM,
-                scale = _size,
+                size = _size,
                 speed = beatObjectData.getModel<SPEED>().value,
                 shape = _shape
             };

@@ -22,7 +22,7 @@ namespace MoveSync
         {
             base.Init(initParam);
             
-            transform.localScale *= initParam.scale;
+            transform.localScale *= initParam.size;
             
             // perfect sync
             _animatorTrail.speed = LevelSequencer.instance.toBPM;

@@ -60,6 +60,8 @@ namespace MoveSync
             AddSpawnTable(new ObjectModel("follow", new [] { ModelInput.APPEAR.defaultValue("6"), ModelInput.DURATION.defaultValue("6"), ModelInput.SIZE.defaultValue("0.5"), ModelInput.SPEED.defaultValue("1"), ModelInput.PROJECTILE.defaultValue("follow"), ModelInput.POSITION }));
             AddSpawnTable(new ObjectModel("boop", new [] { ModelInput.APPEAR.defaultValue("0.25"), ModelInput.DURATION.defaultValue("0.25"), ModelInput.SIZE.defaultValue("1"), ModelInput.SHAPE, ModelInput.POSITION }));
             AddSpawnTable(new ObjectModel("shooterAround", new [] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.COUNT.defaultValue("10"), ModelInput.SHAPE, ModelInput.PROJECTILE, ModelInput.POSITION }));
+            AddSpawnTable(new ObjectModel("shooterArray", new [] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.COUNT.defaultValue("10"), ModelInput.SHAPE, ModelInput.PROJECTILE, ModelInput.POSITION, ModelInput.ROTATION }));
+            AddSpawnTable(new ObjectModel("bulletArray", new [] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.COUNT.defaultValue("10"), ModelInput.SHAPE, ModelInput.PROJECTILE, ModelInput.POSITION, ModelInput.ROTATION }));
 
             AddSpawnTable(new ObjectModel("event", new [] { ModelInput.EVENT.defaultValue("event_none") }));
 

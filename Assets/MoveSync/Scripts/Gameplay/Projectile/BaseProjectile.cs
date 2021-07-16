@@ -18,7 +18,7 @@ public abstract class BaseProjectile : MonoBehaviour, BeatUpdate
         public float invokeTimeStamp;
         public float duration;
         public float appearTime;
-        public float scale;
+        public float size;
         public float speed;
         public int count;
         public Mesh shape;
@@ -28,7 +28,7 @@ public abstract class BaseProjectile : MonoBehaviour, BeatUpdate
     {
         duration = initParam.duration;
         appearTime = initParam.appearTime;
-        scale = initParam.scale;
+        scale = initParam.size;
         speed = initParam.speed;
         
         timeStamp = initParam.invokeTimeStamp;

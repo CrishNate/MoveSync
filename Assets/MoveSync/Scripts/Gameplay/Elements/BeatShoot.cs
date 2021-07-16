@@ -14,8 +14,10 @@ namespace MoveSync
         protected float duration;
         protected Vector3 position;
         protected float size;
+        protected int count;
         protected BaseProjectile projectile;
 
+        protected bool shootOnAwake = true;
 
         public override void Init(BeatObjectData beatObjectData)
         {
@@ -28,11 +30,15 @@ namespace MoveSync
             size = beatObjectData.getModel<SIZE>().value;
             projectile = beatObjectData.getModel<PROJECTILE>().projectile;
 
+            if (beatObjectData.tryGetModel(out COUNT modelCount))
+                count = modelCount.value;
+
             transform.position = GetSpawnPosition();
             transform.rotation = GetRotationByTargetState();
 
-            Shoot();
-            
+            if (shootOnAwake)
+                Shoot(transform.position, transform.rotation, beatObjectData.time);
+
             if (GetDestroyTime() < 0)
                 Destroy(gameObject);
         }
@@ -59,7 +65,7 @@ namespace MoveSync
                 Destroy(gameObject);
         }
 
-        void Shoot()
+        protected void Shoot(Vector3 position, Quaternion direction, float invokeTimeStamp)
         {
             float speed = beatObjectData.tryGetModel<SPEED>(out var speedModel) ? speedModel.value : 0.0f;
             Mesh shape = beatObjectData.tryGetModel<SHAPE>(out var shapeModel) ? shapeModel.mesh : null;
@@ -67,15 +73,20 @@ namespace MoveSync
             BaseProjectile.ProjectileParam initParam = new BaseProjectile.ProjectileParam
             {
                 instigator = gameObject,
-                invokeTimeStamp = beatObjectData.time,
+                invokeTimeStamp = invokeTimeStamp,
                 duration = duration,
                 appearTime = appear,
-                scale = size,
+                size = size,
                 speed = speed,
                 shape = shape
             };
 
-            Instantiate(projectile.gameObject, transform.position, transform.rotation)
+            Shoot(position, direction, initParam);
+        }
+        
+        void Shoot(Vector3 position, Quaternion direction, BaseProjectile.ProjectileParam initParam)
+        {
+            Instantiate(projectile.gameObject, position, direction)
                 .GetComponent<BaseProjectile>()
                 .Init(initParam);
         }

@@ -70,7 +70,7 @@ namespace MoveSync
                 invokeTimeStamp = beatObjectData.time,
                 duration = _duration,
                 appearTime = _appear,
-                scale = _size,
+                size = _size,
             };
             
             projectileObj.GetComponent<BaseProjectile>().Init(initParam);

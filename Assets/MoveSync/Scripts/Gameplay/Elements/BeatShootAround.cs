@@ -94,7 +94,7 @@ namespace MoveSync
                 instigator = gameObject,
                 invokeTimeStamp = LevelSequencer.instance.timeBPM,
                 duration = ProjectileDurationBPM,
-                scale = _size,
+                size = _size,
                 speed = _speed,
                 shape = _shape
             };
