@@ -82,7 +82,7 @@ namespace MoveSync
 
         public Vector3 GetRandomPointNearPlayer()
         {
-            return transform.position + Random.insideUnitSphere * 0.35f;
+            return transform.position + Random.insideUnitSphere * 0.2f;
         }
 
         void Death()

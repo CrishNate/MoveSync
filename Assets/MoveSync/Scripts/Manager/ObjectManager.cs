@@ -13,10 +13,10 @@ namespace MoveSync
     {
         public ObjectModel(string _objectTag, ModelInput[] _modelInput)
         {
-            objectTag = _objectTag;
+            objectTag = new PropertyName(_objectTag);
             modelInput = _modelInput;
             
-            prefab = Resources.Load<GameObject>(ObjectManager.beatObjectsPath + _objectTag);
+            prefab = Resources.Load<GameObject>(ObjectManager.BeatObjectsPath + _objectTag);
         }
 
         public PropertyName objectTag;
@@ -32,7 +32,7 @@ namespace MoveSync
         private Dictionary<PropertyName, ObjectModel> _objectModels = new Dictionary<PropertyName, ObjectModel>();
         private ObjectModel _currentObjectModel;
         
-        public static string beatObjectsPath = "MoveSync/BeatObjects/";
+        public static readonly string BeatObjectsPath = "MoveSync/BeatObjects/";
 
         public void SetCurrentObject(string objectTag)
         {

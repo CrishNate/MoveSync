@@ -49,8 +49,14 @@ namespace MoveSync
             }
             else
             {
+                if (PropertyName.IsNullOrEmpty(beatObjectData.objectTagNew))
+                {
+                    Debug.LogErrorFormat("[SpawnManager] Invalid objectTag: {0}", beatObjectData.objectTagNew);
+                    return;
+                }
+                
                 BeatObject beatObject =
-                    Instantiate(ObjectManager.instance.objectModels[beatObjectData.objectTag].prefab)
+                    Instantiate(ObjectManager.instance.objectModels[beatObjectData.objectTagNew].prefab)
                         .GetComponent<BeatObject>();
                 beatObject.Init(beatObjectData);
                 beatObject.gameObject.SetActive(true);

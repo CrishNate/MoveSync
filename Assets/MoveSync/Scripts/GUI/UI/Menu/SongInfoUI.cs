@@ -41,7 +41,7 @@ public class SongInfoUI : MonoBehaviour
         _authorText.text = songInfo.songAuthor;
         _bpmText.text = songInfo.songParams.bpm.ToString("#.00");
 
-        var audioClip = Resources.Load<AudioClip>(songInfo.songFile);
+        var audioClip = Resources.Load<AudioClip>(LevelDataManager.songPath + songInfo.songFile);
         if (audioClip)
             _songLength.text = $"{audioClip.length / 60:#0}:{audioClip.length % 60:00}";
 

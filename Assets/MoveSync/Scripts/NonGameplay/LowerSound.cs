@@ -25,9 +25,9 @@ public class LowerSound : Singleton<LowerSound>
     IEnumerator Lower()
     {
         _audioLowPassFilter.enabled = true;
-        while (_audioLowPassFilter.cutoffFrequency > 3e3)
+        while (_audioLowPassFilter.cutoffFrequency > 600f)
         {
-            _audioLowPassFilter.cutoffFrequency -= (22e3f - 2e3f) * Time.deltaTime * 5f;
+            _audioLowPassFilter.cutoffFrequency -= (22e3f - 600f) * Time.deltaTime * 5f;
             yield return null;
         }
     }
@@ -36,7 +36,7 @@ public class LowerSound : Singleton<LowerSound>
     {
         while (_audioLowPassFilter.cutoffFrequency < 22e3)
         {
-            _audioLowPassFilter.cutoffFrequency += (22e3f - 2e3f) * Time.deltaTime * 2f;
+            _audioLowPassFilter.cutoffFrequency += (22e3f - 600f) * Time.deltaTime * 2f;
             yield return null;
         }
         _audioLowPassFilter.enabled = false;

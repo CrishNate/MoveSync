@@ -12,6 +12,12 @@ using UnityEngine.Events;
 namespace MoveSync
 {
     [Serializable]
+    public struct SongsList
+    {
+        public List<string> songs;
+    }
+    
+    [Serializable]
     public struct SongInfo
     {
         public string songName;
@@ -40,7 +46,8 @@ namespace MoveSync
     [Serializable]
     public class BeatObjectData : ISerializationCallbackReceiver
     {
-        public PropertyName objectTag;
+        public string objectTag;
+        public PropertyName objectTagNew;
         public SerializableGuid id;
         public float time = -1;
         // editor
@@ -57,12 +64,18 @@ namespace MoveSync
 
         public void OnAfterDeserialize()
         {
+            objectTagNew = new PropertyName(objectTag);
+
+            foreach (ModelInput modelInput in modelInputsData)
+            {
+                modelInput.typeNew = modelInput.type;
+            }
             FixModelInputs();
         }
         
-        public BeatObjectData(PropertyName objectTag, SerializableGuid id, int editorLayer, ModelInput[] modelInputsData)
+        public BeatObjectData(PropertyName objectTagNew, SerializableGuid id, int editorLayer, ModelInput[] modelInputsData)
         {
-            this.objectTag = objectTag;
+            this.objectTagNew = objectTagNew;
             this.id = id;
             this.editorLayer = editorLayer;
             this.modelInputsData = modelInputsData;
@@ -77,7 +90,7 @@ namespace MoveSync
         {
             BeatObjectData other = new BeatObjectData
             {
-                objectTag = objectTag,
+                objectTagNew = objectTagNew,
                 id = SerializableGuid.NewGuid(),
                 modelInputsData = ModelInput.CloneInputs(modelInputsData)
             };
@@ -169,10 +182,12 @@ namespace MoveSync
     public class LevelDataManager : Singleton<LevelDataManager>
     {
         public static string resourcePath => Application.dataPath + "/Resources/";
-        public static string songPath => resourcePath + "Songs/";
+        public static string syncRoot => "MoveSync/";
+        public static string songPath => syncRoot + "Songs/";
         public static string coverPath => songPath + "Cover/";
-        public static string levelFileType = "mslevel";
+        public static string levelFileType = "json";
         public static string autosaveFileName = "autosave";
+        public static string allSongsFilename = "songs";
 
         public UnityEventBeatObjectData onNewObject = new UnityEventBeatObjectData();
         public UnityEventIntParam onUpdateObject = new UnityEventIntParam();
@@ -258,20 +273,26 @@ namespace MoveSync
          */
         public void ExploreLevelFile()
         {
+#if UNITY_EDITOR
             string path = EditorUtility.OpenFilePanel("Load Level", songPath, levelFileType);
             if (path.Length != 0) LoadFile(path);
+#endif
         }
         
         public void ExploreSaveLevelFile()
         {
+#if UNITY_EDITOR
             string path = EditorUtility.SaveFilePanel("Save Level", songPath, "MoveSyncLevel", levelFileType);
             if (path.Length != 0) SaveFile(path);
+#endif
         }
                 
         public void ExploreSongFile()
         {
+#if UNITY_EDITOR
             string path = EditorUtility.OpenFilePanel("Song File", resourcePath, "mp3,wave");
             if (path.Length != 0) LoadSong(path);
+#endif
         }
         
         /*
@@ -282,10 +303,10 @@ namespace MoveSync
             levelInfo.beatObjectDatas.Clear();
         }
         
-        public void LoadFile(string filePath)
+        public void LoadFile(string fileName)
         {
-            string levelJson = File.ReadAllText(filePath);
-            LoadInfo(JsonUtility.FromJson<LevelInfo>(levelJson));
+            TextAsset textAsset = Resources.Load<TextAsset>(fileName);
+            LoadInfo(JsonUtility.FromJson<LevelInfo>(textAsset.text));
         }
 
         public void SaveFile(string filePath)
@@ -299,29 +320,31 @@ namespace MoveSync
 
         public void LoadSong(string filePath)
         {
-            levelInfo.songInfo.songFile = Path.GetFileNameWithoutExtension(filePath.Replace(resourcePath, ""));
+            //levelInfo.songInfo.songFile = Path.GetFileNameWithoutExtension(filePath.Replace(songPath, ""));
             LevelSequencer.instance.songParams = levelInfo.songInfo.songParams;
-            LevelSequencer.instance.audioSource.clip = Resources.Load<AudioClip>(levelInfo.songInfo.songFile);
+            LevelSequencer.instance.audioSource.clip = Resources.Load<AudioClip>(songPath + levelInfo.songInfo.songFile);
 
             onLoadedSong.Invoke();
         }
 
         public static List<SongInfo> GetLevels()
         {
-            DirectoryInfo directorySongInfo = new DirectoryInfo(songPath);
-            FileInfo[] fileInfo = directorySongInfo.GetFiles("*." + levelFileType);
+            TextAsset allSongsFile = Resources.Load<TextAsset>(syncRoot + allSongsFilename);
+            List<string> songsList = JsonUtility.FromJson<SongsList>(allSongsFile.text).songs;
+            
             List<SongInfo> songInfos = new List<SongInfo>();
 
-            foreach (FileInfo file in fileInfo)
+            foreach (string songName in songsList)
             {
-                if (file.Name == autosaveFileName + "." + levelFileType)
-                    continue;
-
-                SongInfo songInfo = JsonUtility.FromJson<LevelInfoOnlySongInfo>(File.ReadAllText(file.FullName)).songInfo;
-                songInfo.filePath = songPath + file.Name;
+                TextAsset songFile = Resources.Load<TextAsset>(songPath + songName);
+                SongInfo songInfo = JsonUtility.FromJson<LevelInfoOnlySongInfo>(songFile.text).songInfo;
+                songInfo.filePath = songPath + songName;
                 songInfos.Add(songInfo);
+                
+                Resources.UnloadAsset(songFile);
             }
 
+            Resources.UnloadAsset(allSongsFile);
             return songInfos;
         }
         
@@ -353,7 +376,7 @@ namespace MoveSync
         void LoadInfo(LevelInfo levelInfo)
         {
             this.levelInfo = levelInfo;
-            LevelSequencer.instance.audioSource.clip = Resources.Load<AudioClip>(levelInfo.songInfo.songFile);
+            LevelSequencer.instance.audioSource.clip = Resources.Load<AudioClip>(songPath + levelInfo.songInfo.songFile);
             LevelSequencer.instance.songParams = levelInfo.songInfo.songParams;
 
             if (levelInfo.levelEditorInfo == null)

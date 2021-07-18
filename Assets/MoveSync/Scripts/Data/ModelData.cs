@@ -9,7 +9,8 @@ namespace MoveSync.ModelData
     public class ModelInput
     {
         public string stringValue = "";
-        public PropertyName type;
+        public string type;
+        public PropertyName typeNew;
 
 
         public ModelInput Clone()
@@ -25,7 +26,7 @@ namespace MoveSync.ModelData
         
         public ModelInput CopyValues(ModelInput origin)
         {
-            type = origin.type;
+            typeNew = origin.typeNew;
             stringValue = origin.stringValue;
             return this;
         }
@@ -40,17 +41,18 @@ namespace MoveSync.ModelData
 
         public static ModelInput RecreateRealModel(ModelInput origin)
         {
-            if (origin.type == ModelData.DURATION.TYPE) return DURATION.CopyValues(origin);
-            if (origin.type == ModelData.APPEAR.TYPE) return APPEAR.CopyValues(origin);
-            if (origin.type == ModelData.SIZE.TYPE) return SIZE.CopyValues(origin);
-            if (origin.type == ModelData.SPEED.TYPE) return SPEED.CopyValues(origin);
-            if (origin.type == ModelData.POSITION.TYPE) return POSITION.CopyValues(origin);
-            if (origin.type == ModelData.ROTATION.TYPE) return ROTATION.CopyValues(origin);
-            if (origin.type == ModelData.EVENT.TYPE) return EVENT.CopyValues(origin);
-            if (origin.type == ModelData.COUNT.TYPE) return COUNT.CopyValues(origin);
-            if (origin.type == ModelData.SHAPE.TYPE) return SHAPE.CopyValues(origin);
-            if (origin.type == ModelData.PROJECTILE.TYPE) return PROJECTILE.CopyValues(origin);
+            if (origin.typeNew == ModelData.DURATION.TYPE) return DURATION.CopyValues(origin);
+            if (origin.typeNew == ModelData.APPEAR.TYPE) return APPEAR.CopyValues(origin);
+            if (origin.typeNew == ModelData.SIZE.TYPE) return SIZE.CopyValues(origin);
+            if (origin.typeNew == ModelData.SPEED.TYPE) return SPEED.CopyValues(origin);
+            if (origin.typeNew == ModelData.POSITION.TYPE) return POSITION.CopyValues(origin);
+            if (origin.typeNew == ModelData.ROTATION.TYPE) return ROTATION.CopyValues(origin);
+            if (origin.typeNew == ModelData.EVENT.TYPE) return EVENT.CopyValues(origin);
+            if (origin.typeNew == ModelData.COUNT.TYPE) return COUNT.CopyValues(origin);
+            if (origin.typeNew == ModelData.SHAPE.TYPE) return SHAPE.CopyValues(origin);
+            if (origin.typeNew == ModelData.PROJECTILE.TYPE) return PROJECTILE.CopyValues(origin);
 
+            Debug.LogErrorFormat("[ModelData] Couldn't recreate model {0}: type: {1}", origin, origin.typeNew);
             return null;
         }
         
@@ -107,34 +109,34 @@ namespace MoveSync.ModelData
     public class DURATION : FloatModelInput
     {
         public static PropertyName TYPE = "DURATION";
-        public DURATION() { type = TYPE; }
+        public DURATION() { typeNew = TYPE; }
     }
     public class APPEAR : FloatModelInput
     {
         public static PropertyName TYPE = "APPEAR";
-        public APPEAR() { type = TYPE; }
+        public APPEAR() { typeNew = TYPE; }
     }
     public class SIZE : FloatModelInput
     {
         public static PropertyName TYPE = "SIZE";
-        public SIZE() { type = TYPE; }
+        public SIZE() { typeNew = TYPE; }
     }
     public class SPEED : FloatModelInput
     {
         public static PropertyName TYPE = "SPEED";
-        public SPEED() { type = TYPE; }
+        public SPEED() { typeNew = TYPE; }
     }
     public class POSITION : Vector3ModelInput
     {
         public static PropertyName TYPE = "POSITION";
-        public POSITION() { type = TYPE; }
+        public POSITION() { typeNew = TYPE; }
         public RandomSpawnType randomSpawnType;
         public Vector3 pivot = Vector3.one;
     }
     public class ROTATION : Vector3ModelInput
     {
         public static PropertyName TYPE = "ROTATION";
-        public ROTATION() { type = TYPE; }
+        public ROTATION() { typeNew = TYPE; }
         
         public new Quaternion value
         {
@@ -145,14 +147,14 @@ namespace MoveSync.ModelData
     public class COUNT : IntModelInput
     {
         public static PropertyName TYPE = "COUNT";
-        public COUNT() { type = TYPE; }
+        public COUNT() { typeNew = TYPE; }
     }
     public class SHAPE : StringModelInput
     {
         public static PropertyName TYPE = "SHAPE";
         public SHAPE() 
         { 
-            type = TYPE;
+            typeNew = TYPE;
             value = MoveSyncData.instance.shapeData.shapesNameList.First();
         }
         public Mesh mesh => MoveSyncData.instance.shapeData.shapes[value];
@@ -162,7 +164,7 @@ namespace MoveSync.ModelData
         public static PropertyName TYPE = "PROJECTILE";
         public PROJECTILE() 
         { 
-            type = TYPE;
+            typeNew = TYPE;
             value = MoveSyncData.instance.projectileData.projectilesNameList.First();
         }
         public BaseProjectile projectile => MoveSyncData.instance.projectileData.projectiles[value];
@@ -173,7 +175,7 @@ namespace MoveSync.ModelData
 
         public EVENT()
         {
-            type = TYPE;
+            typeNew = TYPE;
             value = MoveSyncData.MoveSyncEvents.First();
         }
         public MoveSyncEvent msEvent => (MoveSyncEvent)Enum.Parse(typeof(MoveSyncEvent), value);

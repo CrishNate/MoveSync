@@ -73,11 +73,9 @@ namespace MoveSync
         {
             while (audioSource.pitch > 0)
             {
-                audioSource.pitch -= Time.deltaTime / _restartTime;
+                audioSource.pitch = Mathf.Max(0, audioSource.pitch - Time.deltaTime / _restartTime);
                 yield return null;
             }
-
-            audioSource.pitch = 0;
 
             yield return new WaitForSeconds(1.0f);
 
