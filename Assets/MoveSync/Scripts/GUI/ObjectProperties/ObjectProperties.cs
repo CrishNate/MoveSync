@@ -76,7 +76,7 @@ namespace MoveSync.UI
 
         void ConstructProperties()
         {
-            _itemTag.text = LevelDataManager.PropertyNameToString(_selectedObject.objectTag);
+            _itemTag.text = ObjectManager.ObjectName(_selectedObject.ObjectTag);
             
             foreach (var propertiesObject in _propertiesObjects)
             {

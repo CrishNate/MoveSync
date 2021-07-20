@@ -40,7 +40,8 @@ namespace MoveSync
 
             _image.color = MoveSyncData.instance.colorData.DefaultUIBeatObject;
 
-            if (LevelEditor.isEditor && LevelEditor.instance.objectIcons.TryGetValue(data.objectTag, out Sprite sprite))
+            // TODO: Rework this shit
+            if (LevelEditor.isEditor && LevelEditor.instance.objectIcons.TryGetValue(data.ObjectTag, out Sprite sprite))
             {
                 _image.sprite = sprite;
             }
@@ -79,8 +80,11 @@ namespace MoveSync
         {
             rectTransform.localPosition = new Vector2(beatObjectData.time * _timeline.zoom, TimelineObjectsUI.layerHeight * beatObjectData.editorLayer * -1.0f);
             
-            if (beatObjectData.hasModel<APPEAR>()) _appearUI.SetValue(beatObjectData.getModel<APPEAR>().value * _timeline.zoom);
-            if (beatObjectData.hasModel<DURATION>()) _durationUI.SetValue(beatObjectData.getModel<DURATION>().value * _timeline.zoom);
+            if (beatObjectData.hasModel<APPEAR>()) 
+                _appearUI.SetValue(beatObjectData.getModel<APPEAR>().value * _timeline.zoom);
+            
+            if (beatObjectData.hasModel<DURATION>()) 
+                _durationUI.SetValue(beatObjectData.getModel<DURATION>().value * _timeline.zoom);
         }
 
         void OnSetAppear(float value)
@@ -117,8 +121,11 @@ namespace MoveSync
 
         public void ShowOnlyKey(bool show)
         {
-            if (beatObjectData.hasModel<APPEAR>()) _appearUI.IsShown(!show);
-            if (beatObjectData.hasModel<DURATION>()) _durationUI.IsShown(!show);
+            if (beatObjectData.hasModel<APPEAR>()) 
+                _appearUI.IsShown(!show);
+            
+            if (beatObjectData.hasModel<DURATION>()) 
+                _durationUI.IsShown(!show);
         }
         
 

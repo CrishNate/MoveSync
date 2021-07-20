@@ -254,7 +254,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4106251607092741800}
-  - component: {fileID: 3252960842014125419}
   - component: {fileID: 169742288524110238}
   m_Layer: 5
   m_Name: ObjectUI
@@ -285,14 +284,6 @@ RectTransform:
   m_AnchoredPosition: {x: 15, y: 0}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 1}
---- !u!222 &3252960842014125419
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3748912894899383935}
-  m_CullTransparentMesh: 0
 --- !u!114 &169742288524110238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,7 +297,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beatObjectData:
-    objectTag: 
     id:
       value: 2
     time: 0
@@ -443,7 +433,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -8, y: -8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4207890519284397308
 CanvasRenderer:

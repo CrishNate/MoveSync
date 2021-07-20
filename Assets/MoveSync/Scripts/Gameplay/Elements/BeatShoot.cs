@@ -65,6 +65,9 @@ namespace MoveSync
                 Destroy(gameObject);
         }
 
+        protected virtual void PreShoot(ref BaseProjectile.ProjectileParam initParam)
+        { }
+
         protected void Shoot(Vector3 position, Quaternion direction, float invokeTimeStamp)
         {
             float speed = beatObjectData.tryGetModel<SPEED>(out var speedModel) ? speedModel.value : 0.0f;
@@ -81,11 +84,8 @@ namespace MoveSync
                 shape = shape
             };
 
-            Shoot(position, direction, initParam);
-        }
-        
-        void Shoot(Vector3 position, Quaternion direction, BaseProjectile.ProjectileParam initParam)
-        {
+            PreShoot(ref initParam);
+
             Instantiate(projectile.gameObject, position, direction)
                 .GetComponent<BaseProjectile>()
                 .Init(initParam);

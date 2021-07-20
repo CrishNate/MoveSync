@@ -5,7 +5,7 @@ namespace MoveSync
 {
     public class BeatShootBullet : BeatShootPlayer
     {
-        private static float _distanceFromTarget = 1.0f;
+        protected static float DistanceFromTarget = 1.0f;
         
         
         protected override Vector3 GetSpawnPosition()
@@ -15,7 +15,7 @@ namespace MoveSync
             float distance = dir.magnitude;
             dir = dir.normalized;
             
-            return position + dir * (appear * speed - distance + _distanceFromTarget);
+            return position + dir * (appear * speed - distance + DistanceFromTarget);
         }
     }
 }

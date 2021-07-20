@@ -76,8 +76,7 @@ namespace MoveSync.UI
         {
             if (bindKey.beatObjectData != null)
             {
-                string str = bindKey.beatObjectData.objectTag.ToString();
-                _objectTagText.text = LevelDataManager.PropertyNameToString(bindKey.beatObjectData.objectTag);
+                _objectTagText.text = ObjectManager.instance.objectModels[bindKey.beatObjectData.ObjectTag].objectName;
             }
             
             if (bindKey.key != KeyCode.None)

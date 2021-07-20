@@ -14,7 +14,7 @@ public class ObjectListUI : MonoBehaviour
     {
         foreach (var objectModel in ObjectManager.instance.objectModels)
         {
-            _dropDownWithSearth.options.Add(LevelDataManager.PropertyNameToString(objectModel.Value.objectTag));
+            _dropDownWithSearth.options.Add(objectModel.Value.objectName);
         }
     }
 }

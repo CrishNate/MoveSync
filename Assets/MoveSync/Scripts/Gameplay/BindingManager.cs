@@ -96,7 +96,7 @@ namespace MoveSync.UI
                 StartListening(layer);
             }
 
-            var newBeatObject = new BeatObjectData(ObjectManager.instance.currentObjectModel.objectTag,
+            var newBeatObject = new BeatObjectData(ObjectManager.instance.currentObjectModel.ObjectTag,
                 SerializableGuid.NewGuid(),
                 _awaitConfirmOnLayer,
                 ModelInput.CloneInputs(ObjectManager.instance.currentObjectModel.modelInput));

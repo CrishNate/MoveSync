@@ -52,10 +52,11 @@ namespace MoveSync
             // loading editors sprites
             foreach (var objectModel in ObjectManager.instance.objectModels)
             {
-                string objectTag = LevelDataManager.PropertyNameToString(objectModel.Key);
-                var sprite = Resources.Load<Sprite>(beatObjectIconsPath + objectTag);
+                var sprite = Resources.Load<Sprite>(beatObjectIconsPath + ObjectManager.ObjectName(objectModel.Key));
                 if (sprite)
+                {
                     _objectIcons.Add(objectModel.Key, sprite);
+                }
             }
         }
         
@@ -76,7 +77,9 @@ namespace MoveSync
             while (true)
             {
                 yield return new WaitForSeconds(60.0f);
-                LevelDataManager.instance.SaveFile(LevelDataManager.songPath + LevelDataManager.autosaveFileName + "." + LevelDataManager.levelFileType);
+                LevelDataManager.instance.SaveFile(LevelDataManager.resourcePath + LevelDataManager.songPath +
+                                                   LevelDataManager.autosaveFileName + "." +
+                                                   LevelDataManager.levelFileType);
             }
         }
         

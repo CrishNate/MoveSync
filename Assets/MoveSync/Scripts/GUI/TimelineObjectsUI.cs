@@ -256,10 +256,18 @@ namespace MoveSync
                 BeatObjectData data = newSelectedObject.beatObjectData;
                 
                 // offsetting beat objects while moving
-                if (!InputData.shouldOnlyLayer) data.time = Mathf.Max(0, mouseTime + newSelectedObject.offset);
+                if (!InputData.shouldOnlyLayer)
+                {
+                    data.time = Mathf.Max(0, mouseTime + newSelectedObject.offset);
+                }
+
                 data.editorLayer = Mathf.Max(0, mouseLayer + newSelectedObject.offsetLayer);
-                if (InputData.shouldSnap) data.time = Mathf.Round(data.time);
-                
+
+                if (InputData.shouldSnap)
+                {
+                    data.time = Mathf.Round(data.time);
+                }
+
                 UpdateObject(newSelectedObject.objectUi);
             }
         }

@@ -36,8 +36,11 @@ public class DragDropBoxScale : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         Vector2 scale = _lastContentScale + offset;
         if (!_unrestricted)
         {
-            if (_horizontal) scale.x = Mathf.Clamp(scale.x, minDrag, maxDrag);
-            if (_vertical) scale.y = Mathf.Clamp(scale.y, minDrag, maxDrag);
+            if (_horizontal) 
+                scale.x = Mathf.Clamp(scale.x, minDrag, maxDrag);
+            
+            if (_vertical) 
+                scale.y = Mathf.Clamp(scale.y, minDrag, maxDrag);
         }
 
         if (!_closed && Mathf.Abs(scale.magnitude - minDrag) < Mathf.Epsilon)

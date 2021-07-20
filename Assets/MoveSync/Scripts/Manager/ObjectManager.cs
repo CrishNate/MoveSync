@@ -11,17 +11,23 @@ namespace MoveSync
 {
     public class ObjectModel 
     {
-        public ObjectModel(string _objectTag, ModelInput[] _modelInput)
+        private PropertyName _objectTag;
+        private ModelInput[] _modelInput;
+        private BeatObject _prefab;
+        private string _objectName;
+        
+        public ObjectModel(string objectTag, ModelInput[] modelInput)
         {
-            objectTag = new PropertyName(_objectTag);
-            modelInput = _modelInput;
-            
-            prefab = Resources.Load<GameObject>(ObjectManager.BeatObjectsPath + _objectTag);
+            _objectTag = objectTag;
+            _modelInput = modelInput;
+            _prefab = Resources.Load<BeatObject>(ObjectManager.BeatObjectsPath + objectTag);
+            _objectName = objectTag;
         }
-
-        public PropertyName objectTag;
-        public ModelInput[] modelInput;
-        public GameObject prefab; 
+        
+        public PropertyName ObjectTag => _objectTag;
+        public ModelInput[] modelInput => _modelInput;
+        public BeatObject prefab => _prefab;
+        public string objectName => _objectName;
     }
 
     public class ObjectManager : Singleton<ObjectManager>
@@ -47,7 +53,7 @@ namespace MoveSync
 
         void AddSpawnTable(ObjectModel model)
         {
-            _objectModels.Add(model.objectTag, model);
+            _objectModels.Add(model.ObjectTag, model);
         }
 
         void Start()
@@ -62,12 +68,18 @@ namespace MoveSync
             AddSpawnTable(new ObjectModel("shooterAround", new [] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.COUNT.defaultValue("10"), ModelInput.SHAPE, ModelInput.PROJECTILE, ModelInput.POSITION }));
             AddSpawnTable(new ObjectModel("shooterArray", new [] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.COUNT.defaultValue("10"), ModelInput.SHAPE, ModelInput.PROJECTILE, ModelInput.POSITION, ModelInput.ROTATION }));
             AddSpawnTable(new ObjectModel("bulletArray", new [] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.COUNT.defaultValue("10"), ModelInput.SHAPE, ModelInput.PROJECTILE, ModelInput.POSITION, ModelInput.ROTATION }));
+            AddSpawnTable(new ObjectModel("bulletWarning", new [] { ModelInput.APPEAR.defaultValue("2"), ModelInput.DURATION.defaultValue("1"), ModelInput.SIZE.defaultValue("0.2"), ModelInput.SPEED.defaultValue("2"), ModelInput.COUNT.defaultValue("10"), ModelInput.SHAPE, ModelInput.PROJECTILE, ModelInput.POSITION }));
 
             AddSpawnTable(new ObjectModel("event", new [] { ModelInput.EVENT.defaultValue("event_none") }));
 
             _onObjectsLoaded.Invoke();
         }
 
+        public static string ObjectName(PropertyName objectTag)
+        {
+            return instance.objectModels[objectTag].objectName;
+        }
+        
         public Dictionary<PropertyName, ObjectModel> objectModels => _objectModels;
         public ObjectModel currentObjectModel => _currentObjectModel;
         public UnityEvent onObjectsLoaded => _onObjectsLoaded;
