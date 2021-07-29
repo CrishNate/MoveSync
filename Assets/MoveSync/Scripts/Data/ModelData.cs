@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -22,7 +24,69 @@ namespace MoveSync.ModelData
         SHAPE,
         PROJECTILE,
     }
-    
+    public class ModelInputJsonConverter : JsonConverter
+    {
+        private readonly Type[] _types;
+
+        public ModelInputJsonConverter(params Type[] types)
+        {
+            _types = types;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            throw new NotImplementedException("Unnecessary because CanWrite is false. The type will skip the converter.");
+        }
+
+        bool CheckType<T>(JObject jo, JToken? type, JsonSerializer serializer, [CanBeNull] ref object obj) where T : ModelInput
+        {
+            string modelInputType = typeof(T).ToString();
+
+            if (type.Value<ModelInputType>() == (ModelInputType) Enum.Parse(typeof(ModelInputType), modelInputType))
+            {
+                obj = jo.ToObject<T>(serializer);
+                return true;
+            }
+            
+            return false;
+        }
+        
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+
+            JObject jo = JObject.Load(reader);
+            
+            if (jo.Parent?["modelInputsData"] != null)
+            {
+                JToken? type = jo["type"];
+                if (type != null)
+                {
+                    object obj = null;
+                    if (CheckType<DURATION>(jo, type, serializer, ref obj)) return obj;
+                    if (CheckType<APPEAR>(jo, type, serializer, ref obj)) return obj;
+                    if (CheckType<SIZE>(jo, type, serializer, ref obj)) return obj;
+                    if (CheckType<POSITION>(jo, type, serializer, ref obj)) return obj;
+                    if (CheckType<ROTATION>(jo, type, serializer, ref obj)) return obj;
+                    if (CheckType<EVENT>(jo, type, serializer, ref obj)) return obj;
+                    if (CheckType<COUNT>(jo, type, serializer, ref obj)) return obj;
+                    if (CheckType<SPEED>(jo, type, serializer, ref obj)) return obj;
+                    if (CheckType<SHAPE>(jo, type, serializer, ref obj)) return obj;
+                    if (CheckType<PROJECTILE>(jo, type, serializer, ref obj)) return obj;
+                }
+            }
+
+            return null;
+        }
+
+        public override bool CanWrite => false;
+
+        public override bool CanConvert(Type objectType)
+        {
+            return _types.Any(t => t == objectType);
+        }
+    }
+
     [Serializable]
     public class ModelInput
     {

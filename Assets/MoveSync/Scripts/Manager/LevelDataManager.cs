@@ -181,6 +181,8 @@ namespace MoveSync
         public void LoadFile(string fileName)
         {
             TextAsset textAsset = Resources.Load<TextAsset>(fileName);
+            
+            //new ModelInputJsonConverter(typeof(LevelInfo))
             LoadInfo(JsonConvert.DeserializeObject<LevelInfo>(textAsset.text));
         }
 
