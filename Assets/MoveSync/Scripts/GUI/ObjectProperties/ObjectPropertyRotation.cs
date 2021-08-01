@@ -33,7 +33,7 @@ namespace MoveSync.UI
             var rotationModel = modelInput as ROTATION;
             if (ParentObjectProperties.selectedObject.tryGetModel(out POSITION positionModel))
             {
-                ApplyRotation(rotationModel, PlayerBehaviour.instance.GetRandomPointNearPlayer() - positionModel.value);
+                ApplyRotation(rotationModel, PlayerBehaviour.GetRandomPointNearPlayer() - positionModel.value);
                 LevelDataManager.instance.UpdateBeatObject(ParentObjectProperties.selectedObject.id);
             }
             
@@ -43,7 +43,7 @@ namespace MoveSync.UI
                 if (selectedObject.Value.beatObjectData.tryGetModel(out POSITION selectedPositionModel)
                     && selectedObject.Value.beatObjectData.tryGetModel(out ROTATION selectedRotationModel))
                 {
-                    ApplyRotation(selectedRotationModel, PlayerBehaviour.instance.GetRandomPointNearPlayer() - selectedPositionModel.value);
+                    ApplyRotation(selectedRotationModel, PlayerBehaviour.GetRandomPointNearPlayer() - selectedPositionModel.value);
                     LevelDataManager.instance.UpdateBeatObject(selectedObject.Value.beatObjectData.id);
                 }
             }

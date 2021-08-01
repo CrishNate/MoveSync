@@ -7,7 +7,7 @@ namespace MoveSync
     {
         protected override Quaternion GetRotationByTargetState() 
         {
-            return Quaternion.LookRotation(PlayerBehaviour.instance.GetRandomPointNearPlayer() - transform.position);
+            return Quaternion.LookRotation(PlayerBehaviour.GetRandomPointNearPlayer() - transform.position);
         }
     }
 }

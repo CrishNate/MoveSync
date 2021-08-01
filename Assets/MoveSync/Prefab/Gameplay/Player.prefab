@@ -283,6 +283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fullSizeCollider: {fileID: 4397566317437800415}
+  _xrRig: {fileID: 0}
   onHit:
     m_PersistentCalls:
       m_Calls:

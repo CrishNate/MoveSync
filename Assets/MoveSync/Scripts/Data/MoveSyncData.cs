@@ -7,7 +7,8 @@ namespace MoveSync
     public enum MoveSyncEvent
     {
         None,
-        SkyFlicker
+        SkyFlicker,
+        TitleAnimation
     }
     public class MoveSyncData : Singleton<MoveSyncData>
     {

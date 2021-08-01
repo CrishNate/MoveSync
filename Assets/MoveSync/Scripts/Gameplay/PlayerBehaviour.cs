@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.XR.Interaction.Toolkit;
 using Random = UnityEngine.Random;
 
 namespace MoveSync
@@ -10,7 +11,8 @@ namespace MoveSync
     public class PlayerBehaviour : Singleton<PlayerBehaviour>
     {
         [SerializeField] private GameObject _fullSizeCollider;
-
+        [SerializeField] private XRRig _xrRig;
+        
         public UnityEvent<int> onHit;
             
         private float _invincibilityTimeStamp;
@@ -79,10 +81,27 @@ namespace MoveSync
             yield return new WaitForSeconds(5f);
             _health += 1;
         }
-
-        public Vector3 GetRandomPointNearPlayer()
+        
+        static Vector3 GetPlayerPositionScale(float height)
         {
-            return transform.position + Random.insideUnitSphere * 0.2f;
+            float y = instance._xrRig.cameraFloorOffsetObject.transform.position.y;
+            Vector3 pos = instance.transform.position;
+            return new Vector3(pos.x, y, pos.z + height);
+        }
+        
+        public static Vector3 GetPlayerPositionHalfScale()
+        {
+            return GetPlayerPositionScale(instance._xrRig.cameraYOffset * 0.5f);
+        }
+        
+        public static Vector3 GetPlayerPositionFullScale()
+        {
+            return GetPlayerPositionScale(instance._xrRig.cameraYOffset);
+        }
+        
+        public static Vector3 GetRandomPointNearPlayer()
+        {
+            return instance.transform.position + Random.insideUnitSphere * 0.2f;
         }
 
         void Death()

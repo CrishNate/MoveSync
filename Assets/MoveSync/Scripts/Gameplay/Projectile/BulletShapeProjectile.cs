@@ -14,6 +14,10 @@ namespace MoveSync
         [SerializeField] private GameObject _bulletInstanceModel;
         private Dictionary<GameObject, Vector3> _directions = new Dictionary<GameObject, Vector3>();
         private float _time;
+        protected bool customShape;
+
+        protected GameObject bulletInstanceModel => _bulletInstanceModel;
+        protected Dictionary<GameObject, Vector3> directions => _directions;
 
 
         public virtual Vector3 GetShapePoint(int bulletIndex)
@@ -25,6 +29,9 @@ namespace MoveSync
         {
             base.Init(initParam);
 
+            if (customShape)
+                return;
+            
             for (int i = 0; i < count; i++)
             {
                 GameObject bulletModel = Instantiate(_bulletInstanceModel, transform);
