@@ -29,7 +29,6 @@ Shader "MoveSync/UnlitTransparentColorFog" {
             #include "UnityCG.cginc"
 		    
 			fixed4 _Color;
-			static float _DecreaseDistance = 32;
 
 		    // vertex shader inputs
             struct appdata
@@ -51,7 +50,6 @@ Shader "MoveSync/UnlitTransparentColorFog" {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.worldPos = mul (unity_ObjectToWorld, v.vertex);
-                o.depth = ComputeScreenPos(o.vertex).z;
 				o.color = v.color * _Color;
                 o.uv = v.uv;
 
@@ -66,9 +64,8 @@ Shader "MoveSync/UnlitTransparentColorFog" {
 		    {
                 fixed4 colFog = tex2D(_FogNoise, float2(i.worldPos.x + i.worldPos.z / 2, i.worldPos.y + i.worldPos.z / 2) * 0.01f + _Time.x * 1.0f);
                 fixed4 colGlow = tex2D(_MainTex, i.uv);
+				i.depth = distance(_WorldSpaceCameraPos, i.worldPos);
 
-            	// 0.3 is somehow a magic coeficient for this depth
-		    	i.depth = (_ProjectionParams.z * 0.01f - i.depth * _ProjectionParams.z) * _DecreaseDistance;
                 i.color.a *= (colGlow.a + colFog.r * colGlow.a) * clamp(i.depth, 0, 1);
             	return i.color;
             }
